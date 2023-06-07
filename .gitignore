@@ -1,0 +1,30 @@
+# Node.js dependencies
+node_modules/
+
+# Build artifacts
+build/
+dist/
+
+# Environment variables
+.env
+
+# Client specific
+client/node_modules/
+
+# Server specific
+server/node_modules/
+
+# Logs
+*.log
+logs/
+log.txt
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+
+# macOS specific files
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
