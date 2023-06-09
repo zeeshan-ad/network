@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Text, TextInput, View, KeyboardAvoidingView, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Button } from 'react-native-paper';
 import GoBack from '../components/GoBack';
-import { emailRegex } from '../util/constants';
+import { emailRegex, passwordRegex } from '../util/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { createAccount } from '../APIs';
 
 
 const Signup = ({ navigation }) => {
@@ -46,13 +47,24 @@ const Signup = ({ navigation }) => {
     if (type === 'email') {
       setSignupCred(prevState => ({ ...prevState, email: e.toLowerCase(), emailError: emailRegex.test(e.toLowerCase()) }))
     } else if (type === 'password') {
-      setSignupCred(prevState => ({ ...prevState, password: e }))
+      setSignupCred(prevState => ({ ...prevState, password: e, passwordError: passwordRegex.test(e) }))
     } else if (type === 'firstname') {
       setSignupCred(prevState => ({ ...prevState, firstname: e }))
     } else if (type === 'lastname') {
       setSignupCred(prevState => ({ ...prevState, lastname: e }))
     }
+  }
 
+  console.log(SignupCred)
+
+  const callCreateAccount = async () => {
+    const res = await createAccount(SignupCred);
+    console.log(res)
+    if (res?.status === 200) {
+      navigation.navigate('Home');
+    } else {
+      alert('Something went wrong')
+    }
   }
 
   return (
@@ -98,6 +110,11 @@ const Signup = ({ navigation }) => {
         {Step.currentStep === 3 &&
           <>
             <View>
+              {!SignupCred.passwordError &&
+                <Text style={{ fontSize: 12, color: '#8a8a8a', paddingHorizontal: 10, paddingBottom:20 }}>
+                  Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character
+                </Text>
+              }
               <Text style={styles.label}>PASSWORD</Text>
               <View style={styles.passwordField}>
                 <TextInput secureTextEntry={!PasswordView} name="password" textContentType='password' style={styles.input} value={SignupCred?.password}
@@ -106,12 +123,13 @@ const Signup = ({ navigation }) => {
                   <MaterialCommunityIcons name={`${PasswordView ? 'eye-outline' : 'eye-off-outline'}`} size={24} color="#c9c9c9" />
                 </Pressable>
               </View>
+
             </View>
-            <Button mode='contained' onPress={''}
-              disabled={SignupCred.password ? false : true}
+            <Button mode='contained' onPress={callCreateAccount}
+              disabled={SignupCred.password && SignupCred.passwordError ? false : true}
               style={{ borderRadius: 100 }}
               labelStyle={{ fontSize: 20, fontWeight: 'bold', color: '#fff' }}
-              contentStyle={{ backgroundColor: `${SignupCred.password ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Sign up</Button>
+              contentStyle={{ backgroundColor: `${SignupCred.password && SignupCred.passwordError ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Sign up</Button>
             <Text style={{ textAlign: 'center', color: '#8a8a8a', paddingTop: 10 }}>
               By tapping 'Sign up', you agree to our Privacy Policy and Terms of Service.
             </Text>

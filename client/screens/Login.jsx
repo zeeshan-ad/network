@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, Pressable, KeyboardAvoidingView, TextInput, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper'
 import GoBack from '../components/GoBack';
@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <GoBack navigation={navigation} title={'Log In'} />
       <ScrollView contentContainerStyle={styles.formContainer}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#36A3EB', paddingLeft: 10 }}>Welcome Back!</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#36A3EB', paddingLeft: 10 }}>Hello Again 👋</Text>
         <View>
           <Text style={styles.label}>EMAIL</Text>
           <TextInput name="email" textContentType='emailAddress' style={styles.input} value={LoginCred.email}
