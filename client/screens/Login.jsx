@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Pressable, KeyboardAvoidingView, TextInput, Scr
 import { Button } from 'react-native-paper'
 import GoBack from '../components/GoBack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { emailRegex } from '../util/constants';
+import { emailRegex, theme } from '../util/constants';
 
 
 const Login = ({ navigation }) => {
@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <GoBack navigation={navigation} title={'Log In'} />
       <ScrollView contentContainerStyle={styles.formContainer}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#36A3EB', paddingLeft: 10 }}>Hello Again 👋</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.tertiary, paddingLeft: 10 }}>Hello Again 👋</Text>
         <View>
           <Text style={styles.label}>EMAIL</Text>
           <TextInput name="email" textContentType='emailAddress' style={styles.input} value={LoginCred.email}
@@ -39,19 +39,19 @@ const Login = ({ navigation }) => {
             <TextInput secureTextEntry={!PasswordView} name="password" textContentType='password' style={styles.input} value={LoginCred?.password}
               onChangeText={(e) => handleInput('password', e)}></TextInput>
             <Pressable style={{ position: 'absolute', right: 10, zIndex: 999 }} onPress={() => setPasswordView(!PasswordView)}>
-              <MaterialCommunityIcons name={`${PasswordView ? 'eye-outline' : 'eye-off-outline'}`} size={24} color="#c9c9c9" />
+              <MaterialCommunityIcons name={`${PasswordView ? 'eye-outline' : 'eye-off-outline'}`} size={24} color={theme.colors.grey} />
             </Pressable>
           </View>
         </View>
         <Button mode='contained' onPress={''}
           disabled={LoginCred.email && LoginCred.emailError && LoginCred.password ? false : true}
           style={{ borderRadius: 100 }}
-          labelStyle={{ fontSize: 20, fontWeight: 'bold', color: '#fff' }}
-          contentStyle={{ backgroundColor: `${LoginCred.email && LoginCred.emailError && LoginCred.password ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Let's Yeet!</Button>
+          labelStyle={{ fontSize: 20, fontWeight: 'bold', color: theme.colors.light }}
+          contentStyle={{ backgroundColor: `${LoginCred.email && LoginCred.emailError && LoginCred.password ? theme.colors.tertiary : theme.colors.grey}`, height: 50 }}>Let's Yeet!</Button>
         <Button mode='text'
           onPress={() => navigation.navigate('ForgotPassword')}
-          labelStyle={{ fontWeight: 'bold', color: '#36A3EB' }}
-          style={{ textAlign: 'center', color: '#36A3EB', paddingTop: 10 }}>Forgot Password?</Button>
+          labelStyle={{ fontWeight: 'bold', color: theme.colors.tertiary }}
+          style={{ textAlign: 'center', color: theme.colors.tertiary, paddingTop: 10 }}>Forgot Password?</Button>
       </ScrollView>
     </KeyboardAvoidingView >
   )
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff'
+    backgroundColor: theme.colors.light
   },
   formContainer: {
     flexDirection: 'column',
@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
   label: {
     paddingLeft: 10,
     fontSize: 14,
-    color: '#c9c9c9',
+    color: theme.colors.grey,
     fontWeight: '700',
     textTransform: 'uppercase'
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.light,
     borderBottomWidth: 1,
-    borderColor: '#c9c9c9',
+    borderColor: theme.colors.grey,
     borderRadius: 10,
     height: 50,
     alignSelf: 'center',

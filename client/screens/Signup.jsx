@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, TextInput, View, KeyboardAvoidingView, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Button } from 'react-native-paper';
 import GoBack from '../components/GoBack';
-import { emailRegex, passwordRegex } from '../util/constants';
+import { emailRegex, passwordRegex, theme } from '../util/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { createAccount } from '../APIs';
 
@@ -55,7 +55,6 @@ const Signup = ({ navigation }) => {
     }
   }
 
-  console.log(SignupCred)
 
   const callCreateAccount = async () => {
     const res = await createAccount(SignupCred);
@@ -71,7 +70,7 @@ const Signup = ({ navigation }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <GoBack navigation={navigation} title={'Create Account'} />
       <ScrollView contentContainerStyle={styles.formContainer}>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#c9c9c9', paddingLeft: 10, textTransform: 'uppercase' }}>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: theme.colors.grey, paddingLeft: 10, textTransform: 'uppercase' }}>
           Step {Step.currentStep} of {Step.totalSteps}
         </Text>
         {Step.currentStep === 1 &&
@@ -89,8 +88,8 @@ const Signup = ({ navigation }) => {
             <Button mode='contained' onPress={() => setStep(prevState => ({ ...prevState, currentStep: 2 }))}
               disabled={SignupCred.firstname && SignupCred.lastname ? false : true}
               style={{ borderRadius: 100 }}
-              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: '#fff' }}
-              contentStyle={{ backgroundColor: `${SignupCred.firstname && SignupCred.lastname ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Continue</Button>
+              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: theme.colors.light }}
+              contentStyle={{ backgroundColor: `${SignupCred.firstname && SignupCred.lastname ? theme.colors.tertiary : theme.colors.grey}`, height: 50 }}>Continue</Button>
           </>
         }
         {Step.currentStep === 2 &&
@@ -103,16 +102,18 @@ const Signup = ({ navigation }) => {
             <Button mode='contained' onPress={() => setStep(prevState => ({ ...prevState, currentStep: 3 }))}
               disabled={SignupCred.email && SignupCred.emailError ? false : true}
               style={{ borderRadius: 100 }}
-              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: '#fff' }}
-              contentStyle={{ backgroundColor: `${SignupCred.email && SignupCred.emailError ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Continue</Button>
+              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: theme.colors.light }}
+              contentStyle={{ backgroundColor: `${SignupCred.email && SignupCred.emailError ? theme.colors.tertiary : theme.colors.grey}`, height: 50 }}>Continue</Button>
           </>
         }
         {Step.currentStep === 3 &&
           <>
             <View>
               {!SignupCred.passwordError &&
-                <Text style={{ fontSize: 12, color: '#8a8a8a', paddingHorizontal: 10, paddingBottom:20 }}>
-                  Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character
+                <Text style={{ fontSize: 14, color: theme.colors.darkgrey, paddingHorizontal: 10, paddingBottom: 20 }}>
+                  Password must have atleast 
+                  eight characters, one uppercase letter, one lowercase letter, one number, and
+                  one special character
                 </Text>
               }
               <Text style={styles.label}>PASSWORD</Text>
@@ -120,7 +121,7 @@ const Signup = ({ navigation }) => {
                 <TextInput secureTextEntry={!PasswordView} name="password" textContentType='password' style={styles.input} value={SignupCred?.password}
                   onChangeText={(e) => handleInput('password', e)}></TextInput>
                 <Pressable style={{ position: 'absolute', right: 10, zIndex: 999 }} onPress={() => setPasswordView(!PasswordView)}>
-                  <MaterialCommunityIcons name={`${PasswordView ? 'eye-outline' : 'eye-off-outline'}`} size={24} color="#c9c9c9" />
+                  <MaterialCommunityIcons name={`${PasswordView ? 'eye-outline' : 'eye-off-outline'}`} size={24} color={theme.colors.grey} />
                 </Pressable>
               </View>
 
@@ -128,9 +129,9 @@ const Signup = ({ navigation }) => {
             <Button mode='contained' onPress={callCreateAccount}
               disabled={SignupCred.password && SignupCred.passwordError ? false : true}
               style={{ borderRadius: 100 }}
-              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: '#fff' }}
-              contentStyle={{ backgroundColor: `${SignupCred.password && SignupCred.passwordError ? '#36A3EB' : '#c9c9c9'}`, height: 50 }}>Sign up</Button>
-            <Text style={{ textAlign: 'center', color: '#8a8a8a', paddingTop: 10 }}>
+              labelStyle={{ fontSize: 20, fontWeight: 'bold', color: theme.colors.light }}
+              contentStyle={{ backgroundColor: `${SignupCred.password && SignupCred.passwordError ? theme.colors.tertiary : theme.colors.grey}`, height: 50 }}>Sign up</Button>
+            <Text style={{ textAlign: 'center', color: theme.colors.darkgrey, paddingTop: 10 }}>
               By tapping 'Sign up', you agree to our Privacy Policy and Terms of Service.
             </Text>
           </>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff'
+    backgroundColor: theme.colors.light
   },
   formContainer: {
     flexDirection: 'column',
@@ -161,14 +162,14 @@ const styles = StyleSheet.create({
   label: {
     paddingLeft: 10,
     fontSize: 14,
-    color: '#0c0c0c',
+    color: theme.colors.dark,
     fontWeight: '700',
     textTransform: 'uppercase'
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.light,
     borderBottomWidth: 1,
-    borderColor: '#c9c9c9',
+    borderColor: theme.colors.grey,
     borderRadius: 10,
     height: 50,
     alignSelf: 'center',

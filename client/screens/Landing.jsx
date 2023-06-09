@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Button } from 'react-native-paper'
+import { theme } from '../util/constants';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,7 +28,7 @@ const Landing = ({ navigation }) => {
     <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={{ flexDirection: 'column', height: '100%', justifyContent: "space-between" }}>
         <View style={{ height: '70%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={styles.logo}>Yeet</Text>
+          <Text style={styles.logo}>Yeet!</Text>
         </View>
         <View>
           <Button
@@ -35,7 +36,7 @@ const Landing = ({ navigation }) => {
             onPress={() => navigation.navigate('Login')}
             labelStyle={{ fontSize: 20, fontWeight: 'bold' }}
             uppercase={true}
-            contentStyle={{ height: 80, backgroundColor: '#36A3EB' }}
+            contentStyle={{ height: 80, backgroundColor: theme.colors.tertiary }}
             style={styles.button}>
             Log In
           </Button>
@@ -44,7 +45,7 @@ const Landing = ({ navigation }) => {
             onPress={() => navigation.navigate('Signup')}
             labelStyle={{ fontSize: 20, fontWeight: 'bold' }}
             uppercase={true}
-            contentStyle={{ height: 80, backgroundColor: '#FFB84C' }}
+            contentStyle={{ height: 80, backgroundColor: theme.colors.scondary }}
             style={styles.button}>
             Join the network
           </Button>
@@ -58,14 +59,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#F35F5F'
+    backgroundColor: theme.colors.primary
   },
   logo: {
     fontFamily: 'Pacifico',
     fontSize: 100,
-    color: '#fff',
+    color: theme.colors.light,
     textAlign: 'center',
     padding: 5,
+    shadowColor: theme.colors.dark,
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 10,
   },
   emojis: {
     flexDirection: 'row',
