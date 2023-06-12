@@ -54,7 +54,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   underlineStyleBase: {
-    borderRadius: 0
+    borderRadius: 0,
+    fontSize: fontSizes.large,
+    fontWeight: 'bold',
   },
   button: {
     position: 'absolute',
