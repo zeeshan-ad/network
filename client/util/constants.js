@@ -10,6 +10,7 @@ export const theme = {
     grey: '#c9c9c9',
     light: '#FFFFFF',
     darkgrey: '#444',
+    dark: '#000',
   }
 }
 
@@ -18,9 +19,8 @@ export const fontSizes = {
   medium: 16,
   large: 18,
   heading: 24,
-  bg: 70,
+  BigHightlight: 48,
   Logo: 80,
 }
-export const yeetArr = ['Be authentic 💫', 'Real friends 🤝', 'Fun 😄', 'Express 🎨', 'Share 📸', 'Engage 🤝', 'Connect 🌐'];
 export const ip = '192.168.43.86';
-export const APP_NAME = 'Yeet!';
+export const APP_NAME = 'yeet!';

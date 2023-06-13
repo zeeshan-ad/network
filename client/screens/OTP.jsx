@@ -33,10 +33,6 @@ const OTP = ({ route, navigation }) => {
       <Pressable
         onPress={() => { }}
         style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
-        <View style={{ position: 'absolute', top: 0, left: 8, height: 10, width: 10, backgroundColor: theme.colors.primary }}></View>
-        <View style={{ position: 'absolute', bottom: 5, height: 10, width: 10, backgroundColor: theme.colors.primary }}>
-        </View>
-        <View style={{ position: 'absolute', bottom: 10, right: 0, height: 10, width: 10, backgroundColor: theme.colors.primary }}></View>
         <Text style={{ fontSize: fontSizes.large, fontWeight: 'bold' }}>Let's Go!</Text>
       </Pressable>
       <Link to={{ screen: 'Landing' }} style={{ color: theme.colors.secondary, fontSize: fontSizes.medium, textAlign: 'center' }}>

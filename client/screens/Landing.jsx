@@ -17,6 +17,7 @@ const Landing = ({ navigation }) => {
   const [PhoneNumber, setPhoneNumber] = useState(null);
   const [formattedValue, setFormattedValue] = useState(null);
   const phoneInput = useRef(null);
+  const [LoginForm, setLoginForm] = useState(false)
 
   const [fontsLoaded] = useFonts({
     'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
@@ -24,6 +25,7 @@ const Landing = ({ navigation }) => {
     'VT323': require('../assets/fonts/VT323-Regular.ttf'),
     'Origami': require('../assets/fonts/origami.ttf'),
     'Tiny': require('../assets/fonts/tiny.ttf'),
+    'Righteous': require('../assets/fonts/Righteous-Regular.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -42,62 +44,61 @@ const Landing = ({ navigation }) => {
       <StatusBar style="light" />
       <DismissKeyboard>
         <View style={styles.container}>
-          <LandingBackground />
-          <View style={{ height: '60%' }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-              <Text style={styles.logo}>{APP_NAME}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center' }}>
-              <View style={{ borderWidth: 1, borderColor: theme.colors.light }}>
-                <PhoneInput
-                  ref={phoneInput}
-                  defaultCode="IN"
-                  defaultValue={PhoneNumber}
-                  disableArrowIcon={true}
-                  placeholder=" "
-                  flagButtonStyle={{
-                    paddingLeft: 10, backgroundColor: theme.colors.primary, width: 50, height: 50, borderColor: theme.colors.primary
-                  }}
-                  textContainerStyle={{
-                    backgroundColor: theme.colors.primary, color: theme.colors.light, fontSize: fontSizes.large, height: 50, width: 200, borderColor: theme.colors.primary,
-                    justifyContent: 'center', alignItems: 'center'
-                  }}
-                  textInputStyle={{ color: theme.colors.light, fontSize: fontSizes.large }}
-                  codeTextStyle={{ color: theme.colors.light, fontSize: fontSizes.large, height: 50, paddingTop: 15 }}
-                  layout="first"
-                  containerStyle={{ color: theme.colors.light, backgroundColor: theme.colors.primary, alignItems: 'center' }}
-                  onChangeText={(text) => {
-                    setPhoneNumber(text);
-                  }}
-                  onChangeFormattedText={(text) => {
-                    setFormattedValue(text);
-                  }}
-                  withDarkTheme
-                  withShadow
-                />
+          {LoginForm ? (
+            <View style={{ height: '80%', justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                <Text style={styles.logo}>{APP_NAME}</Text>
               </View>
-              <Pressable
-                onPress={() => {
-                  if (PhoneNumber?.length > 9) {
-                    navigation.navigate('OTP', { phone: PhoneNumber, code: phoneInput.current.state.code, formattedValue: formattedValue })
-                  }
-                }}
-                style={[styles.button, { backgroundColor: PhoneNumber?.length > 9 ? theme.colors.secondary : theme.colors.grey }]}>
-                <View style={{ position: 'absolute', top: 0, left: 8, height: 10, width: 10, backgroundColor: theme.colors.primary }}></View>
-                <View style={{ position: 'absolute', bottom: 5, height: 10, width: 10, backgroundColor: theme.colors.primary }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', }}>
+                <View style={{ borderWidth: 1, borderColor: theme.colors.light }}>
+                  <PhoneInput
+                    ref={phoneInput}
+                    defaultCode="IN"
+                    defaultValue={PhoneNumber}
+                    disableArrowIcon={true}
+                    placeholder=" "
+                    flagButtonStyle={{
+                      paddingLeft: 10, backgroundColor: theme.colors.primary, width: 50, height: 50, borderColor: theme.colors.primary
+                    }}
+                    textContainerStyle={{
+                      backgroundColor: theme.colors.primary, color: theme.colors.light, fontSize: fontSizes.large, height: 50, borderColor: theme.colors.primary,
+                      justifyContent: 'center', alignItems: 'center'
+                    }}
+                    textInputStyle={{ color: theme.colors.light, fontSize: fontSizes.large }}
+                    codeTextStyle={{ color: theme.colors.light, fontSize: fontSizes.large, height: 50, paddingTop: 15 }}
+                    layout="first"
+                    containerStyle={{ color: theme.colors.light, backgroundColor: theme.colors.primary, alignItems: 'center' }}
+                    onChangeText={(text) => {
+                      setPhoneNumber(text);
+                    }}
+                    onChangeFormattedText={(text) => {
+                      setFormattedValue(text);
+                    }}
+                    withDarkTheme
+                    withShadow
+                  />
                 </View>
-                <View style={{ position: 'absolute', bottom: 10, right: 0, height: 10, width: 10, backgroundColor: theme.colors.primary }}></View>
-                <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
-              </Pressable>
+                <Pressable
+                  onPress={() => {
+                    if (PhoneNumber?.length > 9) {
+                      navigation.navigate('OTP', { phone: PhoneNumber, code: phoneInput.current.state.code, formattedValue: formattedValue })
+                    }
+                  }}
+                  style={[styles.button, { backgroundColor: PhoneNumber?.length > 9 ? theme.colors.secondary : theme.colors.grey }]}>
+                  <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
+                </Pressable>
+              </View>
+              <View>
+              </View>
             </View>
-            <View>
-            </View>
-          </View>
+          ) : (
+            <LandingBackground setLoginForm={setLoginForm}/>
+          )}
         </View>
       </DismissKeyboard>
-      <Text style={{ position: 'absolute', bottom: 0, padding: 20, right: 0, backgroundColor: theme.colors.primary, left: 0, textAlign: 'center', color: theme.colors.light }}>
-        Standard charges apply. By continuing, you agree{'\n'}to our  <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
-        <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Terms of Service</Link>.
+      <Text style={{ position: 'absolute', bottom: 30, right: 0, left: 0, textAlign: 'center', color: theme.colors.light }}>
+        {LoginForm && 'Standard charges apply.'}  By continuing, you agree{'\n'}to our  <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
+        <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}> Terms of Service</Link>.
       </Text>
     </KeyboardAvoidingView>
   );
@@ -111,24 +112,17 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   logo: {
-    fontFamily: 'Origami',
+    fontFamily: 'Righteous',
     fontSize: fontSizes.Logo,
     color: theme.colors.light,
     textAlign: 'center',
     padding: 5,
-  },
-  phoneInput: {
-    borderColor: theme.colors.light,
-    borderWidth: 1,
-    width: 280,
-    height: 50,
-    padding: 16,
-    backgroundColor: theme.colors.primary,
+    marginBottom: 20,
   },
   button: {
     position: 'relative',
-    width: 50,
-    height: 50,
+    width: 52,
+    height: 52,
     backgroundColor: theme.colors.secondary,
     flexDirection: 'column',
     justifyContent: 'center',
