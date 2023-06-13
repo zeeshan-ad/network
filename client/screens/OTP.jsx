@@ -12,12 +12,12 @@ const OTP = ({ route, navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
-      <Text style={{ color: theme.colors.light, fontSize: fontSizes.heading, fontWeight: 'bold', marginBottom: 10 }}>
+      <Text style={{ color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', marginBottom: 10 }}>
         Enter confirmation code
       </Text>
-      <Text style={{ color: theme.colors.light, fontSize: fontSizes.medium, maxWidth: 350 }}>
-        You are using {`${formattedValue?.[0]}${code} ${phone}`}{'\n'}
-        we will use your number to verify you on each sign-in.</Text>
+      <Text style={{ color: theme.colors.dark, fontSize: fontSizes.medium, maxWidth: 350, fontWeight: 'bold', }}>
+        You are using {`${formattedValue?.[0]}${code} ${phone}`}.
+        We will use your number to verify you on each sign-in.</Text>
       <OTPInputView
         style={{ width: '100%', height: 100 }}
         pinCount={6}
@@ -32,10 +32,10 @@ const OTP = ({ route, navigation }) => {
       />
       <Pressable
         onPress={() => { }}
-        style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
+        style={[styles.button, { backgroundColor: theme.colors.secondary, borderWidth: 2, borderRadius: 100 }]}>
         <Text style={{ fontSize: fontSizes.large, fontWeight: 'bold' }}>Let's Go!</Text>
       </Pressable>
-      <Link to={{ screen: 'Landing' }} style={{ color: theme.colors.secondary, fontSize: fontSizes.medium, textAlign: 'center' }}>
+      <Link to={{ screen: 'Landing' }} style={{ fontWeight: 'bold', color: theme.colors.secondary, fontSize: fontSizes.medium, textAlign: 'center' }}>
         Use a different number
       </Link>
     </KeyboardAvoidingView>
@@ -50,15 +50,18 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   underlineStyleBase: {
-    borderRadius: 0,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: theme.colors.dark,
     fontSize: fontSizes.large,
     fontWeight: 'bold',
+    color: theme.colors.dark,
   },
   button: {
     position: 'absolute',
     bottom: 40,
     width: '100%',
-    height: 50,
+    height: 52,
     backgroundColor: theme.colors.secondary,
     alignSelf: 'center',
     flexDirection: 'column',

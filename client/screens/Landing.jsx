@@ -8,8 +8,6 @@ import { StatusBar } from 'expo-status-bar';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { Link } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import LandingBackground from '../components/LandingBackground';
-
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,6 +23,8 @@ const Landing = ({ navigation }) => {
     'Origami': require('../assets/fonts/origami.ttf'),
     'Tiny': require('../assets/fonts/tiny.ttf'),
     'Righteous': require('../assets/fonts/Righteous-Regular.ttf'),
+    'Bagel': require('../assets/fonts/BagelFatOne-Regular.ttf'),
+    'Cherry': require('../assets/fonts/CherryBombOne-Regular.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -40,7 +40,7 @@ const Landing = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior="height" onLayout={onLayoutRootView}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <DismissKeyboard>
         <View style={styles.container}>
           <View style={{ height: '80%', justifyContent: 'center' }}>
@@ -48,7 +48,7 @@ const Landing = ({ navigation }) => {
               <Text style={styles.logo}>{APP_NAME}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', }}>
-              <View style={{ borderWidth: 1, borderColor: theme.colors.light }}>
+              <View style={{ borderWidth: 2, borderRadius: 100, borderColor: theme.colors.dark }}>
                 <PhoneInput
                   ref={phoneInput}
                   defaultCode="IN"
@@ -56,24 +56,27 @@ const Landing = ({ navigation }) => {
                   disableArrowIcon={true}
                   placeholder=" "
                   flagButtonStyle={{
-                    paddingLeft: 10, backgroundColor: theme.colors.primary, width: 50, height: 50, borderColor: theme.colors.primary
+                    paddingLeft: 10, borderRadius: 100, backgroundColor: theme.colors.primary, width: 50, height: 50, borderColor: theme.colors.primary
                   }}
                   textContainerStyle={{
-                    backgroundColor: theme.colors.primary, color: theme.colors.light, fontSize: fontSizes.large, height: 50, borderColor: theme.colors.primary,
-                    justifyContent: 'center', alignItems: 'center'
+                    backgroundColor: theme.colors.primary, borderRadius: 100, color: theme.colors.dark, fontSize: fontSizes.large, height: 50, borderColor: theme.colors.primary,
+                    justifyContent: 'center', alignItems: 'center',
                   }}
-                  textInputStyle={{ color: theme.colors.light, fontSize: fontSizes.large }}
-                  codeTextStyle={{ color: theme.colors.light, fontSize: fontSizes.large, height: 50, paddingTop: 15 }}
+                  textInputStyle={{ color: theme.colors.dark, fontSize: fontSizes.large, fontWeight: 'bold' }}
+                  codeTextStyle={{ color: theme.colors.dark, fontSize: fontSizes.large, height: 50, paddingTop: 15, fontWeight: 'bold' }}
                   layout="first"
-                  containerStyle={{ color: theme.colors.light, backgroundColor: theme.colors.primary, alignItems: 'center' }}
+                  containerStyle={{ color: theme.colors.dark, backgroundColor: theme.colors.primary, borderRadius: 100, alignItems: 'center' }}
                   onChangeText={(text) => {
                     setPhoneNumber(text);
+                  }}
+                  countryPickerProps={{
+                    withAlphaFilter: true, withFilter: true, withFlag: true, withCallingCode: true, withEmoji: true,
+                    withCountryNameButton: true, withCallingCodeButton: true, withCloseButton: true, withModal: true
                   }}
                   onChangeFormattedText={(text) => {
                     setFormattedValue(text);
                   }}
                   withDarkTheme
-                  withShadow
                 />
               </View>
               <Pressable
@@ -82,7 +85,7 @@ const Landing = ({ navigation }) => {
                     navigation.navigate('OTP', { phone: PhoneNumber, code: phoneInput.current.state.code, formattedValue: formattedValue })
                   }
                 }}
-                style={[styles.button, { backgroundColor: PhoneNumber?.length > 9 ? theme.colors.secondary : theme.colors.grey }]}>
+                style={[styles.button, { backgroundColor: PhoneNumber?.length > 9 ? theme.colors.secondary : theme.colors.disabled }]}>
                 <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
               </Pressable>
             </View>
@@ -91,9 +94,9 @@ const Landing = ({ navigation }) => {
           </View>
         </View>
       </DismissKeyboard>
-      <Text style={{ position: 'absolute', bottom: 30, right: 0, left: 0, textAlign: 'center', color: theme.colors.light }}>
-        Standard charges apply By continuing, you agree{'\n'}to our  <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
-        <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}> Terms of Service</Link>.
+      <Text style={{ position: 'absolute', bottom: 30, right: 0, left: 0, fontWeight: 'bold', textAlign: 'center', color: theme.colors.dark }}>
+        Standard charges apply. By continuing, you agree{'\n'}to our  <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
+        <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}> Terms of Service</Link>
       </Text>
     </KeyboardAvoidingView>
   );
@@ -107,12 +110,20 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   logo: {
-    fontFamily: 'Righteous',
+    fontFamily: 'Cherry',
     fontSize: fontSizes.Logo,
-    color: theme.colors.light,
+    color: theme.colors.logo,
     textAlign: 'center',
     padding: 5,
     marginBottom: 20,
+    shadowColor: theme.colors.dark,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 50,
   },
   button: {
     position: 'relative',
@@ -122,6 +133,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: theme.colors.dark,
+    borderRadius: 100,
+    borderWidth: 2,
   },
 });
 

@@ -2,15 +2,14 @@ export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
 export const theme = {
   colors: {
-    primary: '#000000',
-    secondary: '#DBFF00',
-    tertiary: '#00D9F0',
-    quaternary: '#F506BF',
-    quinary: '#9155FD',
+    primary: '#23AA6E',
+    secondary: '#CCFF01',
     grey: '#c9c9c9',
-    light: '#FFFFFF',
+    light: '#F8E8C2',
     darkgrey: '#444',
     dark: '#000',
+    logo: '#F8E8C2',
+    disabled: '#92b700'
   }
 }
 
@@ -20,7 +19,7 @@ export const fontSizes = {
   large: 18,
   heading: 24,
   BigHightlight: 48,
-  Logo: 80,
+  Logo: 100,
 }
 export const ip = '192.168.43.86';
-export const APP_NAME = 'yeet!';
+export const APP_NAME = 'Yeet!';
