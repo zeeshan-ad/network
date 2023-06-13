@@ -2,8 +2,8 @@ export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
 export const theme = {
   colors: {
-    primary: '#23AA6E',
-    secondary: '#CCFF01',
+    primary: '#A480F2',
+    secondary: '#72E16E',
     grey: '#c9c9c9',
     light: '#F8E8C2',
     darkgrey: '#444',
