@@ -70,8 +70,8 @@ const Landing = ({ navigation }) => {
                     setPhoneNumber(text);
                   }}
                   countryPickerProps={{
-                    withAlphaFilter: true, withFilter: true, withFlag: true, withCallingCode: true, withEmoji: true,
-                    withCountryNameButton: true, withCallingCodeButton: true, withCloseButton: true, withModal: true
+                    withAlphaFilter: true, withFilter: true, withFlag: true, withCallingCode: false, withEmoji: true,
+                    withCountryNameButton: true, withCallingCodeButton: true, withCloseButton: true, withModal: true, 
                   }}
                   onChangeFormattedText={(text) => {
                     setFormattedValue(text);

@@ -9,7 +9,7 @@ export const theme = {
     darkgrey: '#444',
     dark: '#000',
     logo: '#F8E8C2',
-    disabled: '#92b700'
+    disabled: '#4c9648'
   }
 }
 
