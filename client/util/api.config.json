@@ -1,3 +1,5 @@
 {
-  "create_account": "/api/users/create-account"
+  "create_account": "/api/users/create-account",
+  "verify_email": "/api/users/verify-email",
+  "login_user": "/api/users/login"
 }

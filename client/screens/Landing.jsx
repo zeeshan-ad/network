@@ -1,29 +1,27 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { Text, View, StyleSheet, KeyboardAvoidingView, Pressable } from 'react-native';
+import { Text, View, StyleSheet, KeyboardAvoidingView, Pressable, TextInput, ImageBackground } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { APP_NAME, fontSizes, theme } from '../util/constants';
-import PhoneInput from "react-native-phone-number-input";
+import { APP_NAME, emailRegex, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { Link } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { loginUser, verifyEmail } from '../APIs';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
+
 
 SplashScreen.preventAutoHideAsync();
 
 const Landing = ({ navigation }) => {
-  const [PhoneNumber, setPhoneNumber] = useState(null);
-  const [formattedValue, setFormattedValue] = useState(null);
-  const phoneInput = useRef(null);
+  const [UserCred, setUserCred] = useState({
+    email: '',
+    password: '',
+    passwordHidden: true,
+  });
 
   const [fontsLoaded] = useFonts({
-    'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
-    'Nanum': require('../assets/fonts/NanumBrushScript-Regular.ttf'),
-    'VT323': require('../assets/fonts/VT323-Regular.ttf'),
-    'Origami': require('../assets/fonts/origami.ttf'),
-    'Tiny': require('../assets/fonts/tiny.ttf'),
-    'Righteous': require('../assets/fonts/Righteous-Regular.ttf'),
-    'Bagel': require('../assets/fonts/BagelFatOne-Regular.ttf'),
     'Cherry': require('../assets/fonts/CherryBombOne-Regular.ttf'),
   });
 
@@ -32,6 +30,51 @@ const Landing = ({ navigation }) => {
       await SplashScreen.hideAsync();
     }
   }, [fontsLoaded])
+
+  const handleEmailInput = (text) => {
+    setUserCred((prevCred) => ({
+      ...prevCred,
+      email: text.toLowerCase(),
+    }));
+  }
+
+  const handlePasswordChange = (text) => {
+    setUserCred((prevCred) => ({
+      ...prevCred,
+      password: text,
+    }));
+  }
+
+  const [DisplayPasswordInput, setDisplayPasswordInput] = useState(false);
+
+  const handlePasswordHide = () => {
+    setUserCred((prevCred) => ({
+      ...prevCred,
+      passwordHidden: !prevCred.passwordHidden,
+    }));
+  }
+
+  const callVerifyEmail = async () => {
+    const response = await verifyEmail(UserCred?.email);
+    if (response?.status === 200) {
+      navigation.navigate('Signup', { Email: UserCred?.email });
+    } else if (response?.status === 409) {
+      setDisplayPasswordInput(true);
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
+  const callLogin = async () => {
+    const response = await loginUser(UserCred);
+    if (response?.status === 200) {
+      navigation.navigate('Home', { userData: response?.data });
+    } else if (response?.status === 401) {
+      alert(response.message);
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
 
 
   if (!fontsLoaded) {
@@ -43,61 +86,73 @@ const Landing = ({ navigation }) => {
       <StatusBar style="dark" />
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={{ height: '80%', justifyContent: 'center' }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+          <View style={{ height: '80%', justifyContent: 'center', alignItems: 'center', gap: 30 }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.logo}>{APP_NAME}</Text>
             </View>
+            <View style={{ flexDirection: "row", gap: 10, marginTop: -20, marginBottom: 10 }}>
+              <FontAwesome name="close" size={50} color={theme.colors.warning} style={styles.icons} />
+              <FontAwesome name="circle" size={50} color={theme.colors.accent} style={styles.icons} />
+              <FontAwesome name="close" size={50} color={theme.colors.danger} style={styles.icons} />
+              <FontAwesome name="circle" size={50} color={theme.colors.info} style={styles.icons} />
+            </View>
+            <View>
+              <Text style={{ textAlign: 'center', fontSize: fontSizes.BigHightlight, fontWeight: 'bold', marginTop: -20 }}>
+                Bold Expressions{'\n'}Unique Impressions
+              </Text>
+            </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', }}>
-              <View style={{ borderWidth: 2, borderRadius: 100, borderColor: theme.colors.dark }}>
-                <PhoneInput
-                  ref={phoneInput}
-                  defaultCode="IN"
-                  defaultValue={PhoneNumber}
-                  disableArrowIcon={true}
-                  placeholder=" "
-                  flagButtonStyle={{
-                    paddingLeft: 10, borderRadius: 100, backgroundColor: theme.colors.primary, width: 50, height: 50, borderColor: theme.colors.primary
-                  }}
-                  textContainerStyle={{
-                    backgroundColor: theme.colors.primary, borderRadius: 100, color: theme.colors.dark, fontSize: fontSizes.large, height: 50, borderColor: theme.colors.primary,
-                    justifyContent: 'center', alignItems: 'center',
-                  }}
-                  textInputStyle={{ color: theme.colors.dark, fontSize: fontSizes.large, fontWeight: 'bold' }}
-                  codeTextStyle={{ color: theme.colors.dark, fontSize: fontSizes.large, height: 50, paddingTop: 15, fontWeight: 'bold' }}
-                  layout="first"
-                  containerStyle={{ color: theme.colors.dark, backgroundColor: theme.colors.primary, borderRadius: 100, alignItems: 'center' }}
-                  onChangeText={(text) => {
-                    setPhoneNumber(text);
-                  }}
-                  countryPickerProps={{
-                    withAlphaFilter: true, withFilter: true, withFlag: true, withCallingCode: false, withEmoji: true,
-                    withCountryNameButton: true, withCallingCodeButton: true, withCloseButton: true, withModal: true, 
-                  }}
-                  onChangeFormattedText={(text) => {
-                    setFormattedValue(text);
-                  }}
-                  withDarkTheme
-                />
-              </View>
+              {DisplayPasswordInput ?
+                <View style={{ justifyContent: 'center' }}>
+                  <TextInput secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
+                    style={styles.input} placeholder='Password' />
+                  <Ionicons name={`${UserCred.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
+                    size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
+                </View> :
+                <TextInput
+                  selectionColor={theme.colors.secondary}
+                  onChangeText={handleEmailInput}
+                  value={UserCred?.email}
+                  style={styles.input} placeholder="Email Id" />
+              }
               <Pressable
                 onPress={() => {
-                  if (PhoneNumber?.length > 9) {
-                    navigation.navigate('OTP', { phone: PhoneNumber, code: phoneInput.current.state.code, formattedValue: formattedValue })
+                  if (DisplayPasswordInput) {
+                    callLogin();
+                  } else {
+                    callVerifyEmail();
                   }
                 }}
-                style={[styles.button, { backgroundColor: PhoneNumber?.length > 9 ? theme.colors.secondary : theme.colors.disabled }]}>
+                style={[styles.button, { backgroundColor: UserCred.email.match(emailRegex) ? theme.colors.secondary : theme.colors.disabled }]}>
                 <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
               </Pressable>
             </View>
-            <View>
-            </View>
+            {DisplayPasswordInput &&
+              <View style={{ position: 'relative' }}>
+                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.secondary, marginTop: -20 }}>
+                  Forgot Password?
+                </Text>
+              </View>
+            }
           </View>
         </View>
       </DismissKeyboard>
-      <Text style={{ position: 'absolute', bottom: 30, right: 0, left: 0, fontWeight: 'bold', textAlign: 'center', color: theme.colors.dark }}>
-        Standard charges apply. By continuing, you agree{'\n'}to our  <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
-        <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}> Terms of Service</Link>
-      </Text>
+      {DisplayPasswordInput ?
+        <View>
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center', position: 'absolute', right: 0, left: 0, bottom: 20 }}>
+            Not {UserCred.email}? &nbsp;
+            <Text style={{ color: theme.colors.secondary }} onPress={() => setDisplayPasswordInput(!DisplayPasswordInput)}>
+              Go Back
+            </Text>
+          </Text>
+        </View> :
+        <View>
+          <Text style={{ position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, textAlign: 'center', color: theme.colors.dark }}>
+            By continuing, you accept our{'\n'}<Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}>Privacy Policy</Link> and
+            <Link style={{ color: theme.colors.secondary }} to={{ screen: '' }}> Terms of Service</Link>
+          </Text>
+        </View>
+      }
     </KeyboardAvoidingView>
   );
 };
@@ -114,8 +169,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.Logo,
     color: theme.colors.logo,
     textAlign: 'center',
-    padding: 5,
-    marginBottom: 20,
     shadowColor: theme.colors.dark,
     shadowOffset: {
       width: 5,
@@ -124,6 +177,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 50,
+  },
+  icons: {
+    shadowColor: theme.colors.dark,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
   button: {
     position: 'relative',
@@ -137,6 +199,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 2,
   },
+  input: {
+    borderWidth: 2, borderRadius: 100, borderColor: theme.colors.dark,
+    paddingHorizontal: 20, backgroundColor: theme.colors.light, width: 300, height: 50,
+    color: theme.colors.dark, fontSize: fontSizes.large, fontWeight: 'medium'
+  }
 });
 
 export default Landing;

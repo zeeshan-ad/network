@@ -1,25 +1,25 @@
-import { useState } from 'react';
 import APIconfig from '../util/api.config.json';
 // import { axiosInstance } from '../util/api';
-import { ip } from '../util/constants';
+import { BASE_URL } from '../util/constants';
 import axios from 'axios';
+import { convertDateFormat } from '../util/functions';
 
 
-export const createAccount = async (SignupCred) => {
+export const createAccount = async (UserDetails) => {
   const { create_account } = APIconfig;
 
   const data = JSON.stringify({
-    firstname: SignupCred.firstname.trim(),
-    lastname: SignupCred.lastname.trim(),
-    email: SignupCred.email.trim(),
-    password: SignupCred.password,
+    name: UserDetails?.name.trim(),
+    email: UserDetails?.email.trim(),
+    password: UserDetails?.password,
+    dob: convertDateFormat(UserDetails?.dob),
     created_at: new Date(),
   });
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: `http://${ip}:3000${create_account}`,
+    url: `${BASE_URL}${create_account}`,
     headers: {
       'Content-Type': 'application/json'
     },
