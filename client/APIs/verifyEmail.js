@@ -1,7 +1,5 @@
 import APIconfig from '../util/api.config.json';
-import { BASE_URL } from '../util/constants';
-import axios from 'axios';
-
+import { axiosInstance } from '../util/api';
 
 export const verifyEmail = async (email) => {
   const { verify_email } = APIconfig;
@@ -9,16 +7,15 @@ export const verifyEmail = async (email) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: `${BASE_URL}${verify_email}?email=${email}`,
+    url: `${verify_email}?email=${email}`,
     headers: {
       'Content-Type': 'application/json'
     },
   }; 
 
 
-  const res = await axios.request(config)
+  const res = await axiosInstance.request(config)
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) => {

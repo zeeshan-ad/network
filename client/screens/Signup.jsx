@@ -6,9 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { createAccount } from '../APIs';
 import { StatusBar } from 'expo-status-bar';
 import DismissKeyboard from '../components/DismissKeyboard';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../store/userInfoSlice';
 
 
 const Signup = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const { Email } = route.params;
 
   const [UserDetails, setUserDetails] = useState({
@@ -69,7 +72,7 @@ const Signup = ({ route, navigation }) => {
     if (LoginStatus === false) return;
     const response = await createAccount(UserDetails);
     if (response?.status === 200) {
-      navigation.navigate('Home', { userData: response?.data });
+      dispatch(setUserInfo(response.data.data));
     } else if (response?.status === 409) {
       alert('Email already exists. Please login.');
     } else {
@@ -103,7 +106,7 @@ const Signup = ({ route, navigation }) => {
                 size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
             </View>
             {UserDetails.passwordWarning &&
-              <Text style={{ color: theme.colors.warning, fontSize: fontSizes.medium, fontWeight: fontWeights.normal, marginTop: -15, textAlign: 'center' }}>
+              <Text style={{ color: theme.colors.info, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal, marginTop: -15, textAlign: 'center' }}>
                 Password must be at least 8 characters long.
               </Text>}
           </View>
@@ -114,7 +117,7 @@ const Signup = ({ route, navigation }) => {
           </Pressable>
           <Text style={{ textAlign: 'center', fontWeight: fontWeights.normal, fontSize: fontSizes.medium }}>
             You are using {`${Email}\n`}to sign-up. &nbsp;
-            <Link to={{ screen: 'Landing' }} style={{ color: theme.colors.secondary }}>
+            <Link to={{ screen: 'Landing' }} style={{ textDecorationLine: 'underline' }}>
               Use a different email
             </Link>
           </Text>
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 70,
     height: '100%',
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.light,
   },
   underlineStyleBase: {
     borderRadius: 100,

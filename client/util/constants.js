@@ -6,13 +6,12 @@ export const theme = {
     secondary: '#72E16E',
     info: '#2E8CED',
     danger: '#F44D4C',
-    grey: '#b9b9b9',
-    light: '#F8E8C2',
-    darkgrey: '#444',
     warning: '#F5C400',
     accent: '#F4ABAD',
+    grey: '#b9b9b9',
+    light: '#f2ecde',
+    darkgrey: '#444',
     dark: '#0A0A0A',
-    logo: '#F8E8C2',
     disabled: '#4c9648'
   }
 }
@@ -23,11 +22,14 @@ export const fontWeights = {
 
 export const fontSizes = {
   small: 12,
+  smallMedium: 14,
   medium: 16,
   large: 18,
+  xlarge: 28,
   heading: 24,
+  smallHightlight: 35,
   BigHightlight: 42,
-  Logo: 100,
+  Logo: 70,
 }
 export const BASE_URL = 'http://192.168.0.185:3000';
 export const APP_NAME = 'Yeet!';

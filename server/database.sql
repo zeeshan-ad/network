@@ -12,6 +12,6 @@ CREATE TABLE users (
 CREATE TABLE user_sessions (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    token VARCHAR(255) NOT NULL,
+    token VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

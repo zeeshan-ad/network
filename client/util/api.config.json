@@ -1,5 +1,6 @@
 {
   "create_account": "/api/users/create-account",
   "verify_email": "/api/users/verify-email",
-  "login_user": "/api/users/login"
+  "login_user": "/api/users/login",
+  "logout_user": "/api/users/logout"
 }
