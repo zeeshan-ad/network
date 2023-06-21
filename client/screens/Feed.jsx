@@ -32,13 +32,13 @@ const Feed = ({ navigation }) => {
 
                 <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>You</Text>
               </View>
-              {[...Array(5)].map((e, i) => <Mood key={i} />)}
+              <Mood />
             </View>
           </ScrollView>
           <View style={{ marginBottom: 100 }}>
             <PostSnippet navigation={navigation} />
-            <PostTextSnippet navigation={navigation}/>
-            <PostSnippet navigation={navigation}/>
+            <PostTextSnippet navigation={navigation} />
+            <PostSnippet navigation={navigation} />
           </View>
         </ScrollView>
       </DismissKeyboard>

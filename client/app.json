@@ -8,17 +8,25 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "platforms": ["ios"], 
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/yeet.png",
+      "backgroundColor": "#f2ecde",
+      "resizeMode": "auto"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "infoPlist": {
         "NSAllowsArbitraryLoads": true
       }
     },
     "android": {
-      "adaptiveIcon": {  
-      }
+      "adaptiveIcon": {}
     },
-    "web": {
-    }
+    "web": {}
   }
 }
