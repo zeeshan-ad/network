@@ -14,7 +14,8 @@ export const theme = {
     dark: '#0A0A0A',
     disabled: '#4c9648',
     divider: '#DEDEDE',
-    textPost: '#F9F9F3'
+    textPost: '#F9F9F3',
+    backdrop: 'rgba(0,0,0,0.6)'
   }
 }
 

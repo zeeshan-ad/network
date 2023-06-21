@@ -27,6 +27,7 @@
     "react": "18.2.0",
     "react-intl-tel-input": "^8.2.0",
     "react-native": "0.71.8",
+    "react-native-btr": "^2.2.0",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-paper": "^5.8.0",
     "react-native-phone-number-input": "^2.1.0",
