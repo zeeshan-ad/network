@@ -7,6 +7,7 @@ import Txt from './Txt';
 import { Entypo, Feather, FontAwesome } from '@expo/vector-icons';
 import { theme } from '../util/constants';
 import { View } from 'react-native';
+import Profile from './Profile';
 
 const Home = () => {
 
@@ -15,13 +16,13 @@ const Home = () => {
   return (
     <Tab.Navigator initialRouteName={'Feed'} screenOptions={{
       tabBarShowLabel: false,
-      tabBarStyle: { backgroundColor: theme.colors.light, borderTopWidth: 0, elevation: 0 }
+      tabBarStyle: { backgroundColor: theme.colors.light, borderTopWidth: 0, elevation: 0, paddingTop:10}
     }}
       sceneContainerStyle={{ backgroundColor: theme.colors.light }} >
       <Tab.Screen name="Post" component={Post} options={{
         headerShown: false, tabBarIcon: ({ tintColor }) => {
           return (
-            <View style={{ backgroundColor: theme.colors.secondary, borderRadius: 100, padding: 10 }}>
+            <View style={{ backgroundColor: theme.colors.secondary, borderRadius: 100, padding: 5 }}>
               <Feather name="plus" size={30} />
             </View>
           )
@@ -31,6 +32,9 @@ const Home = () => {
         headerShown: false, tabBarIcon: ({ }) => {
           return <FontAwesome name="send-o" size={25} />
         }
+      }} />
+      <Tab.Screen name="Profile" component={Profile} options={{
+        headerShown: false, tabBarVisible: false, tabBarButton: () => null,
       }} />
       <Tab.Screen name="Notification" component={Notification} options={{
         headerShown: false, tabBarIcon: ({ }) => {
@@ -42,11 +46,6 @@ const Home = () => {
           return <Feather name="home" size={25} />
         }
       }} />
-      {/* <Tab.Screen name="Profile" component={Profile} options={{
-        headerShown: false, tabBarIcon: ({ tintColor }) => {
-          return <Ionicons name="person-circle-outline" size={30} color={tintColor} />
-        }
-      }} /> */}
     </Tab.Navigator>
   )
 }

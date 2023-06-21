@@ -5,7 +5,8 @@ import Landing from './screens/Landing';
 import Signup from './screens/Signup';
 import Home from './screens/Home';
 import { useEffect, useState } from 'react';
-import Profile from './screens/Profile';
+import PostExpanded from './screens/PostExpanded';
+import PostTextExpanded from './components/PostTextExpanded';
 import { useSelector } from 'react-redux';
 
 export default function Navigator() {
@@ -24,7 +25,9 @@ export default function Navigator() {
         {User?.token ?
           <>
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Stack.Screen name="PostExpanded" component={PostExpanded} options={{ headerShown: false }} />
+            <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
+            
           </>
           :
           <>

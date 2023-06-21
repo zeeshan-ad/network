@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 40,
+    marginBottom: 10,
     marginHorizontal: 20,
   },
   logo: {

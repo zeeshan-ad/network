@@ -115,14 +115,16 @@ const Landing = ({ navigation }) => {
                   selectionColor={theme.colors.secondary}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
-                  style={styles.input} placeholder="Email Id" />
+                  style={styles.input} placeholder="Enter your email to continue" />
               }
               <Pressable
                 onPress={() => {
-                  if (DisplayPasswordInput) {
-                    callLogin();
-                  } else {
-                    callVerifyEmail();
+                  if (UserCred.email.match(emailRegex)) {
+                    if (DisplayPasswordInput) {
+                      callLogin();
+                    } else {
+                      callVerifyEmail();
+                    }
                   }
                 }}
                 style={[styles.button, { backgroundColor: UserCred.email.match(emailRegex) ? theme.colors.secondary : theme.colors.disabled }]}>
