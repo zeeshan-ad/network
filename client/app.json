@@ -8,6 +8,14 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Yeet to access your camera."
+        }
+      ]
+    ],
     "platforms": ["ios"], 
     "icon": "./assets/images/icon.png",
     "splash": {

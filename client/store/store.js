@@ -4,11 +4,13 @@ import userInfoReducer from './userInfoSlice';
 import { persistStore, persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from "redux-thunk";
+import editProfileSlice from './editProfileSlice';
 
 
 
 const rootReducer = combineReducers({
   userInfo: userInfoReducer,
+  editProfile: editProfileSlice,
 })
 
 

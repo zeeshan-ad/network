@@ -112,7 +112,6 @@ const Landing = ({ navigation }) => {
                     size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                 </View> :
                 <TextInput
-                  selectionColor={theme.colors.secondary}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
                   style={styles.input} placeholder="Enter your email to continue" />

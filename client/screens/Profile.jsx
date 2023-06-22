@@ -25,7 +25,6 @@ const Profile = ({ navigation }) => {
 
   const [SheetVisible, setSheetVisible] = useState(false);
   const [ModalLogout, setModalLogout] = useState(false);
-  console.log(ModalLogout);
   return (
     <View style={styles.container}>
       <View style={{
@@ -108,14 +107,17 @@ const Profile = ({ navigation }) => {
         onBackdropPress={() => setSheetVisible(!SheetVisible)}
       >
         <View style={styles.card}>
-          <Pressable style={{
+          <Pressable onPress={() => {
+            setSheetVisible(!SheetVisible)
+            navigation.navigate('EditProfile');
+          }} style={{
             flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
             borderBottomWidth: 1, borderBottomColor: theme.colors.divider
           }}>
             <Feather name="edit" size={22} color={theme.colors.dark} />
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Edit Profile</Text>
           </Pressable>
-          <Pressable onPress={() => console.log('what')} style={{
+          <Pressable style={{
             flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
             borderBottomWidth: 1, borderBottomColor: theme.colors.divider
           }}>

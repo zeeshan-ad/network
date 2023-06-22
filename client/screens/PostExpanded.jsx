@@ -47,7 +47,6 @@ const PostExpanded = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior='height'>
-      {/* <DismissKeyboard> */}
       <View>
         {CommentsVisible &&
           <View style={{
@@ -88,7 +87,7 @@ const PostExpanded = ({ navigation }) => {
                   borderColor: theme.colors.dark, overflow: 'hidden'
                 }} />
               <TextInput
-                selectionColor={theme.colors.secondary}
+                selectionColor={theme.colors.dark}
                 style={styles.input} placeholder="Add a comment" />
             </View>
           </View>}
@@ -213,7 +212,6 @@ const PostExpanded = ({ navigation }) => {
           }}
         />
       </View>
-      {/* </DismissKeyboard> */}
     </KeyboardAvoidingView>
   )
 }
