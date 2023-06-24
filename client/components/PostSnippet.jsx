@@ -67,8 +67,8 @@ const PostSnippet = ({ navigation }) => {
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>257</Text>
+                    <FontAwesome name="diamond" size={23} color={theme.colors.light} />
+                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop:2 }}>257</Text>
                   </BlurView>
                 </View>
                 <View style={{

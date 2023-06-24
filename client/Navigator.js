@@ -5,11 +5,12 @@ import Landing from './screens/Landing';
 import Signup from './screens/Signup';
 import Home from './screens/Home';
 import { useEffect, useState } from 'react';
-import PostExpanded from './screens/PostExpanded';
+import PostExpanded from './components/PostExpanded';
 import PostTextExpanded from './components/PostTextExpanded';
 import { useSelector } from 'react-redux';
 import EditProfile from './screens/EditProfile';
 import AppCamera from './AppCamera';
+import Profile from './screens/Profile';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -30,7 +31,8 @@ export default function Navigator() {
             <Stack.Screen name="PostExpanded" component={PostExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-            <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />            
+            <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />  
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />          
           </>
           :
           <>

@@ -15,3 +15,13 @@ CREATE TABLE user_sessions (
     token VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_profile (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    bio VARCHAR(255) NOT NULL,
+    profile_pic VARCHAR(255) NOT NULL,
+    theme VARCHAR(255) NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

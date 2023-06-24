@@ -2,14 +2,12 @@ import axiosInstanceAuth from '../util/api';
 import APIconfig from '../util/api.config.json';
 
 
-export const logoutUser = async () => {
-
-  const { logout_user } = APIconfig;
-
+export const getProfileData = async () => {
+  const { profile } = APIconfig;
   let config = {
-    method: 'delete',
+    method: 'get',
     maxBodyLength: Infinity,
-    url: `${logout_user}`,
+    url: `${profile}`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -25,4 +23,6 @@ export const logoutUser = async () => {
     });
 
   return result;
+
+
 }

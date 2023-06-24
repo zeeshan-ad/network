@@ -2,5 +2,7 @@
   "create_account": "/api/users/create-account",
   "verify_email": "/api/users/verify-email",
   "login_user": "/api/users/login",
-  "logout_user": "/api/users/logout"
+  "logout_user": "/api/users/logout",
+  "profile": "/api/users/profile",
+  "profile_update": "/api/users/profile-update"
 }

@@ -51,7 +51,7 @@ const PostExpanded = ({ navigation }) => {
         {CommentsVisible &&
           <View style={{
             position: 'absolute', bottom: 70, marginLeft: 20, minWidth: 200,
-            maxWidth: width - 100, maxHeight: height/2.6, zIndex: 9
+            maxWidth: width - 100, maxHeight: height / 2.6, zIndex: 9
           }}>
             <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10 }}>
               {comments.map((item, index) => {
@@ -80,7 +80,7 @@ const PostExpanded = ({ navigation }) => {
                 )
               })}
             </ScrollView>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems:'center' }}>
               <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
                 style={{
                   height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
@@ -134,9 +134,8 @@ const PostExpanded = ({ navigation }) => {
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>257</Text>
-                  </BlurView>
+                    <FontAwesome name="diamond" size={23} color={theme.colors.light} />
+                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text></BlurView>
                 </View>
                 <View style={{
                   position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,

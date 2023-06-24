@@ -53,8 +53,8 @@ const PostTextExpanded = ({ navigation }) => {
           <View style={{
             flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
           }}>
-            <FontAwesome name="heart-o" size={25} color={theme.colors.dark} />
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>257</Text>
+            <FontAwesome name="diamond" size={23} color={theme.colors.dark} />
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
           </View>
           <View style={{
             flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
@@ -65,7 +65,7 @@ const PostTextExpanded = ({ navigation }) => {
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginHorizontal: 20, marginBottom:80 }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginHorizontal: 20, marginBottom: 80 }}>
         {comments.map((item, index) => {
           return (
             <View key={index} style={{ flexDirection: 'row' }}>

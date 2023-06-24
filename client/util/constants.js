@@ -39,4 +39,25 @@ export const fontSizes = {
   Logo: 70,
 }
 export const BASE_URL = 'http://192.168.0.188:3000';
+export const ProfileTheme = [
+  "#f2ecde",
+  "#FFC3A0",
+  "#FFDCAB",
+  "#FFF3B6",
+  "#FFECB6",
+  "#FFFEA3",
+  "#D2FF7E",
+  "#8DFF8C",
+  "#A1FFD9",
+  "#ABFFFF",
+  "#AEE7FF",
+  "#A5B3FF",
+  "#D7A6FF",
+  "#FFB3FF",
+  "#FFB8D9",
+  "#FFD6E7",
+  "#FFDDDC",
+  "#FFC2E2"
+];
+
 export const APP_NAME = 'Yeet!';

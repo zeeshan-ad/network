@@ -1,44 +1,90 @@
-import React from 'react';
-import { Dimensions, ImageBackground, Keyboard, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { fontSizes, fontWeights, theme } from '../util/constants';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ImageBackground, Keyboard, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { ProfileTheme, fontSizes, fontWeights, theme } from '../util/constants';
+import { useSelector, useDispatch } from 'react-redux';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native';
+import { updateProfileData } from '../APIs/UpdateProfile';
+import { setProfileData } from '../store/editProfileSlice';
 
 
 const width = Dimensions.get('window').width;
 
 const EditProfile = ({ navigation }) => {
+  const dispatch = useDispatch();
   const editProfile = useSelector(state => state.editProfile);
+
+  const [Bio, setBio] = useState(editProfile?.bio);
+
+  const [isEnabled, setIsEnabled] = useState(editProfile?.is_public);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [PickedTheme, setPickedTheme] = useState(editProfile?.theme === null ? ProfileTheme?.[0] : editProfile?.theme);
+
+  useEffect(() => {
+    dispatch(setProfileData({ ...editProfile, bio: Bio, is_public: isEnabled, theme: PickedTheme }));
+  }, [editProfile, Bio, isEnabled, PickedTheme])
+
+  const callupdateProfileData = async () => {
+    const response = await updateProfileData(editProfile);
+    if (response?.status === 200) {
+      navigation.goBack();
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
+
+
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <KeyboardAvoidingView behavior="height" style={styles.container} >
+      <View style={{ position: 'absolute', top: 50, width: width, paddingHorizontal:10, flexDirection: 'row', justifyContent: 'space-between' }}>
         <Pressable onPress={() => navigation.goBack()}>
           <Ionicons name="close" size={30} color={theme.colors.dark} />
         </Pressable>
-        <Pressable onPress={() => navigation.goBack()}>
+        <Pressable onPress={callupdateProfileData}>
           <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
         </Pressable>
       </View>
-      <View style={{ marginTop: 20, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-        <ImageBackground source={{ uri: editProfile?.image?.uri }} resizeMethod='resize'
-          style={{ height: 100, width: 100 }}
-          imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />
-        <Pressable onPress={() => navigation.navigate('AppCamera')} >
-          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>
-            Update Picture
-          </Text>
-        </Pressable>
-      </View>
-      <View style={{ flexDirection: 'row', width: width - 80, alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginTop: 30, }}>
-        <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Bio</Text>
-        <TextInput selectionColor={theme.colors.dark} style={styles.input} />
-      </View>
-      <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between', gap: 20, marginTop: 30, }}>
-        <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Make account private</Text>
-        <Switch />
-      </View>
+      <ScrollView style={{ width: '100%' }} contentContainerStyle={{ justifyContent: 'center' }} showsVerticalScrollIndicator={false} >
+        <View style={{ marginTop: 20, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+          <ImageBackground source={{ uri: editProfile?.image?.uri }} resizeMethod='resize'
+            style={{ height: 100, width: 100 }}
+            imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />
+          <Pressable onPress={() => navigation.navigate('AppCamera')} >
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>
+              Update Picture
+            </Text>
+          </Pressable>
+        </View>
+        <View style={{ flexDirection: 'row', width: width - 80, alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginTop: 30, }}>
+          <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Bio</Text>
+          <TextInput selectionColor={theme.colors.dark} style={styles.input} onChangeText={setBio} value={Bio} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between', gap: 20, marginTop: 30, }}>
+          <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Make account private</Text>
+          <Switch
+            thumbColor={isEnabled ? theme.colors.secondary : '#f4f3f4'}
+            ios_backgroundColor={theme.colors.grey}
+            onValueChange={toggleSwitch}
+            value={isEnabled} />
+        </View>
+        <View style={{ marginVertical: 20 }}>
+          <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Pick a theme that best defines your vibe</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 20, justifyContent: 'center' }}>
+            {ProfileTheme.map((item, index) => (
+              <Pressable key={index} onPress={() => setPickedTheme(item)}>
+                <View style={{
+                  borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 100, height: 50, width: 50,
+                  backgroundColor: item, justifyContent: 'center', alignItems: 'center'
+                }}>
+                  {PickedTheme === item && <MaterialIcons name="colorize" size={24} color="black" />}
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   )
 }
@@ -53,11 +99,10 @@ const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 2,
     borderColor: theme.colors.dark,
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     backgroundColor: theme.colors.light,
     width: 300,
     maxWidth: 300,
-    height: 50,
     color: theme.colors.dark,
     fontSize: fontSizes.large,
     fontWeight: 'medium'

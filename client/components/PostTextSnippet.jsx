@@ -18,7 +18,7 @@ const PostTextSnippet = ({ navigation }) => {
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara Ali</Text>
         </View>
-        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium}}>20 mins ago</Text>
+        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>20 mins ago</Text>
       </View>
       <View>
         <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
@@ -29,8 +29,8 @@ const PostTextSnippet = ({ navigation }) => {
         <View style={{
           flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
         }}>
-          <FontAwesome name="heart-o" size={25} color={theme.colors.dark} />
-          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>257</Text>
+          <FontAwesome name="diamond" size={23} color={theme.colors.dark} />
+          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
         </View>
         <View style={{
           flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10

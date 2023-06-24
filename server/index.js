@@ -9,7 +9,16 @@ const port = 3000;
 // middleware
 app.use(express.json());
 app.use(cors());
+const multer = require('multer')
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: 'uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
 
+const upload = multer({ storage: storage })
 // routes
 
 // verify email exits or not
@@ -50,11 +59,14 @@ app.post('/api/users/create-account', async (req, res) => {
           if (session.rows.length === 0) {
             return res.status(500).json({ status: 500, message: 'Internal Server Error' });
           }
+          const profile = await pool.query('INSERT INTO user_profile (user_id, created_at) VALUES ($1, $2) RETURNING *', [newUser.rows[0].id, new Date()]);
+          if (profile.rows.length === 0) {
+            return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+          }
           delete newUser.rows[0].password;
           newUser.rows[0].token = token;
           res.status(200).json({ status: 200, data: newUser.rows[0] });
         } catch (err) {
-          console.error(err.message);
           res.status(500).json({ status: 500, message: 'Internal Server Error' });
         }
       });
@@ -96,9 +108,26 @@ app.get('/api/users/login', async (req, res) => {
   }
 });
 
+async function checkToken(req, res, next) {
+  const token = req.headers.authorization;
+  try {
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    if (session.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'Session not found' });
+    }
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+  if (token === undefined) {
+    return res.status(401).json({ status: 401, message: 'Unauthorized' });
+  }
+  next();
+}
+
+
 
 // Logout
-app.delete('/api/users/logout', async (req, res) => {
+app.delete('/api/users/logout', checkToken, async (req, res) => {
 
   const token = req.headers.authorization;
 
@@ -109,7 +138,58 @@ app.delete('/api/users/logout', async (req, res) => {
     }
     res.status(200).json({ status: 200, message: 'Logout Successful' });
   } catch (err) {
-    res.status(400).json({ status: 400, message: 'Bad Request'});
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
+// Get User Profile
+app.get('/api/users/profile', checkToken, async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]).then(async (result) => {
+      const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [result?.rows[0]?.user_id]);
+      if (profile.rows.length === 0) {
+        return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
+      } else {
+        res.status(200).json({ status: 200, data: profile.rows[0] });
+      }
+    }).catch((err) => {
+      res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// Update User Profile
+
+app.post('/api/users/dp', checkToken, upload.single('profile_pic'), async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const profile = await pool.query('UPDATE user_profile SET profile_pic = $1 WHERE user_id = $2 RETURNING *', [`/profile_pic/${req.file.filename}`, session.rows[0].user_id]);
+    if (profile.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    }
+    res.status(200).json({ status: 200, data: profile.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+app.put('/api/users/profile-update', checkToken, async (req, res) => {
+  const { bio, theme, is_public } = req.body;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const profile = await pool.query('UPDATE user_profile SET bio = $1, theme = $2, is_public = $3 WHERE user_id = $4 RETURNING *', [bio, theme, is_public, session.rows[0].user_id]);
+    if (profile.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    }
+    res.status(200).json({ status: 200, data: profile.rows[0] });
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
   }
 });
 
