@@ -2,7 +2,7 @@ import axiosInstanceAuth from "../util/api";
 import APIconfig from "../util/api.config.json";
 
 export const updateProfileData = async (editProfile) => {
-  const { profile_update } = APIconfig;
+  const { profile_update, upload_dp } = APIconfig;
 
 
   const data = {
@@ -21,6 +21,33 @@ export const updateProfileData = async (editProfile) => {
     data: data,
   };
 
+  const formData = new FormData();
+  formData.append("profile_pic", {
+    name: editProfile?.image?.split("/").pop(),
+    uri: editProfile?.image,
+    type: /\.(\w+)$/.exec(editProfile?.image) ? `image/${/\.(\w+)$/.exec(editProfile?.image)?.[1]}` : 'image'
+  });
+
+  const config2 = {
+    method: "put",
+    url: `${upload_dp}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: formData,
+  };
+
+
+  const result2 = await axiosInstanceAuth
+    .request(config2)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+
+
   const result = await axiosInstanceAuth
     .request(config)
     .then((response) => {
@@ -30,5 +57,11 @@ export const updateProfileData = async (editProfile) => {
       return error;
     });
 
-  return result;
+  if (result2?.status === 200 && result?.status === 200) {
+    return { status: 200, message: 'Profile Updated Successfully' }
+  }
+  else {
+    return { status: 400, message: 'Bad Request' }
+  }
+
 }

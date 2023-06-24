@@ -9,8 +9,9 @@ import PostExpanded from './components/PostExpanded';
 import PostTextExpanded from './components/PostTextExpanded';
 import { useSelector } from 'react-redux';
 import EditProfile from './screens/EditProfile';
-import AppCamera from './AppCamera';
+import AppCamera from './screens/AppCamera';
 import Profile from './screens/Profile';
+import Feed from './screens/Feed';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -24,10 +25,10 @@ export default function Navigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={`${User?.token ? 'Home' : 'Landing'}`} screenOptions={{ gestureEnabled: false }}>
+      <Stack.Navigator  initialRouteName={`${User?.token ? 'Home' : 'Landing'}`}>
         {User?.token ?
           <>
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
             <Stack.Screen name="PostExpanded" component={PostExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />

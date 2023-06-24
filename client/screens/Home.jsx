@@ -28,19 +28,19 @@ const Home = () => {
           )
         }
       }} />
-      <Tab.Screen name="Txt" component={Txt} options={{
+      {/* <Tab.Screen name="Txt" component={Txt} options={{
         headerShown: false, tabBarIcon: ({ }) => {
           return <FontAwesome name="send-o" size={25} />
         }
-      }} />
+      }} /> */}
       {/* <Tab.Screen name="Profile" component={Profile} options={{
         headerShown: false, tabBarVisible: false, tabBarButton: () => null,
       }} /> */}
-      <Tab.Screen name="Notification" component={Notification} options={{
+      {/* <Tab.Screen name="Notification" component={Notification} options={{
         headerShown: false, tabBarIcon: ({ }) => {
           return <Entypo name="notification" size={25} />
         }
-      }} />
+      }} /> */}
       <Tab.Screen name="Feed" component={Feed} options={{
         headerShown: false, tabBarIcon: ({ }) => {
           return <Feather name="home" size={25} />

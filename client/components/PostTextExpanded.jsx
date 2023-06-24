@@ -26,46 +26,47 @@ const PostTextExpanded = ({ navigation }) => {
   ]
   return (
     <View style={{ height: height }}>
-      <View style={{
-        minHeight: 150, paddingVertical: 10, marginBottom: 10, marginTop: 50,
-        marginHorizontal: 10, justifyContent: 'space-between',
-      }}>
-        <StatusBar style="dark" />
-        <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
-            </Pressable>
-            <ImageBackground source={require('../assets/images/tzara.jpg')}
-              style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark }}>
-              Tzara Ali
+      <View style={{ position: 'absolute', top: 0, backgroundColor: theme.colors.textPost, width: width, height: 45, zIndex:999, borderBottomWidth:.5, borderBottomColor: theme.colors.divider }}></View>
+
+      <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginBottom: 80, paddingHorizontal: 20 }}>
+        <View style={{
+          minHeight: 150, paddingVertical: 20, marginBottom: 10, marginTop: 50, justifyContent: 'space-between',
+        }}>
+          <StatusBar style="dark" />
+          <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginLeft: -10 }}>
+              <Pressable onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
+              </Pressable>
+              <ImageBackground source={require('../assets/images/tzara.jpg')}
+                style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
+              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark }}>
+                Tzara Ali
+              </Text>
+            </View>
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>20 mins ago</Text>
+          </View>
+          <View style={{ paddingVertical: 20 }}>
+            <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
+              I think I sunk the titanic. 🚢 🌊
             </Text>
           </View>
-          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>20 mins ago</Text>
-        </View>
-        <View>
-          <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
-            I think I sunk the titanic. 🚢 🌊
-          </Text>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{
-            flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
-          }}>
-            <FontAwesome name="diamond" size={23} color={theme.colors.dark} />
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
-          </View>
-          <View style={{
-            flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
-          }}>
-            <Ionicons name="chatbubble-outline" size={25} color={theme.colors.dark} />
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>12</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{
+              flexDirection: 'row', gap: 10, alignItems: 'center'
+            }}>
+              <FontAwesome name="diamond" size={23} color={theme.colors.dark} />
+              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+            </View>
+            <View style={{
+              flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
+            }}>
+              <Ionicons name="chatbubble-outline" size={25} color={theme.colors.dark} />
+              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>12</Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginHorizontal: 20, marginBottom: 80 }}>
         {comments.map((item, index) => {
           return (
             <View key={index} style={{ flexDirection: 'row' }}>
@@ -94,7 +95,7 @@ const PostTextExpanded = ({ navigation }) => {
       </ScrollView>
       <View style={{
         flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0,
-        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: theme.colors.textPost
+        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: theme.colors.textPost,  borderTopWidth:.5, borderTopColor: theme.colors.divider
       }}>
         <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
           style={{

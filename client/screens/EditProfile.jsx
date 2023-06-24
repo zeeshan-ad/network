@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ImageBackground, Keyboard, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { ProfileTheme, fontSizes, fontWeights, theme } from '../util/constants';
+import { ActivityIndicator, Dimensions, ImageBackground, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { BASE_URL, ProfileTheme, fontSizes, fontWeights, theme } from '../util/constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native';
@@ -15,6 +15,8 @@ const EditProfile = ({ navigation }) => {
   const dispatch = useDispatch();
   const editProfile = useSelector(state => state.editProfile);
 
+  const [LoadSubmission, setLoadSubmission] = useState(false);
+
   const [Bio, setBio] = useState(editProfile?.bio);
 
   const [isEnabled, setIsEnabled] = useState(editProfile?.is_public);
@@ -23,11 +25,13 @@ const EditProfile = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(setProfileData({ ...editProfile, bio: Bio, is_public: isEnabled, theme: PickedTheme }));
-  }, [editProfile, Bio, isEnabled, PickedTheme])
+  }, [editProfile, Bio, isEnabled, PickedTheme, LoadSubmission])
 
   const callupdateProfileData = async () => {
+    setLoadSubmission(true);
     const response = await updateProfileData(editProfile);
     if (response?.status === 200) {
+      setLoadSubmission(false);
       navigation.goBack();
     } else {
       alert('Something went wrong. Please try again later.');
@@ -35,22 +39,30 @@ const EditProfile = ({ navigation }) => {
   }
 
 
-
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container} >
-      <View style={{ position: 'absolute', top: 50, width: width, paddingHorizontal:10, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Pressable onPress={() => navigation.goBack()}>
+      <View style={{ position: 'absolute', top: 30, width: width, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Pressable onPress={() => navigation.goBack()} style={{ padding: 20, marginLeft: -20 }}>
           <Ionicons name="close" size={30} color={theme.colors.dark} />
         </Pressable>
-        <Pressable onPress={callupdateProfileData}>
-          <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
-        </Pressable>
+        {LoadSubmission ?
+          (<Pressable style={{ padding: 20, marginRight: -20 }}>
+            <ActivityIndicator size="small" color={theme.colors.dark} />
+          </Pressable>) :
+          (<Pressable onPress={callupdateProfileData} style={{ padding: 20, marginRight: -20 }}>
+            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
+          </Pressable>)
+        }
       </View>
       <ScrollView style={{ width: '100%' }} contentContainerStyle={{ justifyContent: 'center' }} showsVerticalScrollIndicator={false} >
         <View style={{ marginTop: 20, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-          <ImageBackground source={{ uri: editProfile?.image?.uri }} resizeMethod='resize'
+          {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }} resizeMethod='resize'
             style={{ height: 100, width: 100 }}
-            imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />
+            imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />) :
+            (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
+              style={{ height: 100, width: 100 }}
+              imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />)}
+
           <Pressable onPress={() => navigation.navigate('AppCamera')} >
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>
               Update Picture

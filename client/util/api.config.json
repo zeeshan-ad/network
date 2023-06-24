@@ -4,5 +4,6 @@
   "login_user": "/api/users/login",
   "logout_user": "/api/users/logout",
   "profile": "/api/users/profile",
-  "profile_update": "/api/users/profile-update"
+  "profile_update": "/api/users/profile-update",
+  "upload_dp": "/api/users/dp"
 }

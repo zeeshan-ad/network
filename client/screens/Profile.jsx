@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions } from 'react-native';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import { Pressable } from 'react-native';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
@@ -38,7 +38,7 @@ const Profile = ({ navigation }) => {
       dispatch(setProfileData({
         bio: response?.data?.data?.bio,
         is_public: response?.data?.data?.is_public,
-        image: response?.data?.data?.profile_pic,
+        image: BASE_URL + response?.data?.data?.profile_pic,
         theme: response?.data?.data?.theme,
       }));
     } else {
@@ -46,11 +46,10 @@ const Profile = ({ navigation }) => {
     }
   }
 
-
-
   useEffect(() => {
     callGetProfileData();
   }, [isFocused])
+
 
 
   const [SheetVisible, setSheetVisible] = useState(false);
@@ -58,26 +57,31 @@ const Profile = ({ navigation }) => {
   return (
     <View style={[styles.container, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
       <View style={{
-        paddingTop: 50, paddingHorizontal: 20, paddingBottom: 10,
+        position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
+        opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
+        shadowRadius: 5, zIndex: 9
+      }}></View>
+      <View style={{
+        paddingTop: 50, paddingHorizontal: 10, paddingBottom: 10,
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
-        <View style={{flexDirection:'row', marginLeft:-10 }}>
+        <View style={{ flexDirection: 'row', marginLeft: -10 }}>
           <Pressable onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
+            <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
           </Pressable>
           <View style={{
             borderWidth: 1, borderColor: theme.colors.dark, width: 95, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100
+            backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100
           }} >
             <Text style={{ fontSize: fontSizes.large, }}>🌻🤗🌞</Text>
           </View>
         </View>
-        <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{ borderWidth: 1, borderColor: theme.colors.dark, backgroundColor: theme.colors.light, padding: 3, borderRadius: 100 }}>
-          <Feather name="settings" size={20} color={theme.colors.tertiary} />
+        <Pressable onPress={() => setSheetVisible(!SheetVisible)}>
+          <Feather name="settings" size={20} color={theme.colors.light} />
         </Pressable>
       </View>
       <View style={{ width: '100%', height: 450, marginTop: -100 }}>
-        {userInfo?.profile_pic ? (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
+        {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }}
           style={{ height: width + 50, width: width }} />) :
           (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
             style={{ height: width + 50, width: width }} />)}
@@ -116,7 +120,7 @@ const Profile = ({ navigation }) => {
                   }))}
                 </Text>
               </View>
-              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, textDecorationLine: 'underline' }}>dm</Text>
+              {/* <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, textDecorationLine: 'underline' }}>dm</Text> */}
             </View>
           </View>
           <View style={{ paddingVertical: 10, height: 200, justifyContent: 'center', alignItems: 'center' }}>
@@ -124,7 +128,7 @@ const Profile = ({ navigation }) => {
               fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
               textAlign: 'center'
             }}>
-              You haven't posted anything yet,{'\n'}Post your first yeet now.
+              You haven't posted anything yet,{'\n'}post a new memory to get started!
             </Text>
           </View>
         </View>
@@ -169,7 +173,7 @@ const Profile = ({ navigation }) => {
             borderBottomWidth: 1, borderBottomColor: theme.colors.divider
           }}>
             <Feather name="edit" size={22} color={theme.colors.dark} />
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Edit Profile</Text>
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Edit Vibe</Text>
           </Pressable>
           <Pressable onPress={() => {
             setSheetVisible(!SheetVisible);

@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const pool = require('./db');
 var bcrypt = require('bcrypt');
+const fs = require('fs');
 const generateAccessToken = require('./functions');
 const port = 3000;
 
@@ -18,7 +19,9 @@ const storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
+
+app.use('/uploads', express.static(__dirname + '/uploads'));
 // routes
 
 // verify email exits or not
@@ -163,11 +166,21 @@ app.get('/api/users/profile', checkToken, async (req, res) => {
 
 // Update User Profile
 
-app.post('/api/users/dp', checkToken, upload.single('profile_pic'), async (req, res) => {
+app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
+  console.log(req.file);
   try {
     const token = req.headers.authorization;
     const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
-    const profile = await pool.query('UPDATE user_profile SET profile_pic = $1 WHERE user_id = $2 RETURNING *', [`/profile_pic/${req.file.filename}`, session.rows[0].user_id]);
+    // Retrieve the previous profile picture path from the database
+    const prevProfile = await pool.query('SELECT profile_pic FROM user_profile WHERE user_id = $1', [session.rows[0].user_id]);
+
+    // Delete the previous image if it exists
+    if (prevProfile.rows[0]?.profile_pic) {
+      const prevImagePath = prevProfile.rows[0].profile_pic.replace('/uploads/', '');
+      const prevImageFilePath = `uploads/${prevImagePath}`;
+      fs.unlinkSync(prevImageFilePath);
+    }
+    const profile = await pool.query('UPDATE user_profile SET profile_pic = $1 WHERE user_id = $2 RETURNING *', [`/uploads/${req.file.filename}`, session.rows[0].user_id]);
     if (profile.rows.length === 0) {
       return res.status(500).json({ status: 500, message: 'Internal Server Error' });
     }

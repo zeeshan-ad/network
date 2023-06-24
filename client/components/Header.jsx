@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font'
 
 
 SplashScreen.preventAutoHideAsync();
-const Header = ({ navigation }) => {
+const Header = ({ navigation, editProfile }) => {
   const [fontsLoaded] = useFonts({
     'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
   });
@@ -28,8 +28,10 @@ const Header = ({ navigation }) => {
       <Feather name="search" size={25} />
       <Text style={styles.logo}>{APP_NAME}</Text>
       <Pressable onPress={() => { navigation.navigate('Profile') }}>
-        <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
-          style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
+        {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }}
+          style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
+          (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
+            style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />)}
       </Pressable>
     </View>
   )
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 40,
     marginBottom: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
   logo: {
     fontFamily: 'Pacifico',

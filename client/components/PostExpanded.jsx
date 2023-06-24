@@ -46,7 +46,9 @@ const PostExpanded = ({ navigation }) => {
   const [CommentsVisible, setCommentsVisible] = useState(false);
 
   return (
-    <KeyboardAvoidingView behavior='height'>
+    <KeyboardAvoidingView behavior='height' style={{
+    backgroundColor: theme.colors.light,
+    }}>
       <View>
         {CommentsVisible &&
           <View style={{
@@ -80,7 +82,7 @@ const PostExpanded = ({ navigation }) => {
                 )
               })}
             </ScrollView>
-            <View style={{ flexDirection: 'row', alignItems:'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
                 style={{
                   height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
@@ -95,7 +97,7 @@ const PostExpanded = ({ navigation }) => {
           position: 'absolute', marginHorizontal: 20, top: 60, flexDirection: 'row', marginBottom: 10,
           justifyContent: 'space-between', width: width, alignItems: 'center', zIndex: 9
         }}>
-          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginLeft: -10 }}>
             <Pressable onPress={() => navigation.goBack()}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
