@@ -71,10 +71,8 @@ const Landing = ({ navigation }) => {
     const response = await loginUser(UserCred);
     if (response?.status === 200) {
       dispatch(setUserInfo(response?.data?.data));
-    } else if (response?.status === 401) {
-      alert(response.message);
     } else {
-      alert('Something went wrong. Please try again later.');
+      alert('Invalid Credentials');
     }
   }
 

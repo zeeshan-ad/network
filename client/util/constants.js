@@ -38,7 +38,7 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.188:3000';
+export const BASE_URL = 'http://192.168.0.185:3000';
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",
@@ -83,7 +83,7 @@ export const compliments = [
   "Picture-perfect! 😍",
   "You're glowing! ✨",
   "Incredible shot! 😍 ",
-  "Looking snacc! 🤤",
+  "Lookin' snacc! 🤤",
   "You're a star! ⭐",
   "You're a legend! 🤩",
 ];

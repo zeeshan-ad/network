@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, ImageBackground } from 'react-native';
 import { theme, fontSizes, fontWeights } from '../util/constants';
+import {Image} from 'expo-image';
 
 const Mood = () => {
   return (
     <View style={{ position: 'relative', alignItems: 'center', zIndex: 9 }}>
-      <ImageBackground source={require('../assets/images/tzara.jpg')}
+      <Image source={require('../assets/images/tzara.jpg')}
         style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
       <View style={{
         position: 'absolute', borderWidth: 1, borderColor: theme.colors.dark, justifyContent: 'center', alignItems: 'center',

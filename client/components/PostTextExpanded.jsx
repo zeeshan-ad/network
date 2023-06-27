@@ -3,6 +3,7 @@ import { View, Text, ImageBackground, Pressable, Dimensions, ScrollView, TextInp
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
+import { Image } from 'expo-image';
 
 
 const width = Dimensions.get("window").width;
@@ -26,7 +27,7 @@ const PostTextExpanded = ({ navigation }) => {
   ]
   return (
     <View style={{ height: height }}>
-      <View style={{ position: 'absolute', top: 0, backgroundColor: theme.colors.textPost, width: width, height: 45, zIndex:999, borderBottomWidth:.5, borderBottomColor: theme.colors.divider }}></View>
+      <View style={{ position: 'absolute', top: 0, backgroundColor: theme.colors.textPost, width: width, height: 45, zIndex: 999, borderBottomWidth: .5, borderBottomColor: theme.colors.divider }}></View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginBottom: 80, paddingHorizontal: 20 }}>
         <View style={{
@@ -38,7 +39,7 @@ const PostTextExpanded = ({ navigation }) => {
               <Pressable onPress={() => navigation.goBack()}>
                 <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
               </Pressable>
-              <ImageBackground source={require('../assets/images/tzara.jpg')}
+              <Image source={require('../assets/images/tzara.jpg')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
               <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark }}>
                 Tzara Ali
@@ -70,7 +71,7 @@ const PostTextExpanded = ({ navigation }) => {
         {comments.map((item, index) => {
           return (
             <View key={index} style={{ flexDirection: 'row' }}>
-              <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
+              <Image source={require('../assets/images/profilepic-dummy.jpg')}
                 style={{
                   height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                   borderColor: theme.colors.dark, overflow: 'hidden'
@@ -95,9 +96,9 @@ const PostTextExpanded = ({ navigation }) => {
       </ScrollView>
       <View style={{
         flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0,
-        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: theme.colors.textPost,  borderTopWidth:.5, borderTopColor: theme.colors.divider
+        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: theme.colors.textPost, borderTopWidth: .5, borderTopColor: theme.colors.divider
       }}>
-        <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
+        <Image source={require('../assets/images/profilepic-dummy.jpg')}
           style={{
             height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
             borderColor: theme.colors.dark, overflow: 'hidden'

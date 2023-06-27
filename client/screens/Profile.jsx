@@ -10,6 +10,8 @@ import { BottomSheet } from "react-native-btr";
 import { getProfileData } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
+import { Image } from 'expo-image';
+
 
 const width = Dimensions.get('window').width;
 const Profile = ({ navigation }) => {
@@ -38,7 +40,7 @@ const Profile = ({ navigation }) => {
       dispatch(setProfileData({
         bio: response?.data?.data?.bio,
         is_public: response?.data?.data?.is_public,
-        image: BASE_URL + response?.data?.data?.profile_pic,
+        image: response?.data?.data?.profile_pic ? BASE_URL + response?.data?.data?.profile_pic : null,
         theme: response?.data?.data?.theme,
       }));
     } else {
@@ -65,7 +67,7 @@ const Profile = ({ navigation }) => {
         paddingTop: 50, paddingHorizontal: 10, paddingBottom: 10,
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
-        <View style={{ flexDirection: 'row', marginLeft: -10 }}>
+        <View style={{ flexDirection: 'row' }}>
           <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
           </Pressable>
@@ -76,14 +78,14 @@ const Profile = ({ navigation }) => {
             <Text style={{ fontSize: fontSizes.large, }}>🌻🤗🌞</Text>
           </View>
         </View>
-        <Pressable onPress={() => setSheetVisible(!SheetVisible)}>
+        <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{ marginRight: 10 }}>
           <Feather name="settings" size={20} color={theme.colors.light} />
         </Pressable>
       </View>
       <View style={{ width: '100%', height: 450, marginTop: -100 }}>
         {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }}
           style={{ height: width + 50, width: width }} />) :
-          (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
+          (<Image source={require('../assets/images/placeholder_profile.png')}
             style={{ height: width + 50, width: width }} />)}
       </View>
       <ScrollView

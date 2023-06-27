@@ -3,6 +3,7 @@ import { View, Text, Dimensions, ImageBackground } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Image } from 'expo-image';
 
 const PostTextSnippet = ({ navigation }) => {
 
@@ -14,7 +15,7 @@ const PostTextSnippet = ({ navigation }) => {
     }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <ImageBackground source={require('../assets/images/tzara.jpg')}
+          <Image source={require('../assets/images/tzara.jpg')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara Ali</Text>
         </View>

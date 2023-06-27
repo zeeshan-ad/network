@@ -22,9 +22,7 @@ export const loginUser = async ({ email, password }) => {
     })
     .catch((error) => {
       return error;
-
     });
-
   return res;
 }
 

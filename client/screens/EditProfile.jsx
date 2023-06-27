@@ -7,6 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native';
 import { updateProfileData } from '../APIs/UpdateProfile';
 import { setProfileData } from '../store/editProfileSlice';
+import { Image } from 'expo-image';
 
 
 const width = Dimensions.get('window').width;
@@ -27,6 +28,8 @@ const EditProfile = ({ navigation }) => {
     dispatch(setProfileData({ ...editProfile, bio: Bio, is_public: isEnabled, theme: PickedTheme }));
   }, [editProfile, Bio, isEnabled, PickedTheme, LoadSubmission])
 
+
+
   const callupdateProfileData = async () => {
     setLoadSubmission(true);
     const response = await updateProfileData(editProfile);
@@ -46,7 +49,7 @@ const EditProfile = ({ navigation }) => {
           <Ionicons name="close" size={30} color={theme.colors.dark} />
         </Pressable>
         {LoadSubmission ?
-          (<Pressable style={{ padding: 20, marginRight: -20 }}>
+          (<Pressable style={{ padding: 20, marginRight: -10, paddingTop: 25 }}>
             <ActivityIndicator size="small" color={theme.colors.dark} />
           </Pressable>) :
           (<Pressable onPress={callupdateProfileData} style={{ padding: 20, marginRight: -20 }}>
@@ -59,9 +62,9 @@ const EditProfile = ({ navigation }) => {
           {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }} resizeMethod='resize'
             style={{ height: 100, width: 100 }}
             imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />) :
-            (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
-              style={{ height: 100, width: 100 }}
-              imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />)}
+            (<Image source={require('../assets/images/placeholder_profile.png')}
+              style={{ height: 100, width: 100, borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} contentFit="cover"
+               />)}
 
           <Pressable onPress={() => navigation.navigate('AppCamera')} >
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>

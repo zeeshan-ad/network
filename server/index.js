@@ -85,30 +85,42 @@ app.get('/api/users/login', async (req, res) => {
   const { email, password } = req.query;
 
   const userInfo = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-  if (userInfo.rows.length === 0) {
-    return res.status(404).json({ status: 404, message: 'User not found' });
-  }
-
-  const verifyCred = await bcrypt.compare(password, userInfo.rows[0].password);
-  const token = generateAccessToken(userInfo.rows[0]);
-
-  try {
+  if (userInfo.rows.length !== 0) {
+    const verifyCred = await bcrypt.compare(password, userInfo.rows[0].password);
     if (verifyCred) {
+      const token = generateAccessToken(userInfo.rows[0]);
       const session = await pool.query('INSERT INTO user_sessions (user_id, token, created_at) VALUES ($1, $2, $3) RETURNING *', [userInfo.rows[0].id, token, new Date()]);
       if (session.rows.length === 0) {
         return res.status(500).json({ status: 500, message: 'Internal Server Error' });
       }
       delete userInfo.rows[0].password;
       userInfo.rows[0].token = token;
-      res.status(200).json({
+      return res.status(200).json({
         status: 200, data: userInfo.rows[0], message: 'Login Successful'
       });
-    } else {
-      res.status(401).json({ status: 401, message: 'Invalid Credentials' });
     }
-  } catch (err) {
-    res.status(400).json({ status: 400, message: 'Bad Request' });
   }
+  return res.status(401).json({ status: 401, message: 'Invalid Credentials' });
+
+
+  //   try {
+  //     if (verifyCred) {
+  //       const session = await pool.query('INSERT INTO user_sessions (user_id, token, created_at) VALUES ($1, $2, $3) RETURNING *', [userInfo.rows[0].id, token, new Date()]);
+  //       if (session.rows.length === 0) {
+  //         return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  //       }
+  //       delete userInfo.rows[0].password;
+  //       userInfo.rows[0].token = token;
+  //       return res.status(200).json({
+  //         status: 200, data: userInfo.rows[0], message: 'Login Successful'
+  //       });
+  //     } else {
+  //       return res.status(401).json({ status: 401, message: 'Invalid Credentials' });
+  //     }
+  //   } catch (err) {
+  //     return res.status(400).json({ status: 400, message: 'Bad Request' });
+  //   }
+  // }
 });
 
 async function checkToken(req, res, next) {
@@ -144,6 +156,7 @@ app.delete('/api/users/logout', checkToken, async (req, res) => {
     res.status(400).json({ status: 400, message: 'Bad Request' });
   }
 });
+
 
 // Get User Profile
 app.get('/api/users/profile', checkToken, async (req, res) => {
@@ -193,6 +206,7 @@ app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
 
 app.put('/api/users/profile-update', checkToken, async (req, res) => {
   const { bio, theme, is_public } = req.body;
+  console.log(req.body)
   try {
     const token = req.headers.authorization;
     const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);

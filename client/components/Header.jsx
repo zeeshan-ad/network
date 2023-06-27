@@ -3,7 +3,9 @@ import { StyleSheet, View, Text, ImageBackground, Pressable } from 'react-native
 import { Feather } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { APP_NAME, fontSizes, theme } from '../util/constants';
-import { useFonts } from 'expo-font'
+import { useFonts } from 'expo-font';
+import { Image } from 'expo-image';
+
 
 
 SplashScreen.preventAutoHideAsync();
@@ -23,15 +25,16 @@ const Header = ({ navigation, editProfile }) => {
     return null;
   }
 
+
   return (
     <View style={styles.header} onLayout={onLayoutRootView}>
       <Feather name="search" size={25} />
       <Text style={styles.logo}>{APP_NAME}</Text>
       <Pressable onPress={() => { navigation.navigate('Profile') }}>
-        {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }}
+        {editProfile?.image ? (<Image source={editProfile?.image}
           style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-          (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
-            style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />)}
+          (<ImageBackground source={require('../assets/images/placeholder_profile.png')} resizeMode='center'
+            style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
       </Pressable>
     </View>
   )

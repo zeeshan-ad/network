@@ -4,6 +4,7 @@ import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
+import { Image } from 'expo-image';
 
 const PostSnippet = ({ navigation }) => {
 
@@ -31,7 +32,7 @@ const PostSnippet = ({ navigation }) => {
     <View style={{ paddingVertical: 10, position: 'relative' }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', marginBottom: 10, justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <ImageBackground source={require('../assets/images/tzara.jpg')}
+          <Image source={require('../assets/images/tzara.jpg')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara Ali</Text>
         </View>
@@ -51,7 +52,7 @@ const PostSnippet = ({ navigation }) => {
         renderItem={({ index }) => {
           return (
             <TouchableWithoutFeedback
-              onPress={() =>  navigation.navigate('PostExpanded')}>
+              onPress={() => navigation.navigate('PostExpanded')}>
               <View
                 style={{ marginHorizontal: 10, borderWidth: 2, borderRadius: 22 }}
                 key={index}>
@@ -68,7 +69,7 @@ const PostSnippet = ({ navigation }) => {
                     alignItems: 'center',
                   }}>
                     <FontAwesome name="diamond" size={23} color={theme.colors.light} />
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop:2 }}>257</Text>
+                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
                   </BlurView>
                 </View>
                 <View style={{
@@ -124,11 +125,11 @@ const PostSnippet = ({ navigation }) => {
                       {picDummy[index].caption}
                     </Text>
                   </View>}
-                <ImageBackground style={{
+                <Image style={{
                   height: '100%',
                   width: '100%',
+                  borderRadius: 20
                 }}
-                  imageStyle={{ borderRadius: 20 }}
                   source={picDummy[index].photo} />
               </View>
             </TouchableWithoutFeedback>

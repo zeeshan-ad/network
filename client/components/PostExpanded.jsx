@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, Dimensions, ImageBackground, Pressable, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Dimensions, Pressable, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Image } from 'expo-image';
 
 
 const width = Dimensions.get("window").width;
@@ -44,10 +45,21 @@ const PostExpanded = ({ navigation }) => {
   ]
 
   const [CommentsVisible, setCommentsVisible] = useState(false);
+  const [ShowBtn, setShowBtn] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowBtn(true);
+    }, 1000)
+
+    return () => {
+      clearInterval(timeout);
+    }
+  }, [])
+
 
   return (
     <KeyboardAvoidingView behavior='height' style={{
-    backgroundColor: theme.colors.light,
+      backgroundColor: theme.colors.light,
     }}>
       <View>
         {CommentsVisible &&
@@ -59,7 +71,7 @@ const PostExpanded = ({ navigation }) => {
               {comments.map((item, index) => {
                 return (
                   <View key={index} style={{ flexDirection: 'row' }}>
-                    <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
+                    <Image source={require('../assets/images/profilepic-dummy.jpg')}
                       style={{
                         height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                         borderColor: theme.colors.dark, overflow: 'hidden'
@@ -83,7 +95,7 @@ const PostExpanded = ({ navigation }) => {
               })}
             </ScrollView>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ImageBackground source={require('../assets/images/profilepic-dummy.jpg')}
+              <Image source={require('../assets/images/profilepic-dummy.jpg')}
                 style={{
                   height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                   borderColor: theme.colors.dark, overflow: 'hidden'
@@ -101,7 +113,7 @@ const PostExpanded = ({ navigation }) => {
             <Pressable onPress={() => navigation.goBack()}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
-            <ImageBackground source={require('../assets/images/tzara.jpg')}
+            <Image source={require('../assets/images/tzara.jpg')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light }}>
               Tzara Ali
@@ -125,7 +137,7 @@ const PostExpanded = ({ navigation }) => {
                 onPress={() => Keyboard.dismiss()}
                 style={{}}
                 key={index}>
-                <View style={{
+                {ShowBtn && <View style={{
                   borderRadius: 100,
                   overflow: "hidden",
                   flex: 1,
@@ -138,7 +150,7 @@ const PostExpanded = ({ navigation }) => {
                   }}>
                     <FontAwesome name="diamond" size={23} color={theme.colors.light} />
                     <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text></BlurView>
-                </View>
+                </View>}
                 <View style={{
                   position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
                   opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
@@ -149,7 +161,7 @@ const PostExpanded = ({ navigation }) => {
                   opacity: 0.2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: -20 }, shadowOpacity: 1,
                   shadowRadius: 5, zIndex: 9
                 }}></View>
-                <View style={{
+                {ShowBtn && <View style={{
                   borderRadius: 100,
                   overflow: "hidden",
                   flex: 1,
@@ -165,7 +177,7 @@ const PostExpanded = ({ navigation }) => {
                     </TouchableWithoutFeedback>
                     <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
                   </BlurView>
-                </View>
+                </View>}
                 <View style={{
                   borderRadius: 100,
                   overflow: "hidden",
@@ -202,11 +214,10 @@ const PostExpanded = ({ navigation }) => {
                       {picDummy[index].caption}
                     </Text>
                   </View>}
-                <ImageBackground style={{
+                <Image style={{
                   height: '100%',
                   width: '100%',
                 }}
-                  resizeMode='cover'
                   source={picDummy[index].photo} />
               </View>
             )

@@ -4,7 +4,6 @@ import APIconfig from "../util/api.config.json";
 export const updateProfileData = async (editProfile) => {
   const { profile_update, upload_dp } = APIconfig;
 
-
   const data = {
     bio: editProfile?.bio,
     theme: editProfile?.theme,
@@ -21,12 +20,17 @@ export const updateProfileData = async (editProfile) => {
     data: data,
   };
 
+
   const formData = new FormData();
-  formData.append("profile_pic", {
-    name: editProfile?.image?.split("/").pop(),
-    uri: editProfile?.image,
-    type: /\.(\w+)$/.exec(editProfile?.image) ? `image/${/\.(\w+)$/.exec(editProfile?.image)?.[1]}` : 'image'
-  });
+
+  if (editProfile.image !== null) {
+    formData.append("profile_pic", {
+      name: editProfile?.image?.split("/").pop(),
+      uri: editProfile?.image,
+      type: /\.(\w+)$/.exec(editProfile?.image) ? `image/${/\.(\w+)$/.exec(editProfile?.image)?.[1]}` : 'image'
+    });
+
+  }
 
   const config2 = {
     method: "put",
@@ -57,11 +61,15 @@ export const updateProfileData = async (editProfile) => {
       return error;
     });
 
-  if (result2?.status === 200 && result?.status === 200) {
-    return { status: 200, message: 'Profile Updated Successfully' }
-  }
-  else {
-    return { status: 400, message: 'Bad Request' }
+  if (editProfile?.image) {
+    if (result2?.status === 200 && result?.status === 200) {
+      return { status: 200, message: 'Profile Updated Successfully' }
+    }
+    else {
+      return { status: 400, message: 'Bad Request' }
+    }
+  } else {
+    return result;
   }
 
 }

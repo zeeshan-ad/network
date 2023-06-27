@@ -10,6 +10,8 @@ import PostTextSnippet from '../components/PostTextSnippet';
 import { getProfileData } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
+import { Image } from 'expo-image';
+
 
 
 const Feed = ({ navigation }) => {
@@ -29,7 +31,7 @@ const Feed = ({ navigation }) => {
       dispatch(setProfileData({
         bio: response?.data?.data?.bio,
         is_public: response?.data?.data?.is_public,
-        image: BASE_URL + response?.data?.data?.profile_pic,
+        image: response?.data?.data?.profile_pic ? BASE_URL + response?.data?.data?.profile_pic : null,
         theme: response?.data?.data?.theme,
       }));
     } else {
@@ -64,10 +66,10 @@ const Feed = ({ navigation }) => {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', gap: 15, paddingHorizontal: 10, paddingTop: 20, paddingBottom: 10, zIndex: -999 }}>
             <View style={{ position: 'relative', alignItems: 'center' }}>
-              {editProfile?.image ? (<ImageBackground source={{ uri: editProfile?.image }}
+              {editProfile?.image ? (<Image source={editProfile?.image}
                 style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-                (<ImageBackground source={require('../assets/images/placeholder_profile.png')}
-                  style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />)}
+                (<Image source={require('../assets/images/placeholder_profile.png')} resizeMode='center'
+                  style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }}/>)}
 
               <View style={{
                 position: 'absolute', borderWidth: 1, borderColor: theme.colors.dark, justifyContent: 'center', alignItems: 'center',
