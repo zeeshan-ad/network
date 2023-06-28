@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Landing from './screens/Landing';
 import Signup from './screens/Signup';
-import Home from './screens/Home';
 import { useEffect, useState } from 'react';
 import PostExpanded from './components/PostExpanded';
 import PostTextExpanded from './components/PostTextExpanded';
@@ -12,6 +11,7 @@ import EditProfile from './screens/EditProfile';
 import AppCamera from './screens/AppCamera';
 import Profile from './screens/Profile';
 import Feed from './screens/Feed';
+import PostMood from './components/PostMood';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -33,7 +33,8 @@ export default function Navigator() {
             <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
             <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />  
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />          
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />   
+            <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />       
           </>
           :
           <>

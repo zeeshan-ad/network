@@ -91,7 +91,7 @@ const Landing = ({ navigation }) => {
             </View>
             <View>
               <Text style={{ textAlign: 'center', marginTop: -20, fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>
-                Be authentic. Make friends. Have Fun.{'\n'}Join the network.
+                Be authentic. Make friends. Have Fun.{'\n'}Be the unfiltered you.
               </Text>
             </View>
             {DisplayPasswordInput &&

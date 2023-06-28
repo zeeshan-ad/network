@@ -5,5 +5,7 @@
   "logout_user": "/api/users/logout",
   "profile": "/api/users/profile",
   "profile_update": "/api/users/profile-update",
-  "upload_dp": "/api/users/dp"
+  "upload_dp": "/api/users/dp",
+  "update_mood": "/api/users/update_mood",
+  "get_mood": "/api/users/get_mood"
 }

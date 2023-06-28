@@ -7,7 +7,7 @@ import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData } from '../APIs';
+import { getProfileData, getMood } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -15,6 +15,7 @@ import { Image } from 'expo-image';
 
 const width = Dimensions.get('window').width;
 const Profile = ({ navigation }) => {
+  const [FetchedMood, setFetchedMood] = useState('');
   const isFocused = useIsFocused();
   const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
@@ -48,7 +49,17 @@ const Profile = ({ navigation }) => {
     }
   }
 
+  const callGetMood = async () => {
+    const response = await getMood();
+    if (response?.status === 200) {
+      setFetchedMood(response?.data?.data);
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
   useEffect(() => {
+    callGetMood();
     callGetProfileData();
   }, [isFocused])
 
@@ -75,7 +86,11 @@ const Profile = ({ navigation }) => {
             borderWidth: 1, borderColor: theme.colors.dark, width: 95, justifyContent: 'center', alignItems: 'center',
             backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100
           }} >
-            <Text style={{ fontSize: fontSizes.large, }}>🌻🤗🌞</Text>
+            <Pressable onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
+              {FetchedMood?.mood ?
+                <Text numberOfLines={1} ellipsizeMode='clip' style={{ fontSize: fontSizes.large, }}>{FetchedMood?.mood}</Text> :
+                <Feather name="plus" size={20} color={theme.colors.dark} />}
+            </Pressable>
           </View>
         </View>
         <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{ marginRight: 10 }}>

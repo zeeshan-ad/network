@@ -38,6 +38,7 @@ const EditProfile = ({ navigation }) => {
       navigation.goBack();
     } else {
       alert('Something went wrong. Please try again later.');
+      setLoadSubmission(false);
     }
   }
 
