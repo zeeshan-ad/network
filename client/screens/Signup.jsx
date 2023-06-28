@@ -81,7 +81,7 @@ const Signup = ({ route, navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height">
+    <KeyboardAvoidingView behavior="padding">
       <StatusBar style="dark" />
       <DismissKeyboard>
         <View style={styles.container}>

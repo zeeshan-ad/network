@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ImageBackground, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ScrollView, TouchableWithoutFeedback, Pressable, SafeAreaView } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
@@ -42,7 +42,6 @@ const Feed = ({ navigation }) => {
 
   const callGetMood = async () => {
     const response = await getMood();
-    console.log(response?.data?.data);
     if (response?.status === 200) {
       setFetchedMood(response?.data?.data);
     } else {
@@ -58,9 +57,8 @@ const Feed = ({ navigation }) => {
 
 
   return (
-    <KeyboardAvoidingView behavior="height" style={{
-      backgroundColor: theme.colors.light,
-    }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.light }}>
+    <KeyboardAvoidingView behavior="padding">
       <Header navigation={navigation} editProfile={editProfile} />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <Text style={{ fontSize: fontSizes.large, color: theme.colors.dark, paddingLeft: 10, fontWeight: fontWeights.normal }}>Moods</Text>
@@ -78,7 +76,8 @@ const Feed = ({ navigation }) => {
                   backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, left: 0, top: -15, padding: 3, borderRadius: 100
                 }} >
                   {FetchedMood?.mood ?
-                    <Text numberOfLines={1} ellipsizeMode='clip' style={{ fontSize: fontSizes.large, }}>{FetchedMood?.mood}</Text> :
+                    <Text numberOfLines={1} ellipsizeMode='clip' style={{width:70, textAlign:'center', fontSize: fontSizes.medium, height:22, paddingVertical:2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    shadowRadius: 1, elevation: 10, }}>{FetchedMood?.mood}</Text> :
                     <Feather name="plus" size={20} color={theme.colors.dark} />}
                 </View>
                 <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>You</Text>
@@ -87,15 +86,15 @@ const Feed = ({ navigation }) => {
             <Mood navigation={navigation} />
           </View>
         </ScrollView>
-        <View style={{ marginBottom: 100 }}>
+        <View>
           <PostSnippet navigation={navigation} />
           <PostTextSnippet navigation={navigation} />
           <PostSnippet navigation={navigation} />
         </View>
         <View style={{ height: 50 }}></View>
       </ScrollView>
-      <View style={{
-        position: 'absolute', bottom: 120, right: 15, zIndex: 999, backgroundColor: theme.colors.secondary, padding: 10,
+      <Pressable onPress={() => navigation.navigate('Post', { editProfile })} style={{
+        position: 'absolute', bottom: 50, right: 15, zIndex: 999, backgroundColor: theme.colors.secondary, padding: 10,
         borderWidth: 2, borderRadius: 100, height: 60, width: 60, justifyContent: 'center', alignItems: 'center', shadowColor: "#000",
         shadowOffset: {
           width: 0,
@@ -106,8 +105,9 @@ const Feed = ({ navigation }) => {
         elevation: 10,
       }}>
         <Feather name="plus" size={30} color={theme.colors.dark} />
-      </View>
+      </Pressable>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 

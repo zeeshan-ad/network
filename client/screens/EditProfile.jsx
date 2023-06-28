@@ -44,17 +44,26 @@ const EditProfile = ({ navigation }) => {
 
 
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container} >
+    <KeyboardAvoidingView behavior="padding" style={[styles.container, { backgroundColor: editProfile?.theme }]} >
       <View style={{ position: 'absolute', top: 30, width: width, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Pressable onPress={() => navigation.goBack()} style={{ padding: 20, marginLeft: -20 }}>
-          <Ionicons name="close" size={30} color={theme.colors.dark} />
+        <Pressable onPress={() => navigation.goBack()} style={{
+          padding: 20, marginLeft: -15, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+        }}>
+          <Ionicons name="close" size={30} color={theme.colors.light} />
         </Pressable>
         {LoadSubmission ?
-          (<Pressable style={{ padding: 20, marginRight: -10, paddingTop: 25 }}>
-            <ActivityIndicator size="small" color={theme.colors.dark} />
+          (<Pressable style={{
+            padding: 20, marginRight: -10, paddingTop: 25, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+          }}>
+            <ActivityIndicator size="small" color={theme.colors.light} />
           </Pressable>) :
-          (<Pressable onPress={callupdateProfileData} style={{ padding: 20, marginRight: -20 }}>
-            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
+          (<Pressable onPress={callupdateProfileData} style={{
+            padding: 20, marginRight: -15, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+          }}>
+            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.light} />
           </Pressable>)
         }
       </View>
@@ -65,7 +74,7 @@ const EditProfile = ({ navigation }) => {
             imageStyle={{ borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} />) :
             (<Image source={require('../assets/images/placeholder_profile.png')}
               style={{ height: 100, width: 100, borderWidth: 2, borderColor: theme.colors.dark, borderRadius: 10 }} contentFit="cover"
-               />)}
+            />)}
 
           <Pressable onPress={() => navigation.navigate('AppCamera')} >
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>
@@ -110,13 +119,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     paddingHorizontal: 20,
-    backgroundColor: theme.colors.light
   },
   input: {
     borderBottomWidth: 2,
     borderColor: theme.colors.dark,
     paddingHorizontal: 5,
-    backgroundColor: theme.colors.light,
+    backgroundColor: 'transparent',
     width: 300,
     maxWidth: 300,
     color: theme.colors.dark,

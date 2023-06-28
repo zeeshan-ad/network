@@ -58,7 +58,7 @@ const PostExpanded = ({ navigation }) => {
 
 
   return (
-    <KeyboardAvoidingView behavior='height' style={{
+    <KeyboardAvoidingView behavior='padding' style={{
       backgroundColor: theme.colors.light,
     }}>
       <View>
@@ -110,12 +110,18 @@ const PostExpanded = ({ navigation }) => {
           justifyContent: 'space-between', width: width, alignItems: 'center', zIndex: 9
         }}>
           <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginLeft: -10 }}>
-            <Pressable onPress={() => navigation.goBack()}>
+            <Pressable onPress={() => navigation.goBack()} style={{
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+              shadowRadius: 1, elevation: 10,
+            }}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
             <Image source={require('../assets/images/tzara.jpg')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light }}>
+            <Text style={{
+              fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+              shadowRadius: 1, elevation: 10,
+            }}>
               Tzara Ali
             </Text>
           </View>
@@ -186,7 +192,11 @@ const PostExpanded = ({ navigation }) => {
                   zIndex: 9,
                   position: 'absolute', right: 30, bottom: 30,
                 }}>
-                  <Text style={{ color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium }}>
+                  <Text style={{
+                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
+                    shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    shadowRadius: 1, elevation: 10,
+                  }}>
                     {`${index + 1}/${picDummy.length}`}</Text>
                 </View>
 
@@ -197,7 +207,10 @@ const PostExpanded = ({ navigation }) => {
                   zIndex: 9,
                   position: 'absolute', right: 20, top: 75
                 }}>
-                  <Text style={{ color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.medium }}>
+                  <Text style={{
+                    color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    shadowRadius: 1, elevation: 10,
+                  }}>
                     2 hours</Text>
                 </View>
 
@@ -210,7 +223,10 @@ const PostExpanded = ({ navigation }) => {
                     backgroundColor: "transparent",
                     position: 'absolute', left: 20, bottom: 30, zIndex: 9
                   }}>
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium }}>
+                    <Text style={{
+                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                      shadowRadius: 1, elevation: 10,
+                    }}>
                       {picDummy[index].caption}
                     </Text>
                   </View>}

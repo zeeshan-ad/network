@@ -79,7 +79,10 @@ const Profile = ({ navigation }) => {
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
         <View style={{ flexDirection: 'row' }}>
-          <Pressable onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()} style={{
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+          }}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
           </Pressable>
           <View style={{
@@ -88,12 +91,18 @@ const Profile = ({ navigation }) => {
           }} >
             <Pressable onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
               {FetchedMood?.mood ?
-                <Text numberOfLines={1} ellipsizeMode='clip' style={{ fontSize: fontSizes.large, }}>{FetchedMood?.mood}</Text> :
+                <Text numberOfLines={1} ellipsizeMode='clip' style={{
+                  width: 70, textAlign: 'center', fontSize: fontSizes.medium, paddingVertical: 2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                  shadowRadius: 1, elevation: 10,
+                }}>{FetchedMood?.mood}</Text> :
                 <Feather name="plus" size={20} color={theme.colors.dark} />}
             </Pressable>
           </View>
         </View>
-        <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{ marginRight: 10 }}>
+        <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{
+          marginRight: 10, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+        }}>
           <Feather name="settings" size={20} color={theme.colors.light} />
         </Pressable>
       </View>
@@ -137,7 +146,6 @@ const Profile = ({ navigation }) => {
                   }))}
                 </Text>
               </View>
-              {/* <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, textDecorationLine: 'underline' }}>dm</Text> */}
             </View>
           </View>
           <View style={{ paddingVertical: 10, height: 200, justifyContent: 'center', alignItems: 'center' }}>

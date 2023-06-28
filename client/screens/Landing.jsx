@@ -81,7 +81,7 @@ const Landing = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" onLayout={onLayoutRootView}>
+    <KeyboardAvoidingView behavior="padding" onLayout={onLayoutRootView}>
       <StatusBar style="dark" />
       <DismissKeyboard>
         <View style={styles.container}>

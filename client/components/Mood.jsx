@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { theme, fontSizes, fontWeights } from '../util/constants';
-import {Image} from 'expo-image';
+import { Image } from 'expo-image';
 
 const Mood = () => {
   return (
@@ -10,9 +10,12 @@ const Mood = () => {
         style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
       <View style={{
         position: 'absolute', borderWidth: 1, borderColor: theme.colors.dark, justifyContent: 'center', alignItems: 'center',
-        backgroundColor: theme.colors.secondary, left: 0, top: -15, paddingVertical: 5, paddingHorizontal: 5, borderRadius: 100
+        backgroundColor: theme.colors.secondary, left: 0, top: -15, padding: 3, borderRadius: 100
       }} >
-        <Text numberOfLines={1} ellipsizeMode='clip' style={{ fontSize: fontSizes.large, }}>🌉👓👻</Text>
+        <Text numberOfLines={1} ellipsizeMode='clip' style={{
+          width: 70, textAlign: 'center', fontSize: fontSizes.medium, height: 22, paddingVertical: 2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          shadowRadius: 1, elevation: 10,
+        }}>🌉👓👻</Text>
       </View>
       <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara</Text>
     </View>

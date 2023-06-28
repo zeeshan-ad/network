@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Dimensions, Pressable, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Dimensions, Pressable, ActivityIndicator, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { theme, fontSizes, fontWeights } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 import EmojiKeyboard from './EmojiKeyboard';
@@ -35,21 +35,30 @@ const PostMood = ({ navigation, route }) => {
   }
 
   return (
-    <View style={{
+    <SafeAreaView style={{
       flex: 1, paddingHorizontal: 20, paddingTop: 50, justifyContent: 'flex-start',
       backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light
     }}>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginLeft: -10 }}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={30} color={theme.colors.dark} />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal:20 }}>
+        <Pressable onPress={() => navigation.goBack()} style={{
+          shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          shadowRadius: 1, elevation: 10,
+        }}>
+          <Ionicons name="close" size={30} color={theme.colors.light} />
         </Pressable>
         {LoadSubmission ?
-          (<Pressable style={{ marginRight: -10, marginTop: 10 }}>
-            <ActivityIndicator size="small" color={theme.colors.dark} />
+          (<Pressable style={{
+            marginTop: 10, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10,
+          }}>
+            <ActivityIndicator size="small" color={theme.colors.light} />
           </Pressable>) :
-          (<Pressable onPress={callupdateMood} style={{ marginRight: -20 }}>
-            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
+          (<Pressable onPress={callupdateMood} style={{
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10,
+          }}>
+            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.light} />
           </Pressable>)
         }
       </View>
@@ -80,10 +89,10 @@ const PostMood = ({ navigation, route }) => {
           </Text>
         }
       </View>
-      <ScrollView style={{ marginBottom: 30 }} showsVerticalScrollIndicator={false} >
+      {/* <ScrollView style={{ marginBottom: 30 }} showsVerticalScrollIndicator={false} > */}
         <EmojiKeyboard onEmojiSelected={handleEmojiSelected} />
-      </ScrollView>
-    </View>
+      {/* </ScrollView> */}
+    </SafeAreaView>
   )
 }
 
@@ -91,6 +100,8 @@ const styles = StyleSheet.create({
   emojis: {
     fontSize: fontSizes.Logo,
     marginBottom: 20,
+    shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+    shadowRadius: 1, elevation: 10,
   },
 });
 

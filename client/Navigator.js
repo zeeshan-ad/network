@@ -12,6 +12,7 @@ import AppCamera from './screens/AppCamera';
 import Profile from './screens/Profile';
 import Feed from './screens/Feed';
 import PostMood from './components/PostMood';
+import Post from './screens/Post';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -34,7 +35,8 @@ export default function Navigator() {
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
             <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />  
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />   
-            <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />       
+            <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />  
+            <Stack.Screen name="Post" component={Post} options={{ headerShown: false }} />     
           </>
           :
           <>

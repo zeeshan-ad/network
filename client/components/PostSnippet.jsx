@@ -97,7 +97,11 @@ const PostSnippet = ({ navigation }) => {
                   zIndex: 9999,
                   position: 'absolute', right: 10, bottom: 10,
                 }}>
-                  <Text style={{ color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium }}>{`${index + 1}/${picDummy.length}`}</Text>
+                  <Text style={{
+                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    shadowRadius: 1, elevation: 10,
+                  }}>
+                    {`${index + 1}/${picDummy.length}`}</Text>
                 </View>
 
                 <View style={{
@@ -107,7 +111,10 @@ const PostSnippet = ({ navigation }) => {
                   zIndex: 9999,
                   position: 'absolute', left: 10, top: 10,
                 }}>
-                  <Text style={{ color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium }}>
+                  <Text style={{
+                    color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    shadowRadius: 1, elevation: 10,
+                  }}>
                     2 hours</Text>
                 </View>
 
@@ -121,7 +128,10 @@ const PostSnippet = ({ navigation }) => {
                     zIndex: 9999,
                     position: 'absolute', left: 10, bottom: 10,
                   }}>
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium }}>
+                    <Text style={{
+                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                      shadowRadius: 1, elevation: 10,
+                    }}>
                       {picDummy[index].caption}
                     </Text>
                   </View>}
