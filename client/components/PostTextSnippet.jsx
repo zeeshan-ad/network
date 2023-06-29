@@ -5,8 +5,7 @@ import { fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 
-const PostTextSnippet = ({ navigation }) => {
-
+const PostTextSnippet = ({ navigation, key, memo, profile }) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded')} style={{
@@ -15,7 +14,7 @@ const PostTextSnippet = ({ navigation }) => {
     }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <Image source={require('../assets/images/tzara.jpg')}
+          <Image source={profile?.profile_pic}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara Ali</Text>
         </View>
@@ -23,7 +22,7 @@ const PostTextSnippet = ({ navigation }) => {
       </View>
       <View>
         <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
-          I think I sunk the titanic. 🚢 🌊
+          {memo?.[key]?.memo}
         </Text>
       </View>
       <View style={{ flexDirection: 'row' }}>

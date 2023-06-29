@@ -7,5 +7,7 @@
   "profile_update": "/api/users/profile-update",
   "upload_dp": "/api/users/dp",
   "update_mood": "/api/users/update_mood",
-  "get_mood": "/api/users/get_mood"
+  "get_mood": "/api/users/get_mood",
+  "user_posts_memos": "/api/users/post_memos",
+  "get_user_memos": "/api/users/get_memos"
 }

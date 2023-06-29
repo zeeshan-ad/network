@@ -137,7 +137,7 @@ export default function AppCamera({ navigation }) {
       {previewVisible && capturedImage ? (
         <CameraPreview photo={capturedImage} retakePicture={retakePicture} />
       ) : (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
+        <SafeAreaView style={styles.container}>
           <Camera style={styles.camera} type={type} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
           </Camera>
           <Pressable style={[styles.CameraButton, {

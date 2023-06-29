@@ -12,7 +12,7 @@ const PostSnippet = ({ navigation }) => {
 
   const picDummy = [{
     "photo": require("../assets/images/1.jpeg"),
-    "caption": "Hello Shadow"
+    "caption": "Hello Shadow!"
   }, {
     "photo": require("../assets/images/2.jpeg"),
     "caption": "Study!!!"
@@ -120,7 +120,6 @@ const PostSnippet = ({ navigation }) => {
 
                 {picDummy[index].caption &&
                   <View style={{
-                    borderRadius: 100,
                     overflow: "hidden",
                     flex: 1,
                     width: '80%',
@@ -129,7 +128,8 @@ const PostSnippet = ({ navigation }) => {
                     position: 'absolute', left: 10, bottom: 10,
                   }}>
                     <Text style={{
-                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                       shadowRadius: 1, elevation: 10,
                     }}>
                       {picDummy[index].caption}

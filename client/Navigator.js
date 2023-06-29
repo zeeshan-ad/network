@@ -11,7 +11,7 @@ import EditProfile from './screens/EditProfile';
 import AppCamera from './screens/AppCamera';
 import Profile from './screens/Profile';
 import Feed from './screens/Feed';
-import PostMood from './components/PostMood';
+import PostMood from './screens/PostMood';
 import Post from './screens/Post';
 
 export default function Navigator() {
