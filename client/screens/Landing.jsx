@@ -82,26 +82,18 @@ const Landing = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior="padding" onLayout={onLayoutRootView}>
-      <StatusBar style="dark" />
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={{ height: '80%', justifyContent: 'center', alignItems: 'center', gap: 30 }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.centerContainer}>
+            <View>
               <Text style={styles.logo}>{APP_NAME}</Text>
             </View>
             <View>
-              <Text style={{ textAlign: 'center', marginTop: -20, fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>
+              <Text style={styles.title}>
                 Be authentic. Make friends. Have Fun.{'\n'}Be the unfiltered you.
               </Text>
             </View>
-            {DisplayPasswordInput &&
-              <View style={{ position: 'absolute', paddingTop: 300 }}>
-                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline', marginTop: -20 }}>
-                  Recover Password
-                </Text>
-              </View>
-            }
-            <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', }}>
+            <View style={styles.form}>
               {DisplayPasswordInput ?
                 <View style={{ justifyContent: 'center' }}>
                   <TextInput secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
@@ -128,22 +120,30 @@ const Landing = ({ navigation }) => {
                 <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
               </Pressable>
             </View>
+            <View>
+              {DisplayPasswordInput &&
+                <Text style={[styles.link, { fontSize: fontSizes.medium, fontWeight: fontWeights.normal }]}>
+                  Recover Password
+                </Text>
+              }
+            </View>
           </View>
         </View>
       </DismissKeyboard>
       {DisplayPasswordInput ?
         <View>
-          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center', position: 'absolute', right: 0, left: 0, bottom: 20 }}>
+          <Text style={styles.text}>
             Not {UserCred.email}? &nbsp;
-            <Text style={{ textDecorationLine: 'underline' }} onPress={() => setDisplayPasswordInput(!DisplayPasswordInput)}>
+            <Text style={styles.link} onPress={() => setDisplayPasswordInput(!DisplayPasswordInput)}>
               Go Back
             </Text>
           </Text>
         </View> :
         <View>
-          <Text style={{ position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, textAlign: 'center', color: theme.colors.dark }}>
-            By continuing, you accept our{'\n'}<Link style={{ textDecorationLine: 'underline' }} to={{ screen: '' }}>Privacy Policy</Link>&nbsp;and
-            &nbsp;<Link style={{ textDecorationLine: 'underline' }} to={{ screen: '' }}>Terms of Service</Link>
+          <Text style={styles.text}>
+            By continuing, you accept our{'\n'}
+            <Link style={styles.link} to={{ screen: '' }}>Privacy Policy</Link>&nbsp;and
+            &nbsp;<Link style={styles.link} to={{ screen: '' }}>Terms of Service</Link>
           </Text>
         </View>
       }
@@ -158,6 +158,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: theme.colors.light,
   },
+  title: { textAlign: 'center', marginTop: -20, fontSize: fontSizes.large, fontWeight: fontWeights.normal },
+  form: { flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center' },
+  link: { textDecorationLine: 'underline' },
+  centerContainer: { height: '80%', justifyContent: 'center', alignItems: 'center', gap: 30 },
   logo: {
     fontFamily: 'Pacifico',
     fontSize: fontSizes.Logo,
@@ -189,6 +193,10 @@ const styles = StyleSheet.create({
     color: theme.colors.dark,
     fontSize: fontSizes.large,
     fontWeight: 'medium'
+  },
+  text: {
+    position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
+    textAlign: 'center', color: theme.colors.dark
   }
 });
 

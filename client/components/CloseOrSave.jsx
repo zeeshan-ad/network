@@ -22,7 +22,7 @@ const CloseOrSave = ({ navigation, LoadSubmission, Save }) => {
 }
 
 const styles = StyleSheet.create({
-  container: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal: 20 },
+  container: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10 },
   iconShadow: {
     shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
     shadowRadius: 1, elevation: 10,

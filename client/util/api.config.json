@@ -1,6 +1,7 @@
 {
   "create_account": "/api/users/create-account",
   "verify_email": "/api/users/verify-email",
+  "verify_username": "/api/users/verify-username",
   "login_user": "/api/users/login",
   "logout_user": "/api/users/logout",
   "profile": "/api/users/profile",
@@ -9,5 +10,6 @@
   "update_mood": "/api/users/update_mood",
   "get_mood": "/api/users/get_mood",
   "user_posts_memos": "/api/users/post_memos",
-  "get_user_memos": "/api/users/get_memos"
+  "get_user_memos": "/api/users/get_memos",
+  "search_user": "/api/users/search"
 }

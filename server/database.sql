@@ -5,6 +5,7 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     dob DATE NOT NULL,
 );
@@ -23,5 +24,19 @@ CREATE TABLE user_profile (
     profile_pic VARCHAR(255) NOT NULL,
     theme VARCHAR(255) NOT NULL,
     is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_mood (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    mood TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_posts_memos (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    memo TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

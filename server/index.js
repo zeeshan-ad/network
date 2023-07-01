@@ -40,22 +40,37 @@ app.get('/api/users/verify-email', async (req, res) => {
   }
 });
 
+// verify username exits or not
+app.get('/api/users/verify-username', async (req, res) => {
+  const username = req.query.username;
+
+  if (username.length < 3) {
+    return res.status(409).json({ status: 409, message: 'Username must be greater than 2 characters' });
+  }
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (result.rows.length > 0) {
+      return res.status(409).json({ status: 409, message: 'Username already exists, Please try another one.' });
+    } else {
+      return res.status(200).json({ status: 200, message: 'Username does not exists' });
+    }
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
 // Insert a user in users table
 app.post('/api/users/create-account', async (req, res) => {
-  try {
-    const { name, email, password, created_at, dob } = req.body;
-    // check if user already exists
-    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (user.rows.length > 0) {
-      return res.status(409).json({ status: 409, message: 'Email already exists' });
-    }
+  const { name, email, username, password, created_at, dob } = req.body;
 
+  try {
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash(password, salt, async function (err, hash) {
         try {
           const newUser = await pool.query(
-            'INSERT INTO users (name, email, password, created_at, dob) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [name, email, hash, created_at, dob]
+            'INSERT INTO users (name, email, created_at, dob, password, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [name, email, created_at, dob, hash, username]
           );
           const token = generateAccessToken(newUser.rows[0]);
           const session = await pool.query('INSERT INTO user_sessions (user_id, token, created_at) VALUES ($1, $2, $3) RETURNING *', [newUser.rows[0].id, token, new Date()]);
@@ -64,6 +79,10 @@ app.post('/api/users/create-account', async (req, res) => {
           }
           const profile = await pool.query('INSERT INTO user_profile (user_id, created_at) VALUES ($1, $2) RETURNING *', [newUser.rows[0].id, new Date()]);
           if (profile.rows.length === 0) {
+            return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+          }
+          const mood = await pool.query('INSERT INTO user_mood (user_id, created_at) VALUES ($1, $2) RETURNING *', [newUser.rows[0].id, new Date()]);
+          if (mood.rows.length === 0) {
             return res.status(500).json({ status: 500, message: 'Internal Server Error' });
           }
           delete newUser.rows[0].password;
@@ -101,26 +120,6 @@ app.get('/api/users/login', async (req, res) => {
     }
   }
   return res.status(401).json({ status: 401, message: 'Invalid Credentials' });
-
-
-  //   try {
-  //     if (verifyCred) {
-  //       const session = await pool.query('INSERT INTO user_sessions (user_id, token, created_at) VALUES ($1, $2, $3) RETURNING *', [userInfo.rows[0].id, token, new Date()]);
-  //       if (session.rows.length === 0) {
-  //         return res.status(500).json({ status: 500, message: 'Internal Server Error' });
-  //       }
-  //       delete userInfo.rows[0].password;
-  //       userInfo.rows[0].token = token;
-  //       return res.status(200).json({
-  //         status: 200, data: userInfo.rows[0], message: 'Login Successful'
-  //       });
-  //     } else {
-  //       return res.status(401).json({ status: 401, message: 'Invalid Credentials' });
-  //     }
-  //   } catch (err) {
-  //     return res.status(400).json({ status: 400, message: 'Bad Request' });
-  //   }
-  // }
 });
 
 async function checkToken(req, res, next) {
@@ -180,7 +179,6 @@ app.get('/api/users/profile', checkToken, async (req, res) => {
 // Update User Profile
 
 app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
-  console.log(req.file);
   try {
     const token = req.headers.authorization;
     const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
@@ -206,7 +204,6 @@ app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
 
 app.put('/api/users/profile-update', checkToken, async (req, res) => {
   const { bio, theme, is_public } = req.body;
-  console.log(req.body)
   try {
     const token = req.headers.authorization;
     const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
@@ -217,6 +214,98 @@ app.put('/api/users/profile-update', checkToken, async (req, res) => {
     res.status(200).json({ status: 200, data: profile.rows[0] });
   } catch (err) {
     res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
+// Update user_mood
+app.put('/api/users/update_mood', checkToken, async (req, res) => {
+  const { text } = req.body;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const profile = await pool.query('UPDATE user_mood SET mood = $1 WHERE user_id = $2 RETURNING *', [text, session.rows[0].user_id]);
+    if (profile.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    }
+    res.status(200).json({ status: 200, data: profile.rows[0] });
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
+// get user_mood
+app.get('/api/users/get_mood', checkToken, async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const profile = await pool.query('SELECT * FROM user_mood WHERE user_id = $1', [session.rows[0].user_id]);
+    if (profile.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
+    } else {
+      res.status(200).json({ status: 200, data: profile.rows[0] });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// post user_posts_memos
+app.post('/api/users/post_memos', checkToken, async (req, res) => {
+  const { Memo } = req.body;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const profile = await pool.query('INSERT INTO user_posts_memos (user_id, memo) VALUES ($1, $2) RETURNING *', [session.rows[0].user_id, Memo]);
+    if (profile.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    }
+    res.status(200).json({ status: 200, data: profile.rows[0] });
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
+// get user_posts_memos
+app.get('/api/users/get_memos', checkToken, async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const memo = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1', [session.rows[0].user_id]);
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [session.rows[0].user_id]);
+    if (memo.rows.length === 0 && profile.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
+    } else {
+      let data = {
+        profile: profile.rows[0],
+        memo: memo.rows
+      }
+      res.status(200).json({ status: 200, data: data });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+// get api to search for users using name or email id
+app.get('/api/users/search', checkToken, async (req, res) => {
+  const { search, offset } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+    const users = await pool.query('SELECT * FROM users WHERE (name ILIKE $1 OR username ILIKE $1) AND id != $2 OFFSET $3 LIMIT $4',
+      [`%${search}%`, session.rows[0].user_id, offset, 20]);
+
+    // maps users.rows to fetch from user_profile table user details and save it in data
+    const data = await Promise.all(users.rows.map(async (user) => {
+      const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [user.id]);
+      return { id: user?.id, name: user?.name, username: user?.username, profile_pic: profile?.rows[0]?.profile_pic };
+    }));
+
+    res.status(200).json({ status: 200, data: data });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
 });
 

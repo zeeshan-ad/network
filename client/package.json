@@ -27,6 +27,7 @@
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.22.2",
+    "lodash": "^4.17.21",
     "react": "18.2.0",
     "react-intl-tel-input": "^8.2.0",
     "react-moment": "^1.1.3",

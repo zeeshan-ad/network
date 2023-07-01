@@ -7,6 +7,7 @@ const initialState = {
   created_at: "",
   token: "",
   id: "",
+  username: "",
 }
 
 const userInfoSlice = createSlice({
@@ -20,6 +21,7 @@ const userInfoSlice = createSlice({
       state.created_at = action.payload.created_at;
       state.token = action.payload.token;
       state.id = action.payload.id;
+      state.username = action.payload.username;
     },
     resetUserInfo: (state) => {
       state.name = "";
@@ -28,6 +30,7 @@ const userInfoSlice = createSlice({
       state.created_at = "";
       state.token = "";
       state.id = "";
+      state.username = "";
     }
   }
 })

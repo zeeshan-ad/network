@@ -39,7 +39,7 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.185:3000';
+export const BASE_URL = 'http://192.168.0.187:3000';
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",
@@ -53,7 +53,7 @@ export const ProfileTheme = [
   "#CDA5FF",
   "#FFA5E3",
   "#FFF6B5",
-  "#A9A9A9",
+  "#EFEFEF",
   "#D2B48C",
   "#8F9779",
   "#6D9BC3",

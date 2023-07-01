@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { APP_NAME, fontSizes, theme } from '../util/constants';
@@ -28,12 +28,14 @@ const Header = ({ navigation, editProfile }) => {
 
   return (
     <View style={styles.header} onLayout={onLayoutRootView}>
-      <Feather name="search" size={25} />
+      <Pressable onPress={() => { navigation.navigate('Search', { editProfile }) }}>
+        <Feather name="search" size={25} />
+      </Pressable>
       <Text style={styles.logo}>{APP_NAME}</Text>
       <Pressable onPress={() => { navigation.navigate('Profile') }}>
         {editProfile?.image ? (<Image source={editProfile?.image}
           style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-          (<ImageBackground source={require('../assets/images/placeholder_profile.png')} resizeMode='center'
+          (<Image source={require('../assets/images/placeholder_profile.png')}
             style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
       </Pressable>
     </View>

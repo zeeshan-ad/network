@@ -13,6 +13,8 @@ import Profile from './screens/Profile';
 import Feed from './screens/Feed';
 import PostMood from './screens/PostMood';
 import Post from './screens/Post';
+import Search from './screens/Search';
+import { StatusBar } from 'expo-status-bar';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -26,17 +28,19 @@ export default function Navigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator  initialRouteName={`${User?.token ? 'Home' : 'Landing'}`}>
+      <StatusBar style="dark" />
+      <Stack.Navigator initialRouteName={`${User?.token ? 'Home' : 'Landing'}`}>
         {User?.token ?
           <>
             <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
             <Stack.Screen name="PostExpanded" component={PostExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-            <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />  
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />   
-            <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />  
-            <Stack.Screen name="Post" component={Post} options={{ headerShown: false }} />     
+            <Stack.Screen name="AppCamera" component={AppCamera} options={{ headerShown: false }} />
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />
+            <Stack.Screen name="Post" component={Post} options={{ headerShown: false }} />
+            <Stack.Screen name="Search" component={Search} options={{ headerShown: false}} />
           </>
           :
           <>

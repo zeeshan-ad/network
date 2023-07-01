@@ -13,6 +13,7 @@ export const createAccount = async (UserDetails) => {
     email: UserDetails?.email.trim(),
     password: UserDetails?.password,
     dob: convertDateFormat(UserDetails?.dob),
+    username: UserDetails?.username.trim(),
     created_at: new Date(),
   });
 

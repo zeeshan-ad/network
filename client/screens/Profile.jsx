@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
 import { getProfileData, getMood } from '../APIs';
-import { setProfileData } from '../store/editProfileSlice';
+import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
 
@@ -26,6 +26,7 @@ const Profile = ({ navigation }) => {
 
     if (response?.status === 200) {
       dispatch(resetUserInfo());
+      dispatch(resetProfileData());
     }
     else {
       alert('Something went wrong. Please try again later.');
@@ -126,6 +127,7 @@ const Profile = ({ navigation }) => {
             paddingBottom: 20, gap: 10
           }}>
             <View style={{ height: '100%', width: width - 165 }}>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, color: theme.colors.backdrop, paddingBottom: 5, fontStyle: 'italic' }}>@{userInfo?.username}</Text>
               <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingBottom: 2.5 }}>
                 {userInfo?.name}
               </Text>
@@ -163,8 +165,10 @@ const Profile = ({ navigation }) => {
         transparent={true}
         visible={ModalLogout}>
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>Are you sure you want to log out?</Text>
+          <View style={[styles.modalView, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
+              Are you sure you want to log out?
+            </Text>
             <Pressable
               style={{
                 borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
@@ -238,7 +242,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: theme.colors.light,
     padding: 20,
     borderRadius: 20,
     alignItems: 'center',
