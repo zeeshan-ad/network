@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import { Pressable } from 'react-native';
-import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -73,17 +73,57 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const [RequestStatus, setRequestStatus] = useState(null);
+
+  const callGetRequestStatus = async () => {
+    const response = await getRequestStatus(userId);
+    if (response?.status === 200) {
+      setRequestStatus(response?.data?.data);
+    } else
+      setRequestStatus(null);
+  }
+
+
+  const callCancelRequest = async () => {
+    const response = await cancelRequest(userId);
+    if (response?.data?.status === 200) {
+      callGetRequestStatus();
+    }
+  }
+
+
   useEffect(() => {
     if (!userId) {
       callGetMood();
       callGetProfileData();
     } else {
+      callGetRequestStatus();
       CallGetUserProfile();
     }
   }, [isFocused, userId])
 
+  const callSendRequest = async () => {
+    const response = await sendRequest(userId);
+    if (response?.data?.status === 200) {
+      callGetRequestStatus();
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
+  const callAcceptRequest = async () => {
+    const response = await acceptRequest(userId);
+    if (response?.data?.status === 200) {
+      callGetRequestStatus();
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
   const [SheetVisible, setSheetVisible] = useState(false);
   const [ModalLogout, setModalLogout] = useState(false);
+  const [ModalRequest, setModalRequest] = useState(false);
+  const [RemoveFriend, setRemoveFriend] = useState(false);
   return (
     <View style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
       <View style={{
@@ -166,8 +206,8 @@ const Profile = ({ navigation, route }) => {
               {ProfileInfo?.bio &&
                 <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>{ProfileInfo?.bio}</Text>}
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>
-                <Text style={{ fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>296</Text>
-                &nbsp;Friends in {userId ? 'their' : 'your'} bubble
+                <Text style={{ fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{ProfileInfo?.totalFriends}</Text>
+                &nbsp;{ProfileInfo?.totalFriends > 1 ? 'Friends' : 'Friend'} in {userId ? 'their' : 'your'} bubble
               </Text>
             </View>
             <View style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -180,13 +220,47 @@ const Profile = ({ navigation, route }) => {
                   }))}
                 </Text>
               </View>
-              {userId &&
-                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                  <Ionicons name="md-person-add" size={18} color={theme.colors.darkgrey} />
-                  <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
-                    Join bubble
-                  </Text>
-                </View>
+              {userId && (
+                RequestStatus?.status === 'pending' && userId === RequestStatus?.req_to_id ?
+                  <Pressable onPress={callCancelRequest}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
+                      <Ionicons name="time-sharp" size={18} color={theme.colors.darkgrey} />
+                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                        Pending
+                      </Text>
+                    </View>
+                  </Pressable>
+                  :
+                  RequestStatus?.status === 'pending' && userId === RequestStatus?.req_by_id ?
+                    <Pressable onPress={() => setModalRequest(true)}>
+                      <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
+                        <Ionicons name="time-sharp" size={18} color={theme.colors.darkgrey} />
+                        <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                          Accept
+                        </Text>
+                      </View>
+                    </Pressable>
+                    : RequestStatus?.status === 'accepted' ?
+                      <Pressable onPress={() => {
+                        setModalRequest(true);
+                        setRemoveFriend(true);
+                      }}>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
+                          <MaterialCommunityIcons name="account-multiple-check" size={25} color={theme.colors.darkgrey}
+                            style={{ marginBottom: -3, marginRight: 3 }} />
+                          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                            Friends
+                          </Text>
+                        </View>
+                      </Pressable> :
+                      <Pressable onPress={callSendRequest}>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
+                          <Ionicons name="md-person-add" size={18} color={theme.colors.darkgrey} />
+                          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                            Join bubble
+                          </Text>
+                        </View>
+                      </Pressable>)
               }
             </View>
           </View>
@@ -196,7 +270,9 @@ const Profile = ({ navigation, route }) => {
               textAlign: 'center'
             }}>
               {!userId ? "You haven't posted anything yet,\npost a moment or memo to get started!"
-                : ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + " hasn't posted anything yet."}
+                : RequestStatus?.status === "accepted" ?
+                  ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + " hasn't posted anything yet." :
+                  "Join " + ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + "'s bubble to see their posts."}
             </Text>
           </View>
         </View>
@@ -230,6 +306,35 @@ const Profile = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
+      {userId && <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ModalRequest}>
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+            <Text style={{ fontSize: fontSizes.large, textAlign: 'center', fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
+              {!RemoveFriend ? ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 50 }}>
+              <Pressable
+                onPress={() => {
+                  setModalRequest(false);
+                  callCancelRequest();
+                }}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>{!RemoveFriend ? 'Decline' : 'Remove'}</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setModalRequest(false);
+                  if (!RemoveFriend)
+                    callAcceptRequest();
+                }}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>{!RemoveFriend ? 'Accept' : 'Cancel'}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>}
       <BottomSheet
         visible={SheetVisible}
         onBackdropPress={() => setSheetVisible(!SheetVisible)}

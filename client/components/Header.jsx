@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Fontisto } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { APP_NAME, fontSizes, theme } from '../util/constants';
 import { useFonts } from 'expo-font';
@@ -32,12 +32,15 @@ const Header = ({ navigation, editProfile }) => {
         <Feather name="search" size={25} />
       </Pressable>
       <Text style={styles.logo}>{APP_NAME}</Text>
-      <Pressable onPress={() => { navigation.navigate('Profile', { userId: null }) }}>
-        {editProfile?.image ? (<Image source={editProfile?.image}
-          style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-          (<Image source={require('../assets/images/placeholder_profile.png')}
-            style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
-      </Pressable>
+      <View style={{ flexDirection: 'row', gap:20, alignItems:"center" }}>
+      <Fontisto name="bell"  size={25} color={theme.colors.dark}/>
+        <Pressable onPress={() => { navigation.navigate('Profile', { userId: null }) }}>
+          {editProfile?.image ? (<Image source={editProfile?.image}
+            style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
+            (<Image source={require('../assets/images/placeholder_profile.png')}
+              style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
+        </Pressable>
+      </View>
     </View>
   )
 }
@@ -51,6 +54,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   logo: {
+    marginRight: -55,
     fontFamily: 'Pacifico',
     fontSize: fontSizes.smallHightlight,
     color: theme.colors.dark,

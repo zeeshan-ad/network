@@ -43,7 +43,6 @@ const EditProfile = ({ navigation }) => {
     }
   }
 
-console.log(editProfile?.image)
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: editProfile?.theme }]}>
       <KeyboardAvoidingView behavior="padding" style={styles.container} >

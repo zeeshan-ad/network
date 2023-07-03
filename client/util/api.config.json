@@ -12,5 +12,9 @@
   "user_posts_memos": "/api/users/post_memos",
   "get_user_memos": "/api/users/get_memos",
   "search_user": "/api/users/search",
-  "other_user": "/api/users/other_profile"
+  "other_user": "/api/users/other_profile",
+  "send_request": "/api/users/friend_request",
+  "get_requests_status": "/api/users/friend_request_status",
+  "cancel_request": "/api/users/cancel_friend_request",
+  "accept_request": "/api/users/accept_friend_request"
 }

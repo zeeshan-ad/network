@@ -163,10 +163,11 @@ app.get('/api/users/profile', checkToken, async (req, res) => {
     const token = req.headers.authorization;
     await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]).then(async (result) => {
       const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [result?.rows[0]?.user_id]);
+      const friends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 OR req_to_id = $1) AND (status = $2)', [result?.rows[0]?.user_id, "accepted"]);
       if (profile.rows.length === 0) {
         return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
       } else {
-        res.status(200).json({ status: 200, data: profile.rows[0] });
+        res.status(200).json({ status: 200, data: { ...profile.rows[0], totalFriends: friends.rows.length } });
       }
     }).catch((err) => {
       res.status(500).json({ status: 500, message: 'Internal Server Error' });
@@ -324,12 +325,84 @@ app.get('/api/users/other_profile', checkToken, async (req, res) => {
     const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
     // get mood
     const mood = await pool.query('SELECT * FROM user_mood WHERE user_id = $1', [userId]);
-    console.log(mood.rows[0]);
+    // get total friends
+    const friends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 OR req_to_id = $1) AND (status = $2)', [userId, "accepted"]);
     delete user.rows[0].password;
     if (!profile.rows.length || !user.rows.length)
       return res.status(404).json({ status: 404, message: 'Profile not found' });
     else
-      return res.status(200).json({ status: 200, data: { ...profile.rows[0], ...user.rows[0], mood: mood.rows[0]?.mood ? mood.rows[0]?.mood : null } });
+      return res.status(200).json({ status: 200, data: { ...profile.rows[0], ...user.rows[0], mood: mood.rows[0]?.mood ? mood.rows[0]?.mood : null, totalFriends: friends.rows.length } });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// Store friend request
+app.post('/api/users/friend_request', checkToken, async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+    const user_req = await pool.query('INSERT INTO friends_requests (req_by_id, req_to_id, status, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [session.rows[0].user_id, userId, 'pending', new Date()]);
+    if (!user_req.rows.length) return res.status(404).json({ status: 404, message: 'Profile not found' });
+    else return res.status(200).json({ status: 200, data: user_req.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// get request status of friend request
+app.get('/api/users/friend_request_status', checkToken, async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    const user_req = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 AND req_to_id = $2) OR (req_by_id = $2 AND req_to_id = $1)', [session.rows[0].user_id, userId]);
+    if (!user_req.rows.length) return res.status(404).json({ status: 404, message: 'Profile not found' });
+    else return res.status(200).json({ status: 200, data: user_req.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// cancel friend request
+app.delete('/api/users/cancel_friend_request', checkToken, async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    const user_req = await pool.query('DELETE FROM friends_requests WHERE (req_by_id = $1 AND req_to_id = $2) OR (req_by_id = $2 AND req_to_id = $1)', [session.rows[0].user_id, userId]);
+    if (!user_req.rows.length) return res.status(200).json({ status: 200, message: 'deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+// accept friend request
+app.put('/api/users/accept_friend_request', checkToken, async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    const user_req = await pool.query('UPDATE friends_requests SET status = $1 WHERE (req_by_id = $2 AND req_to_id = $3) OR (req_by_id = $3 AND req_to_id = $2) RETURNING *', ['accepted', session.rows[0].user_id, userId]);
+    if (!user_req.rows.length) return res.status(404).json({ status: 404, message: 'Profile not found' });
+    else return res.status(200).json({ status: 200, data: user_req.rows[0] });
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }

@@ -9,8 +9,12 @@ import { getMemos } from "./getMemos";
 import { search } from "./search";
 import { verifyUsername } from "./verifyUsername";
 import { getUserProfile } from "./getUserProfile";
+import { sendRequest } from "./sendRequest";
+import { getRequestStatus } from "./getRequestStatus";
+import { cancelRequest } from "./cancelRequest";
+import { acceptRequest } from "./acceptRequest";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search,
-  verifyUsername, getUserProfile
+  verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest
 }
