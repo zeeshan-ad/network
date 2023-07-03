@@ -11,5 +11,6 @@
   "get_mood": "/api/users/get_mood",
   "user_posts_memos": "/api/users/post_memos",
   "get_user_memos": "/api/users/get_memos",
-  "search_user": "/api/users/search"
+  "search_user": "/api/users/search",
+  "other_user": "/api/users/other_profile"
 }

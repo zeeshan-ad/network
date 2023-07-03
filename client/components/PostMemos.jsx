@@ -58,7 +58,7 @@ const PostMemos = ({ navigation, route }) => {
       <CloseOrSave navigation={navigation} Save={callPostMemos} LoadSubmission={LoadSubmission} />
       <View style={{ minHeight: 20 }}></View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.memoContainer}>
-        <TextInput multiline={true} selectionColor={theme.colors.dark}
+        <TextInput multiline={true} selectionColor={theme.colors.darkgrey}
           style={[styles.input, {
             fontSize: Memo.length < 200 ? fontSizes.xlarge : fontSizes.yeetPosts,
             fontWeight: Memo.length < 200 ? "500" : "400",

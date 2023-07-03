@@ -9,10 +9,12 @@ import { updateProfileData } from '../APIs/UpdateProfile';
 import { setProfileData } from '../store/editProfileSlice';
 import { Image } from 'expo-image';
 import CloseOrSave from '../components/CloseOrSave';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const EditProfile = ({ navigation }) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const editProfile = useSelector(state => state.editProfile);
 
   const [LoadSubmission, setLoadSubmission] = useState(false);
@@ -25,7 +27,7 @@ const EditProfile = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(setProfileData({ ...editProfile, bio: Bio, is_public: isEnabled, theme: PickedTheme }));
-  }, [editProfile, Bio, isEnabled, PickedTheme, LoadSubmission])
+  }, [editProfile, Bio, isEnabled, PickedTheme, LoadSubmission, isFocused])
 
 
 
@@ -41,7 +43,7 @@ const EditProfile = ({ navigation }) => {
     }
   }
 
-
+console.log(editProfile?.image)
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: editProfile?.theme }]}>
       <KeyboardAvoidingView behavior="padding" style={styles.container} >
@@ -63,7 +65,7 @@ const EditProfile = ({ navigation }) => {
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.titleText}>Bio</Text>
-            <TextInput selectionColor={theme.colors.dark} style={styles.input} onChangeText={setBio} value={Bio} />
+            <TextInput selectionColor={theme.colors.darkgrey} style={styles.input} onChangeText={setBio} value={Bio} />
           </View>
           {/* <View style={styles.inputContainer}>
             <Text style={styles.titleText}>Make account private</Text>
@@ -107,7 +109,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center'
   },
   input: {
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 1.5,
+    paddingBottom: 5,
     borderColor: theme.colors.dark,
     paddingHorizontal: 5,
     backgroundColor: 'transparent',

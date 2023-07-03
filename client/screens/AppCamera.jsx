@@ -97,24 +97,18 @@ export default function AppCamera({ navigation }) {
           alignItems: 'center',
           width: '100%',
         }}>
-          <Pressable onPress={retakePicture} style={{
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10,
-          }}>
-            <Ionicons name="close" size={30} color={theme.colors.light} />
+          <Pressable onPress={retakePicture} >
+            <Ionicons name="close" size={30} color={theme.colors.dark} />
           </Pressable>
           <Pressable
-            style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-              shadowRadius: 1, elevation: 10,
-            }} onPress={() => {
+            onPress={() => {
               dispatch(setProfileData({
                 bio: editProfile?.bio,
                 image: Image?.uri,
               }));
               navigation.navigate('EditProfile');
             }}>
-            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.light} />
+            <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
           </Pressable>
         </View>
         <ImageBackground
@@ -140,25 +134,17 @@ export default function AppCamera({ navigation }) {
         <SafeAreaView style={styles.container}>
           <Camera style={styles.camera} type={type} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
           </Camera>
-          <Pressable style={[styles.CameraButton, {
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10,
-          }]} onPress={takePicture}>
-            <Ionicons name="ios-radio-button-off-sharp" size={100} color={theme.colors.light} />
+          <Pressable style={[styles.CameraButton]} onPress={takePicture}>
+            <Ionicons name="ios-radio-button-off-sharp" size={100} color={theme.colors.dark} />
           </Pressable>
           <View style={styles.header}>
             <Pressable onPress={() => navigation.goBack()} style={{
               marginLeft: -10,
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-              shadowRadius: 1, elevation: 10,
             }}>
-              <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
+              <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
             </Pressable>
-            <TouchableOpacity onPress={toggleCameraType} style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-              shadowRadius: 1, elevation: 10,
-            }}>
-              <MaterialCommunityIcons name="camera-flip" size={30} color={theme.colors.light} />
+            <TouchableOpacity onPress={toggleCameraType}>
+              <MaterialCommunityIcons name="camera-flip" size={30} color={theme.colors.dark} />
             </TouchableOpacity>
           </View>
         </SafeAreaView>

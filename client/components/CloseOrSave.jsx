@@ -6,15 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 const CloseOrSave = ({ navigation, LoadSubmission, Save }) => {
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => navigation.goBack()} style={styles.iconShadow}>
-        <Ionicons name="close" size={30} color={theme.colors.light} />
+      <Pressable onPress={() => navigation.goBack()}>
+        <Ionicons name="close" size={30} color={theme.colors.dark} />
       </Pressable>
       {LoadSubmission ?
-        (<Pressable style={styles.iconShadow}>
-          <ActivityIndicator size="small" color={theme.colors.light} />
+        (<Pressable >
+          <ActivityIndicator size="small" color={theme.colors.dark} style={{ paddingTop: 5 }} />
         </Pressable>) :
-        (<Pressable onPress={Save} style={styles.iconShadow}>
-          <Ionicons name="checkmark-sharp" size={30} color={theme.colors.light} />
+        (<Pressable onPress={Save}>
+          <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />
         </Pressable>)
       }
     </View>

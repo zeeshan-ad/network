@@ -101,7 +101,7 @@ const PostExpanded = ({ navigation }) => {
                   borderColor: theme.colors.dark, overflow: 'hidden'
                 }} />
               <TextInput
-                selectionColor={theme.colors.dark}
+                selectionColor={theme.colors.darkgrey}
                 style={styles.input} placeholder="Add a comment" />
             </View>
           </View>}

@@ -69,7 +69,7 @@ const Feed = ({ navigation }) => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header navigation={navigation} editProfile={editProfile} />
         <ScrollView showsVerticalScrollIndicator={false}>

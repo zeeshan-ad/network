@@ -309,6 +309,36 @@ app.get('/api/users/search', checkToken, async (req, res) => {
   }
 });
 
+// get api to get user profile details
+app.get('/api/users/other_profile', checkToken, async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    // check if user is trying to access other user profile
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [userId]);
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
+    // get mood
+    const mood = await pool.query('SELECT * FROM user_mood WHERE user_id = $1', [userId]);
+    console.log(mood.rows[0]);
+    delete user.rows[0].password;
+    if (!profile.rows.length || !user.rows.length)
+      return res.status(404).json({ status: 404, message: 'Profile not found' });
+    else
+      return res.status(200).json({ status: 200, data: { ...profile.rows[0], ...user.rows[0], mood: mood.rows[0]?.mood ? mood.rows[0]?.mood : null } });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
 
 
 app.listen(port, () => console.log(`app listening on port ${port}!`));

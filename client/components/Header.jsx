@@ -32,7 +32,7 @@ const Header = ({ navigation, editProfile }) => {
         <Feather name="search" size={25} />
       </Pressable>
       <Text style={styles.logo}>{APP_NAME}</Text>
-      <Pressable onPress={() => { navigation.navigate('Profile') }}>
+      <Pressable onPress={() => { navigation.navigate('Profile', { userId: null }) }}>
         {editProfile?.image ? (<Image source={editProfile?.image}
           style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
           (<Image source={require('../assets/images/placeholder_profile.png')}

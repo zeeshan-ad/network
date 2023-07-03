@@ -8,5 +8,9 @@ import { postMemos } from "./postMemos";
 import { getMemos } from "./getMemos";
 import { search } from "./search";
 import { verifyUsername } from "./verifyUsername";
+import { getUserProfile } from "./getUserProfile";
 
-export { createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, verifyUsername }
+export {
+  createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search,
+  verifyUsername, getUserProfile
+}
