@@ -12,7 +12,7 @@ const width = Dimensions.get('window').width;
 const PostMood = ({ navigation, route }) => {
   const [LoadSubmission, setLoadSubmission] = useState(false);
   const { editProfile, FetchedMood } = route.params;
-  const [text, setText] = useState(FetchedMood?.mood);
+  const [text, setText] = useState(FetchedMood?.mood ? FetchedMood?.mood : "");
 
   const handleEmojiSelected = (emoji) => {
     if ((text + emoji).length <= 6)

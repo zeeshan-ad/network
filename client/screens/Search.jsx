@@ -15,22 +15,24 @@ const Search = ({ navigation, route }) => {
   const [searchTerm, setsearchTerm] = useState("");
   const [searchResult, setsearchResult] = useState(null);
   const [Offset, setOffset] = useState(0);
-  const [isLoadMore, setisLoadMore] = useState(false);
 
   const callSearch = async (searchTerm) => {
-    setisLoadMore(true);
     const response = await search(searchTerm, Offset);
     if (response?.status === 200) {
-      if (Offset === 0)
+      if (Offset === 0) {
         setsearchResult(response?.data?.data);
-      else
-        setsearchResult([...searchResult, ...response?.data?.data]);
-      setisLoadMore(false);
+      } else {
+        if (response?.data?.data?.length === 0) {
+          setsearchResult([...searchResult, { flag: false }]);
+        } else {
+          setsearchResult([...searchResult, ...response?.data?.data]);
+        }
+      }
     } else {
       alert('Something went wrong. Please try again later.');
-      setisLoadMore(false);
     }
   }
+
 
   const debouncedSearch = _.debounce(callSearch, 500);
 
@@ -41,7 +43,6 @@ const Search = ({ navigation, route }) => {
       setOffset(0)
     debouncedSearch(searchTerm);
   }
-  console.log(Offset)
   useEffect(() => {
     if (searchTerm.length > 2)
       debouncedSearch(searchTerm);
@@ -70,9 +71,9 @@ const Search = ({ navigation, route }) => {
         {searchResult?.length > 0 ?
           <View style={styles.resultContainer}>
             <FlatList
-              data={[...searchResult, { loadmore: true }]}
+              data={[...searchResult, searchResult[searchResult.length - 1]?.flag === false ? { loadmore: false } : { loadmore: true }]}
               renderItem={({ item }) => {
-                if (!item?.loadmore) {
+                if (item.name) {
                   return (
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginVertical: 10 }}>
                       <Pressable onPress={() => navigation.navigate('Profile', { userId: item._id })}>
@@ -89,26 +90,32 @@ const Search = ({ navigation, route }) => {
                       </View>
                     </View>)
                 }
-                else {
+                else if (item.loadmore) {
                   return (
-                    isLoadMore ?
-                      <ActivityIndicator size="small" color={theme.colors.light} /> :
-                      <Pressable onPress={LoadMore} style={{ marginTop: 20 }}>
-                        <Text style={{
-                          fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center',
-                          textDecorationLine: 'underline'
-                        }}>Load more results</Text>
-                      </Pressable>
+                    <Pressable onPress={LoadMore} style={{ marginTop: 20 }}>
+                      <Text style={{
+                        fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center',
+                        textDecorationLine: 'underline'
+                      }}>Load more results</Text>
+                    </Pressable>
+                  )
+                } else if (item.flag === false) {
+                  return (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.darkgrey }}>
+                        No more results</Text>
+                    </View>
                   )
                 }
+
               }}
-              keyExtractor={item => item.id} /><Pressable>
+              keyExtractor={(_item, index) => index} /><Pressable>
 
             </Pressable>
           </View>
           : searchResult === null ?
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.darkgrey }}>
                 Start typing a name or username...</Text>
             </View> :
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
