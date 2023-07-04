@@ -17,5 +17,6 @@
   "get_requests_status": "/api/users/friend_request_status",
   "cancel_request": "/api/users/cancel_friend_request",
   "accept_request": "/api/users/accept_friend_request",
-  "notify_pending_requests": "/api/users/notify_pending_friends_request"
+  "notify_pending_requests": "/api/users/notify_pending_friends_request",
+  "friends_mood": "/api/users/friends_moods"
 }

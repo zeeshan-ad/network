@@ -7,7 +7,7 @@ import PostSnippet from '../components/PostSnippet';
 import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
 import PostTextSnippet from '../components/PostTextSnippet';
-import { getProfileData, getMood, getMemos, getPendingRequests } from '../APIs';
+import { getProfileData, getMood, getMemos, getPendingRequests, getFriendsMoods } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -75,13 +75,21 @@ const Feed = ({ navigation }) => {
     }
   }
 
+  const [FriendsMood, setFriendsMood] = useState(null);
 
+  const callGetFriendsMood = async () => {
+    const response = await getFriendsMoods();
+    if (response?.status === 200) {
+      setFriendsMood(response?.data?.data);
+    }
+  }
 
   useEffect(() => {
     callGetProfileData();
     callGetMood();
     callGetMemos();
     callGetPendingRequests()
+    callGetFriendsMood();
   }, [isFocused]);
 
   return (
@@ -108,7 +116,7 @@ const Feed = ({ navigation }) => {
                   <Text style={styles.text}>You</Text>
                 </View>
               </TouchableWithoutFeedback>
-              <Mood navigation={navigation} />
+              <Mood navigation={navigation} FriendsMood={FriendsMood} />
             </View>
           </ScrollView>
           <View>

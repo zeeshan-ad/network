@@ -8,28 +8,24 @@ const EmojiKeyboard = ({ onEmojiSelected }) => {
     onEmojiSelected(emoji);
   };
 
-  
+
   return (
-    <View>
-      <View >
-        <FlatList
-          numColumns={7}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.emojiContainer}
-          data={emojis}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                style={styles.emojiButton}
-                onPress={() => handleEmojiPress(item)}
-              >
-                <Text style={styles.emojiText}>{item}</Text>
-              </TouchableOpacity>)
-          }}
-          keyExtractor={(_item, index) => index.toString()}
-        />
-      </View>
-    </View>
+    <FlatList
+      numColumns={7}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.emojiContainer}
+      data={emojis.filter((emoji) => emoji.length === 2)}
+      renderItem={({ item }) => {
+        return (
+          <TouchableOpacity
+            style={styles.emojiButton}
+            onPress={() => handleEmojiPress(item)}
+          >
+            <Text style={styles.emojiText}>{item}</Text>
+          </TouchableOpacity>)
+      }}
+      keyExtractor={(_item, index) => index.toString()}
+    />
   );
 };
 

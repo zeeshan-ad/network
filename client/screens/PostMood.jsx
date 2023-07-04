@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, Pressable, ActivityIndicator, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { theme, fontSizes, fontWeights } from '../util/constants';
-import { Ionicons } from '@expo/vector-icons';
 import EmojiKeyboard from '../components/EmojiKeyboard';
 import { StyleSheet } from 'react-native';
 import { updateMood } from '../APIs';
