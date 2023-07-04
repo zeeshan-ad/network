@@ -271,8 +271,8 @@ const Profile = ({ navigation, route }) => {
             }}>
               {!userId ? "You haven't posted anything yet,\npost a moment or memo to get started!"
                 : RequestStatus?.status === "accepted" ?
-                  ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + " hasn't posted anything yet." :
-                  "Join " + ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + "'s bubble to see their posts."}
+                  ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + " hasn't posted anything yet." :
+                  "Join " + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + "'s bubble to see their posts."}
             </Text>
           </View>
         </View>
@@ -313,19 +313,21 @@ const Profile = ({ navigation, route }) => {
         <View style={styles.centeredView}>
           <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
             <Text style={{ fontSize: fontSizes.large, textAlign: 'center', fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
-              {!RemoveFriend ? ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
+              {!RemoveFriend ? ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 50 }}>
               <Pressable
                 onPress={() => {
                   setModalRequest(false);
                   callCancelRequest();
+                  CallGetUserProfile();
                 }}>
                 <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>{!RemoveFriend ? 'Decline' : 'Remove'}</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
                   setModalRequest(false);
+                  CallGetUserProfile();
                   if (!RemoveFriend)
                     callAcceptRequest();
                 }}>

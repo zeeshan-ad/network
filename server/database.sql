@@ -40,5 +40,6 @@ CREATE TABLE friends_requests (
     req_by_id INT NOT NULL,
     req_to_id INT NOT NULL,
     status VARCHAR(255) NOT NULL,
+    notify BOOL NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

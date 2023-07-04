@@ -13,8 +13,9 @@ import { sendRequest } from "./sendRequest";
 import { getRequestStatus } from "./getRequestStatus";
 import { cancelRequest } from "./cancelRequest";
 import { acceptRequest } from "./acceptRequest";
+import { getPendingRequests } from "./getPendingRequests";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search,
-  verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest
+  verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests
 }

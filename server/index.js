@@ -409,6 +409,33 @@ app.put('/api/users/accept_friend_request', checkToken, async (req, res) => {
 });
 
 
+// get pending freinds request list
+app.get('/api/users/notify_pending_friends_request', checkToken, async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    const user_req = await pool.query('SELECT * FROM friends_requests WHERE req_to_id = $1 AND status = $2', [session.rows[0].user_id, 'pending']);
+    if (!user_req.rows.length) return res.status(404).json({ status: 404, message: 'Profile not found' });
+
+    else {
+      // get user name and profile image
+      const data = await Promise.all(user_req.rows.map(async (item) => {
+        const user = await pool.query('SELECT * FROM users WHERE id = $1', [item.req_by_id]);
+        const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [item.req_by_id]);
+        return { ...item, name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic };
+      }));
+      return res.status(200).json({ status: 200, data: data });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
 
 
 

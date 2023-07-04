@@ -7,10 +7,11 @@ import PostSnippet from '../components/PostSnippet';
 import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
 import PostTextSnippet from '../components/PostTextSnippet';
-import { getProfileData, getMood, getMemos } from '../APIs';
+import { getProfileData, getMood, getMemos, getPendingRequests } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
+import { set } from 'lodash';
 
 
 
@@ -61,17 +62,33 @@ const Feed = ({ navigation }) => {
     }
   }
 
+  const [PendingRequests, setPendingRequests] = useState(null);
+  const [unseenReq, setunseenReq] = useState(0);
+
+  const callGetPendingRequests = async () => {
+    setPendingRequests(null);
+    setunseenReq(0);
+    const response = await getPendingRequests();
+    if (response?.status === 200) {
+      setPendingRequests(response?.data?.data);
+      setunseenReq(response?.data?.data?.filter((item) => item?.notify === true)?.length)
+    }
+  }
+
+
 
   useEffect(() => {
     callGetProfileData();
     callGetMood();
     callGetMemos();
+    callGetPendingRequests()
   }, [isFocused]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
-        <Header navigation={navigation} editProfile={editProfile} />
+        <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
+          unseenReq={unseenReq} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.titleText}>Moods</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
