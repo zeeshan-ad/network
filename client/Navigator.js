@@ -15,6 +15,7 @@ import PostMood from './screens/PostMood';
 import Post from './screens/Post';
 import Search from './screens/Search';
 import { StatusBar } from 'expo-status-bar';
+import CameraPreview from './components/CameraPreview';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -29,7 +30,7 @@ export default function Navigator() {
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
-      <Stack.Navigator initialRouteName={`${User?.token ? 'Home' : 'Landing'}`}>
+      <Stack.Navigator initialRouteName={`${User?.token ? 'Feed' : 'Landing'}`}>
         {User?.token ?
           <>
             <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
@@ -41,6 +42,7 @@ export default function Navigator() {
             <Stack.Screen name="PostMood" component={PostMood} options={{ headerShown: false }} />
             <Stack.Screen name="Post" component={Post} options={{ headerShown: false }} />
             <Stack.Screen name="Search" component={Search} options={{ headerShown: false}} />
+            <Stack.Screen name="CameraPreview" component={CameraPreview} options={{ headerShown: false }} />
           </>
           :
           <>

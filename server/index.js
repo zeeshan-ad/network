@@ -19,9 +19,20 @@ const storage = multer.diskStorage({
   }
 })
 
+const storageMoments = multer.diskStorage({
+  destination: 'moments/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const uploadMoments = multer({ storage: storageMoments });
+
 const upload = multer({ storage: storage });
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/moments', express.static(__dirname + '/moments'));
+
 // routes
 
 // verify email exits or not
@@ -200,6 +211,19 @@ app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
+});
+
+// post user_posts_moments 
+app.post('/api/users/post_moments', uploadMoments.single('moment'), checkToken, async (req, res) => {
+  const token = req.headers.authorization;
+  const { caption } = req.query;
+  console.log(caption);
+  const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+  const moment = await pool.query('INSERT INTO user_posts_moments (user_id, moment, created_at, caption) VALUES ($1, $2, $3, $4) RETURNING *', [session.rows[0].user_id, `/moments/${req.file.filename}`, new Date(), caption]);
+  if (moment.rows.length === 0) {
+    return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+  res.status(200).json({ status: 200, data: moment.rows[0] });
 });
 
 
@@ -456,8 +480,7 @@ app.get('/api/users/friends_moods', checkToken, async (req, res) => {
     }));
     // Sort the array by the 'time' property in descending order
     const sortedData = friends_moods.sort((a, b) => new Date(b.time) - new Date(a.time));
-
-    return res.status(200).json({ status: 200, data: sortedData });
+    return res.status(200).json({ status: 200, data: sortedData.filter(item => item.mood !== '') });
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }

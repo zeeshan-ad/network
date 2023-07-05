@@ -34,12 +34,18 @@ CREATE TABLE user_posts_memos (
     memo TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE friends_requests (
     id SERIAL PRIMARY KEY,
     req_by_id INT NOT NULL,
     req_to_id INT NOT NULL,
     status VARCHAR(255) NOT NULL,
     notify BOOL NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE user_posts_moments (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    moment VARCHAR NOT NULL,
+    caption TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -44,7 +44,7 @@ export default function AppCamera({ navigation }) {
   const _rotate90andFlip = async (photo) => {
     const manipResult = await manipulateAsync(
       photo,
-      [{ rotate: -180 }, { flip: FlipType.Vertical }],
+      type === 'front' ? [{ rotate: 0 }, { flip: FlipType.Horizontal }] : [],
       { compress: 1, format: SaveFormat.PNG }
     );
     setImage(manipResult);
