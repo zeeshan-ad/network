@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Dimensions, Pressable, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
@@ -15,7 +15,6 @@ const height = Dimensions.get("window").height;
 const PostExpanded = ({ navigation, route }) => {
   const userInfo = useSelector(state => state.userInfo);
   const moment = route?.params?.moment;
-  console.log(moment);
 
   const comments = [
     { "comment": "My shadow says hi back!" },
@@ -195,7 +194,7 @@ const PostExpanded = ({ navigation, route }) => {
                     color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                     shadowRadius: 1, elevation: 10,
                   }}>
-                    {convertUtcToLocal(moment?.[index]?.created_at)}</Text>
+                    {convertTimeStamp(moment?.[index]?.created_at)}</Text>
                 </View>
 
                 {moment[index].caption &&

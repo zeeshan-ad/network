@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ScrollView, TouchableWithoutFeedback, Pressable, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ScrollView, TouchableWithoutFeedback, Pressable, SafeAreaView, FlatList } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
@@ -11,7 +11,6 @@ import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed }
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
-
 
 
 const Feed = ({ navigation }) => {
@@ -81,7 +80,6 @@ const Feed = ({ navigation }) => {
     }
   }
 
-
   useEffect(() => {
     callGetProfileData();
     callGetMood();
@@ -90,49 +88,55 @@ const Feed = ({ navigation }) => {
     callGetFeed();
   }, [isFocused]);
 
+
+  const getHeader = () => {
+    return (
+      <><Text style={styles.titleText}>Moods</Text><ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.moodsContainer}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
+            <View style={styles.profileMood}>
+              {editProfile?.image ? (<Image source={editProfile?.image}
+                style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
+                (<Image source={require('../assets/images/placeholder_profile.png')}
+                  style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}
+
+              <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, }]}>
+                {FetchedMood?.mood ?
+                  <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
+                  <Feather name="plus" size={20} color={theme.colors.dark} />}
+              </View>
+              <Text style={styles.text}>You</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <Mood navigation={navigation} FriendsMood={FriendsMood} />
+        </View>
+      </ScrollView></>
+    )
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
           unseenReq={unseenReq} />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.titleText}>Moods</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.moodsContainer}>
-              <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })} >
-                <View style={styles.profileMood}>
-                  {editProfile?.image ? (<Image source={editProfile?.image}
-                    style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-                    (<Image source={require('../assets/images/placeholder_profile.png')}
-                      style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}
-
-                  <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, }]} >
-                    {FetchedMood?.mood ?
-                      <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
-                      <Feather name="plus" size={20} color={theme.colors.dark} />}
-                  </View>
-                  <Text style={styles.text}>You</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <Mood navigation={navigation} FriendsMood={FriendsMood} />
-            </View>
-          </ScrollView>
-          <View>
-            {Feed?.map((item, index) => {
-              if (Array.isArray(item)) {
-                return (
-                  <PostSnippet key={index} navigation={navigation} moment={item}/>
-                )
-              } else {
-                return (
-                  <PostTextSnippet key={index} navigation={navigation} memo={item} />
-                )
-              }
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={Feed}
+          ListHeaderComponent={getHeader}
+          ListFooterComponent={<View style={{ height: 150 }}></View>}
+          renderItem={({ item }) => {
+            if (Array.isArray(item)) {
+              return (
+                <PostSnippet navigation={navigation} moment={item} />
+              )
+            } else {
+              return (
+                <PostTextSnippet navigation={navigation} memo={item} />
+              )
             }
-            )}
-          </View>
-          <View style={{ height: 50 }}></View>
-        </ScrollView>
+          }}
+          keyExtractor={(item, index) => index}
+        />
         <Pressable onPress={() => navigation.navigate('Post', { editProfile })} style={styles.postBtn}>
           <Feather name="plus" size={30} color={theme.colors.dark} />
         </Pressable>
@@ -216,4 +220,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Feed
+export default Feed;

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
@@ -55,7 +55,7 @@ const PostTextExpanded = ({ navigation, route }) => {
                 </Text>
               </Pressable>
             </View>
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertUtcToLocal(memo?.created_at)}</Text>
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertTimeStamp(memo?.created_at)}</Text>
           </View>
           <View style={{ paddingVertical: 20 }}>
             <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts }}>

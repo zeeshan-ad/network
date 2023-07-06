@@ -4,6 +4,7 @@ const cors = require('cors');
 const pool = require('./db');
 var bcrypt = require('bcrypt');
 const fs = require('fs');
+const moment = require('moment-timezone');
 const generateAccessToken = require('./functions');
 const port = 3000;
 
@@ -29,6 +30,58 @@ const storageMoments = multer.diskStorage({
 const uploadMoments = multer({ storage: storageMoments });
 
 const upload = multer({ storage: storage });
+
+function convertToLocalTimezone(array) {
+  return array.map((item) => {
+    if (Array.isArray(item)) {
+      return convertToLocalTimezone(item);
+    } else if (item.created_at) {
+      const localDate = new Date(item.created_at).toLocaleString();
+      return { ...item, created_at: localDate };
+    } else {
+      return item;
+    }
+  });
+}
+
+function separateArrayByDate(arr) {
+  let result = [];
+  let tempDict = {};
+
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i];
+
+    if (Array.isArray(item)) {
+      let tempArr = [];
+
+      for (let j = 0; j < item.length; j++) {
+        const obj = item[j];
+        const created_at = obj.created_at;
+        const day = created_at.split(",")[0].trim();
+
+        if (!tempDict[day]) {
+          tempDict[day] = [];
+        }
+
+        tempDict[day].push(obj);
+      }
+
+      tempArr = Object.values(tempDict);
+      result.push(...tempArr);
+      tempDict = {};
+    } else {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+function compareCreatedAt(a, b) {
+  const dateA = Array.isArray(a) ? new Date(a[0].created_at) : new Date(a.created_at);
+  const dateB = Array.isArray(b) ? new Date(b[0].created_at) : new Date(b.created_at);
+  return dateB - dateA;
+}
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/moments', express.static(__dirname + '/moments'));
@@ -217,7 +270,6 @@ app.put('/api/users/dp', upload.single('profile_pic'), async (req, res) => {
 app.post('/api/users/post_moments', uploadMoments.single('moment'), checkToken, async (req, res) => {
   const token = req.headers.authorization;
   const { caption } = req.query;
-  console.log(caption);
   const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
   const moment = await pool.query('INSERT INTO user_posts_moments (user_id, moment, created_at, caption) VALUES ($1, $2, $3, $4) RETURNING *', [session.rows[0].user_id, `/moments/${req.file.filename}`, new Date(), caption]);
   if (moment.rows.length === 0) {
@@ -485,6 +537,62 @@ app.get('/api/users/friends_moods', checkToken, async (req, res) => {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
 });
+
+// get feed data from user_posts_memos and user_posts_moments of friends and user itself arranged by time
+app.get('/api/users/feed', checkToken, async (req, res) => {
+
+  const currentDate = moment.utc(new Date()).local().format("YYYY-MM-DD");
+  const prevDate = moment.utc().local().subtract(1, 'day').format("YYYY-MM-DD");;
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    // check if user is authenticated
+    if (!session.rows.length) return res.status(404).json({ status: 404, message: 'Authentication fail' });
+
+    // get friends list
+    const friends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 OR req_to_id = $1) AND status = $2', [session.rows[0].user_id, 'accepted']);
+    if (!friends.rows.length) return res.status(404).json({ status: 404, message: 'No friends found' });
+
+    // get friends posts
+    const friends_posts = await Promise.all(friends.rows.map(async (item) => {
+      const posts_memos = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1 AND DATE(created_at) BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id === item.req_by_id ? item.req_to_id : item.req_by_id, prevDate, currentDate]);
+      const posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 AND DATE(created_at) BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id === item.req_by_id ? item.req_to_id : item.req_by_id, prevDate, currentDate]);
+      const user = await pool.query('SELECT * FROM users WHERE id = $1', [session.rows[0].user_id === item.req_by_id ? item.req_to_id : item.req_by_id]);
+      const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [session.rows[0].user_id === item.req_by_id ? item.req_to_id : item.req_by_id]);
+      const dataMemos = [
+        ...posts_memos?.rows?.map(item => ({ ...item, type: 'memo', name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic, theme: profile.rows[0].theme })),
+      ]
+      const dataMoments = posts_moments?.rows?.map(item => ({ ...item, type: 'moment', name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic }));
+
+      return [...dataMemos, dataMoments];
+    }));
+
+    // get user memos and moments
+
+
+    const user_posts_memos = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1 AND DATE(created_at)  BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id, prevDate, currentDate]);
+    const user_posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 AND DATE(created_at)  BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id, prevDate, currentDate]);
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [session.rows[0].user_id]);
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [session.rows[0].user_id]);
+
+    const dataMemos = [
+      ...user_posts_memos?.rows?.map(item => ({ ...item, type: 'memo', name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic, theme: profile.rows[0].theme })),
+    ]
+    const dataMoments = [
+      ...user_posts_moments?.rows?.map(item => ({ ...item, type: 'moment', name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic })),
+    ]
+
+    const data = [...dataMemos, dataMoments, ...friends_posts.flat()];
+
+    const modifiedData = separateArrayByDate(convertToLocalTimezone(data));
+    return res.status(200).json({ status: 200, data: modifiedData.sort(compareCreatedAt) });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
 
 
 

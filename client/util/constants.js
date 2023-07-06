@@ -83,7 +83,7 @@ export const compliments = [
 
 export const APP_NAME = 'Yeet!';
 
-export function convertUtcToLocal(utcTimestamp) {
-  const localTime = moment.utc(utcTimestamp).local().format('MMMM Do YY, h:mm a');
+export function convertTimeStamp(Timestamp) {
+  const localTime = moment(Timestamp, 'MM/DD/YYYY, hh:mm a').format('MMMM Do YY, h:mm a');
   return localTime;
 }

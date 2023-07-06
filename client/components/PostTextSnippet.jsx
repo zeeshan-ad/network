@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Dimensions, ImageBackground } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 
@@ -18,7 +18,7 @@ const PostTextSnippet = ({ navigation, memo }) => {
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{memo?.name}</Text>
         </View>
-        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertUtcToLocal(memo?.created_at)}</Text>
+        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertTimeStamp(memo?.created_at)}</Text>
       </View>
       <View>
         <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
