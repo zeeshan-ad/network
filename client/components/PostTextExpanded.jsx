@@ -1,15 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, ImageBackground, Pressable, Dimensions, ScrollView, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
+import { useSelector } from 'react-redux';
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const PostTextExpanded = ({ navigation }) => {
+const PostTextExpanded = ({ navigation, route }) => {
+  const editProfile = useSelector(state => state.editProfile);
+  const userInfo = useSelector(state => state.userInfo);
+
+  const memo = route.params.memo;
 
   const comments = [
     { "comment": "My shadow says hi back!" },
@@ -27,9 +32,12 @@ const PostTextExpanded = ({ navigation }) => {
   ]
   return (
     <View style={{ height: height }}>
-      <View style={{ position: 'absolute', top: 0, backgroundColor: theme.colors.textPost, width: width, height: 45, zIndex: 999, borderBottomWidth: .5, borderBottomColor: theme.colors.divider }}></View>
+      <View style={{ position: 'absolute', top: 0, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, width: width, height: 45, zIndex: 999 }}></View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10, marginBottom: 80, paddingHorizontal: 20 }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{
+        marginBottom: 10, marginBottom: 80, paddingHorizontal: 20,
+        backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost,
+      }}>
         <View style={{
           minHeight: 150, paddingVertical: 20, marginBottom: 10, marginTop: 50, justifyContent: 'space-between',
         }}>
@@ -39,17 +47,19 @@ const PostTextExpanded = ({ navigation }) => {
               <Pressable onPress={() => navigation.goBack()}>
                 <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
               </Pressable>
-              <Image source={require('../assets/images/tzara.jpg')}
-                style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
-              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark }}>
-                Tzara Ali
-              </Text>
+              <Pressable onPress={() => navigation.navigate('Profile', { userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/tzara.jpg')}
+                  style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, color: theme.colors.dark }}>
+                  {memo?.name}
+                </Text>
+              </Pressable>
             </View>
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>20 mins ago</Text>
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertUtcToLocal(memo?.created_at)}</Text>
           </View>
           <View style={{ paddingVertical: 20 }}>
             <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
-              I think I sunk the titanic. 🚢 🌊
+              {memo?.memo}
             </Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
@@ -96,9 +106,9 @@ const PostTextExpanded = ({ navigation }) => {
       </ScrollView>
       <View style={{
         flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0,
-        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: theme.colors.textPost, borderTopWidth: .5, borderTopColor: theme.colors.divider
+        paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost
       }}>
-        <Image source={require('../assets/images/profilepic-dummy.jpg')}
+        <Image source={editProfile?.image ? editProfile?.image : require('../assets/images/placeholder_profile.png')}
           style={{
             height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
             borderColor: theme.colors.dark, overflow: 'hidden'

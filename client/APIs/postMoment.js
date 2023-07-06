@@ -6,8 +6,6 @@ export const postMoment = async (momentPath, Caption) => {
 
   const formData = new FormData();
 
-  console.log('yoo', Caption);
-
   if (momentPath !== null) {
     formData.append("moment", {
       name: momentPath?.split("/").pop(),

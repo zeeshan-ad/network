@@ -42,12 +42,17 @@ export default function AppCamera({ navigation }) {
 
   const [Image, setImage] = useState();
   const _rotate90andFlip = async (photo) => {
+    setImage(null);
     const manipResult = await manipulateAsync(
       photo,
       type === 'front' ? [{ rotate: 0 }, { flip: FlipType.Horizontal }] : [],
-      { compress: 1, format: SaveFormat.PNG }
+      { compress: 1, format: SaveFormat.PNG },
     );
     setImage(manipResult);
+    dispatch(setProfileData({
+      bio: editProfile?.bio,
+      image: manipResult?.uri,
+    }));
   };
 
 
@@ -102,10 +107,7 @@ export default function AppCamera({ navigation }) {
           </Pressable>
           <Pressable
             onPress={() => {
-              dispatch(setProfileData({
-                bio: editProfile?.bio,
-                image: Image?.uri,
-              }));
+
               navigation.navigate('EditProfile');
             }}>
             <Ionicons name="checkmark-sharp" size={30} color={theme.colors.dark} />

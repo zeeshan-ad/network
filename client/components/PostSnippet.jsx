@@ -2,39 +2,22 @@ import React, { useState, useRef } from 'react';
 import { View, Text, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 
-const PostSnippet = ({ navigation }) => {
+const PostSnippet = ({ navigation, moment }) => {
+
 
   const width = Dimensions.get("window").width;
-
-  const picDummy = [{
-    "photo": require("../assets/images/1.jpeg"),
-    "caption": "Hello Shadow!"
-  }, {
-    "photo": require("../assets/images/2.jpeg"),
-    "caption": "Study!!!"
-  }, {
-    "photo": require("../assets/images/3.jpeg"),
-    "caption": "Imma ded 💀"
-  }, {
-    "photo": require("../assets/images/4.jpeg"),
-    "caption": "heart eyes 😍"
-  }, {
-    "photo": require("../assets/images/5.jpeg")
-  }, {
-    "photo": require("../assets/images/6.jpeg")
-  }]
 
   return (
     <View style={{ paddingVertical: 10, position: 'relative' }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', marginBottom: 10, justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <Image source={require('../assets/images/tzara.jpg')}
+          <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
-          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>Tzara Ali</Text>
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{moment?.[0]?.name}</Text>
         </View>
       </View>
       <Carousel
@@ -44,7 +27,7 @@ const PostSnippet = ({ navigation }) => {
         width={width}
         loop={false}
         height={450}
-        data={picDummy}
+        data={moment}
         onSnapToItem={(index) => console.log('current index:', index)}
         modeConfig={{
           stackInterval: 18,
@@ -52,7 +35,7 @@ const PostSnippet = ({ navigation }) => {
         renderItem={({ index }) => {
           return (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('PostExpanded')}>
+              onPress={() => navigation.navigate('PostExpanded', {moment})}>
               <View
                 style={{ marginHorizontal: 10, borderWidth: 2, borderRadius: 22 }}
                 key={index}>
@@ -64,7 +47,7 @@ const PostSnippet = ({ navigation }) => {
                   zIndex: 9999,
                   position: 'absolute', right: 10, top: 10,
                 }}>
-                  <BlurView intensity={20} style={{
+                  <BlurView intensity={60} style={{
                     padding: 10,
                     alignItems: 'center',
                   }}>
@@ -80,7 +63,7 @@ const PostSnippet = ({ navigation }) => {
                   zIndex: 9999,
                   position: 'absolute', right: 10, top: 90,
                 }}>
-                  <BlurView intensity={20} style={{
+                  <BlurView intensity={60} style={{
                     padding: 10,
                     alignItems: 'center',
                   }}>
@@ -101,7 +84,7 @@ const PostSnippet = ({ navigation }) => {
                     color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                     shadowRadius: 1, elevation: 10,
                   }}>
-                    {`${index + 1}/${picDummy.length}`}</Text>
+                    {`${index + 1}/${moment.length}`}</Text>
                 </View>
 
                 <View style={{
@@ -115,10 +98,10 @@ const PostSnippet = ({ navigation }) => {
                     color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                     shadowRadius: 1, elevation: 10,
                   }}>
-                    2 hours</Text>
+                    {convertUtcToLocal(moment?.[index]?.created_at)}</Text>
                 </View>
 
-                {picDummy[index].caption &&
+                {moment[index].caption &&
                   <View style={{
                     overflow: "hidden",
                     flex: 1,
@@ -132,7 +115,7 @@ const PostSnippet = ({ navigation }) => {
                       shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                       shadowRadius: 1, elevation: 10,
                     }}>
-                      {picDummy[index].caption}
+                      {moment[index].caption}
                     </Text>
                   </View>}
                 <Image style={{
@@ -140,7 +123,7 @@ const PostSnippet = ({ navigation }) => {
                   width: '100%',
                   borderRadius: 20
                 }}
-                  source={picDummy[index].photo} />
+                  source={BASE_URL + moment[index].moment} />
               </View>
             </TouchableWithoutFeedback>
           )

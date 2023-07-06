@@ -99,7 +99,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq }) => {
               )
             }) :
               <Text style={{ textAlign: 'center', fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>
-                No Notifications
+                Nothing to show here!
               </Text>
             }
           </ScrollView>

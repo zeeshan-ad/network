@@ -7,11 +7,10 @@ import PostSnippet from '../components/PostSnippet';
 import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
 import PostTextSnippet from '../components/PostTextSnippet';
-import { getProfileData, getMood, getMemos, getPendingRequests, getFriendsMoods } from '../APIs';
+import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { set } from 'lodash';
 
 
 
@@ -51,17 +50,6 @@ const Feed = ({ navigation }) => {
     }
   }
 
-  const [FetchedMemos, setFetchedMemos] = useState()
-
-  const callGetMemos = async () => {
-    const response = await getMemos();
-    if (response?.status === 200) {
-      setFetchedMemos(response?.data?.data);
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
-  }
-
   const [PendingRequests, setPendingRequests] = useState(null);
   const [unseenReq, setunseenReq] = useState(0);
 
@@ -84,12 +72,22 @@ const Feed = ({ navigation }) => {
     }
   }
 
+  const [Feed, setFeed] = useState(null);
+
+  const callGetFeed = async () => {
+    const response = await getFeed();
+    if (response?.status === 200) {
+      setFeed(response?.data?.data);
+    }
+  }
+
+
   useEffect(() => {
     callGetProfileData();
     callGetMood();
-    callGetMemos();
     callGetPendingRequests()
     callGetFriendsMood();
+    callGetFeed();
   }, [isFocused]);
 
   return (
@@ -120,12 +118,18 @@ const Feed = ({ navigation }) => {
             </View>
           </ScrollView>
           <View>
-            {FetchedMemos?.memo?.length > 0 && FetchedMemos?.memo?.map((item, index) =>
-              <PostTextSnippet key={index} navigation={navigation} memo={item} profile={FetchedMemos?.profile} />
+            {Feed?.map((item, index) => {
+              if (Array.isArray(item)) {
+                return (
+                  <PostSnippet key={index} navigation={navigation} moment={item}/>
+                )
+              } else {
+                return (
+                  <PostTextSnippet key={index} navigation={navigation} memo={item} />
+                )
+              }
+            }
             )}
-            <PostSnippet navigation={navigation} />
-
-            <PostSnippet navigation={navigation} />
           </View>
           <View style={{ height: 50 }}></View>
         </ScrollView>

@@ -2,38 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Dimensions, Pressable, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertUtcToLocal, fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
+import { useSelector } from 'react-redux';
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const PostExpanded = ({ navigation }) => {
-
-
-  const picDummy = [{
-    "photo": require("../assets/images/1.jpeg"),
-    "caption": "Hello Shadow"
-  }, {
-    "photo": require("../assets/images/2.jpeg"),
-    "caption": "Study!!!"
-  }, {
-    "photo": require("../assets/images/3.jpeg"),
-    "caption": "Imma ded 💀"
-  }, {
-    "photo": require("../assets/images/4.jpeg"),
-    "caption": "heart eyes 😍"
-  }, {
-    "photo": require("../assets/images/5.jpeg"),
-    "caption": "Sky <3"
-
-  }, {
-    "photo": require("../assets/images/6.jpeg"),
-    "caption": "heart eyes 😍",
-  }]
+const PostExpanded = ({ navigation, route }) => {
+  const userInfo = useSelector(state => state.userInfo);
+  const moment = route?.params?.moment;
+  console.log(moment);
 
   const comments = [
     { "comment": "My shadow says hi back!" },
@@ -49,7 +31,7 @@ const PostExpanded = ({ navigation }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowBtn(true);
-    }, 1000)
+    }, 3000)
 
     return () => {
       clearInterval(timeout);
@@ -116,14 +98,16 @@ const PostExpanded = ({ navigation }) => {
             }}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
-            <Image source={require('../assets/images/tzara.jpg')}
+            <Pressable onPress={() => navigation.navigate('Profile', { userId: moment?.user_id !== userInfo?.id ? moment?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
             <Text style={{
-              fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+              fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
               shadowRadius: 1, elevation: 10,
             }}>
-              Tzara Ali
+              {moment?.[0]?.name}
             </Text>
+            </Pressable>
           </View>
         </View>
         <Carousel
@@ -132,7 +116,7 @@ const PostExpanded = ({ navigation }) => {
           }}
           width={width}
           loop={false}
-          data={picDummy}
+          data={moment}
           onSnapToItem={(index) => console.log('current index:', index)}
           modeConfig={{
             stackInterval: 18,
@@ -197,7 +181,7 @@ const PostExpanded = ({ navigation }) => {
                     shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                     shadowRadius: 1, elevation: 10,
                   }}>
-                    {`${index + 1}/${picDummy.length}`}</Text>
+                    {`${index + 1}/${moment.length}`}</Text>
                 </View>
 
                 <View style={{
@@ -208,13 +192,13 @@ const PostExpanded = ({ navigation }) => {
                   position: 'absolute', right: 20, top: 75
                 }}>
                   <Text style={{
-                    color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                     shadowRadius: 1, elevation: 10,
                   }}>
-                    2 hours</Text>
+                    {convertUtcToLocal(moment?.[index]?.created_at)}</Text>
                 </View>
 
-                {picDummy[index].caption &&
+                {moment[index].caption &&
                   <View style={{
                     borderRadius: 100,
                     overflow: "hidden",
@@ -227,14 +211,14 @@ const PostExpanded = ({ navigation }) => {
                       color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                       shadowRadius: 1, elevation: 10,
                     }}>
-                      {picDummy[index].caption}
+                      {moment[index].caption}
                     </Text>
                   </View>}
                 <Image style={{
                   height: '100%',
                   width: '100%',
                 }}
-                  source={picDummy[index].photo} />
+                  source={BASE_URL + moment[index].moment} />
               </View>
             )
           }}

@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
 export const theme = {
@@ -80,3 +82,8 @@ export const compliments = [
 ];
 
 export const APP_NAME = 'Yeet!';
+
+export function convertUtcToLocal(utcTimestamp) {
+  const localTime = moment.utc(utcTimestamp).local().format('MMMM Do YY, h:mm a');
+  return localTime;
+}

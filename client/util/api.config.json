@@ -19,5 +19,6 @@
   "accept_request": "/api/users/accept_friend_request",
   "notify_pending_requests": "/api/users/notify_pending_friends_request",
   "friends_mood": "/api/users/friends_moods",
-  "post_moments": "/api/users/post_moments"
+  "post_moments": "/api/users/post_moments",
+  "get_feed": "/api/users/feed"
 }
