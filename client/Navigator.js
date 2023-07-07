@@ -10,12 +10,12 @@ import { useSelector } from 'react-redux';
 import EditProfile from './screens/EditProfile';
 import AppCamera from './screens/AppCamera';
 import Profile from './screens/Profile';
-import Feed from './screens/Feed';
 import PostMood from './screens/PostMood';
 import Post from './screens/Post';
 import Search from './screens/Search';
 import { StatusBar } from 'expo-status-bar';
 import CameraPreview from './components/CameraPreview';
+import FeedComponent from './screens/Feed';
 
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
@@ -33,7 +33,7 @@ export default function Navigator() {
       <Stack.Navigator initialRouteName={`${User?.token ? 'Feed' : 'Landing'}`}>
         {User?.token ?
           <>
-            <Stack.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
+            <Stack.Screen name="Feed" component={FeedComponent} options={{ headerShown: false }} />
             <Stack.Screen name="PostExpanded" component={PostExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="PostTextExpanded" component={PostTextExpanded} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />

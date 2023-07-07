@@ -3,28 +3,26 @@ import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ScrollView, T
 import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
-import PostSnippet from '../components/PostSnippet';
 import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
-import PostTextSnippet from '../components/PostTextSnippet';
 import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
+import MemoizedFeed from '../components/MemoizedFeed';
 
 
-const Feed = ({ navigation }) => {
-  const height = Dimensions.get("window").height;
+const { height, width } = Dimensions.get('window');
+
+const FeedComponent = ({ navigation }) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
 
   const [ProfileInfo, setProfileInfo] = useState();
-  const [FetchedMood, setFetchedMood] = useState('');
 
 
-  const callGetProfileData = async () => {
+  async function callGetProfileData() {
     const response = await getProfileData();
     if (response?.status === 200) {
       setProfileInfo(response?.data?.data);
@@ -40,19 +38,11 @@ const Feed = ({ navigation }) => {
     }
   }
 
-  const callGetMood = async () => {
-    const response = await getMood();
-    if (response?.status === 200) {
-      setFetchedMood(response?.data?.data);
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
-  }
 
   const [PendingRequests, setPendingRequests] = useState(null);
   const [unseenReq, setunseenReq] = useState(0);
 
-  const callGetPendingRequests = async () => {
+  async function callGetPendingRequests() {
     setPendingRequests(null);
     setunseenReq(0);
     const response = await getPendingRequests();
@@ -62,18 +52,9 @@ const Feed = ({ navigation }) => {
     }
   }
 
-  const [FriendsMood, setFriendsMood] = useState(null);
-
-  const callGetFriendsMood = async () => {
-    const response = await getFriendsMoods();
-    if (response?.status === 200) {
-      setFriendsMood(response?.data?.data);
-    }
-  }
-
   const [Feed, setFeed] = useState(null);
 
-  const callGetFeed = async () => {
+  async function callGetFeed() {
     const response = await getFeed();
     if (response?.status === 200) {
       setFeed(response?.data?.data);
@@ -82,61 +63,30 @@ const Feed = ({ navigation }) => {
 
   useEffect(() => {
     callGetProfileData();
-    callGetMood();
     callGetPendingRequests()
-    callGetFriendsMood();
     callGetFeed();
   }, [isFocused]);
-
-
-  const getHeader = () => {
-    return (
-      <><Text style={styles.titleText}>Moods</Text><ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.moodsContainer}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
-            <View style={styles.profileMood}>
-              {editProfile?.image ? (<Image source={editProfile?.image}
-                style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-                (<Image source={require('../assets/images/placeholder_profile.png')}
-                  style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}
-
-              <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, }]}>
-                {FetchedMood?.mood ?
-                  <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
-                  <Feather name="plus" size={20} color={theme.colors.dark} />}
-              </View>
-              <Text style={styles.text}>You</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          <Mood navigation={navigation} FriendsMood={FriendsMood} />
-        </View>
-      </ScrollView></>
-    )
-  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
           unseenReq={unseenReq} />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={Feed}
-          ListHeaderComponent={getHeader}
-          ListFooterComponent={<View style={{ height: 150 }}></View>}
-          renderItem={({ item }) => {
-            if (Array.isArray(item)) {
-              return (
-                <PostSnippet navigation={navigation} moment={item} />
-              )
-            } else {
-              return (
-                <PostTextSnippet navigation={navigation} memo={item} />
-              )
-            }
-          }}
-          keyExtractor={(item, index) => index}
-        />
+        <View style={{ minHeight: height - 80, justifyContent: "center" }}>
+          <MemoizedFeed navigation={navigation} Feed={Feed} />
+          {!Feed &&
+            <View style={{ position: "absolute", flex: 1, height: '50%', justifyContent: "center", alignItems: "center", width: width }}>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>
+                Add friends to your bubble{'\n'}to fill up this space.
+              </Text>
+              <Pressable onPress={() => navigation.navigate('Search', { editProfile })}
+                style={{ marginTop: 20, backgroundColor: theme.colors.secondary, padding: 10, borderRadius: 10, borderWidth: 2 }}>
+                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Find friends</Text>
+              </Pressable>
+            </View>
+          }
+        </View>
+
         <Pressable onPress={() => navigation.navigate('Post', { editProfile })} style={styles.postBtn}>
           <Feather name="plus" size={30} color={theme.colors.dark} />
         </Pressable>
@@ -220,4 +170,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Feed;
+export default FeedComponent;

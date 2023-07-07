@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import { View, Text, Dimensions, ImageBackground } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
@@ -43,4 +43,4 @@ const PostTextSnippet = ({ navigation, memo }) => {
   )
 }
 
-export default PostTextSnippet;
+export default memo(PostTextSnippet);

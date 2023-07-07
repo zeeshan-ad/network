@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import { View, Text, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -133,4 +133,4 @@ const PostSnippet = ({ navigation, moment }) => {
   )
 }
 
-export default PostSnippet;
+export default memo(PostSnippet);
