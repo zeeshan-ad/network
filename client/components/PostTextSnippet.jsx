@@ -4,11 +4,13 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
+import { useSelector } from 'react-redux';
 
 const PostTextSnippet = ({ navigation, memo }) => {
-
+  const userInfo = useSelector(state => state.userInfo);
+  const editProfile = useSelector(state => state.editProfile);
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo })} style={{
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo, editProfile, userInfo })} style={{
       minHeight: 150, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, paddingVertical: 10, marginVertical: 10,
       borderWidth: 2, borderColor: theme.colors.dark, marginHorizontal: 10, borderRadius: 20, justifyContent: 'space-between'
     }}>

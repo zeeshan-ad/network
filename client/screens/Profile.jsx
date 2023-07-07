@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions } from 'react-native';
-import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
+import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2 } from '../util/constants';
 import { Pressable } from 'react-native';
-import { Feather, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
 
 
-const width = Dimensions.get('window').width;
+const { width, height } = Dimensions.get('window');
 const Profile = ({ navigation, route }) => {
   const { userId } = route.params;
   const [FetchedMood, setFetchedMood] = useState('');
@@ -22,6 +22,7 @@ const Profile = ({ navigation, route }) => {
   const userInfo = userId ? null : useSelector(state => state.userInfo);
   const editProfile = userId ? null : useSelector(state => state.editProfile);
   const dispatch = useDispatch();
+
 
   const callLogout = async () => {
     const response = await logoutUser();
@@ -91,14 +92,29 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const [AllMemos, setAllMemos] = useState();
+  const [AllMoments, setAllMoments] = useState();
+  callGetPosts = async (userId) => {
+    const response = await getProfilePosts(userId);
+    if (response?.status === 200) {
+      setAllMemos(response?.data?.data?.memos);
+      setAllMoments(response?.data?.data?.moments);
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
+
 
   useEffect(() => {
     if (!userId) {
       callGetMood();
       callGetProfileData();
+      callGetPosts(userInfo?.id);
     } else {
       callGetRequestStatus();
       CallGetUserProfile();
+      callGetPosts(userId);
     }
   }, [isFocused, userId])
 
@@ -120,31 +136,36 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+
+  const [CurrentTab, setCurrentTab] = useState(0);
   const [SheetVisible, setSheetVisible] = useState(false);
   const [ModalLogout, setModalLogout] = useState(false);
   const [ModalRequest, setModalRequest] = useState(false);
   const [RemoveFriend, setRemoveFriend] = useState(false);
+
   return (
-    <View style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
       <View style={{
-        position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
-        opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
-        shadowRadius: 5, zIndex: 9
-      }}></View>
-      <View style={{
-        paddingTop: 50, paddingHorizontal: 10, paddingBottom: 10,
+        paddingTop: 10, paddingHorizontal: 10, paddingBottom: 10,
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable onPress={() => navigation.goBack()} style={{
             shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
           }}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
           </Pressable>
-          {ProfileInfo?.mood || FetchedMood?.mood ? <View style={{
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: 'italic' }}>
+            @{userId ? ProfileInfo?.username : userInfo?.username}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20, marginRight: 10 }}>
+          {(ProfileInfo?.mood && userId) || (!userId) ? <View style={{
             borderWidth: 1, borderColor: theme.colors.dark, width: 95, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100
+            backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100,
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10
           }} >
             <Pressable onPress={() => !userId && navigation.navigate('PostMood', { editProfile, FetchedMood })}>
               {!userId ? (
@@ -163,60 +184,38 @@ const Profile = ({ navigation, route }) => {
               }
             </Pressable>
           </View> : null}
+          {!userId &&
+            <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+              shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
+            }}>
+              <Feather name="settings" size={20} color={theme.colors.light} />
+            </Pressable>
+          }
         </View>
-        {!userId &&
-          <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{
-            marginRight: 10, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
-          }}>
-            <Feather name="settings" size={20} color={theme.colors.light} />
-          </Pressable>
-        }
       </View>
-      <View style={{ width: '100%', height: 450, marginTop: -100 }}>
-        {!userId ? editProfile?.image ? (<Image source={editProfile?.image}
-          style={{ height: width + 50, width: width }} />) :
-          (<Image source={require('../assets/images/placeholder_profile.png')}
-            style={{ height: width + 50, width: width }} />)
-          : ProfileInfo?.profile_pic ? (<Image source={BASE_URL + ProfileInfo?.profile_pic}
-            style={{ height: width + 50, width: width }} />) :
-            (<Image source={require('../assets/images/placeholder_profile.png')}
-              style={{ height: width + 50, width: width }} />)}
-      </View>
-      <ScrollView
-        style={{ position: 'absolute', top: 0, width: '100%', flex: 1 }}>
-        <View style={{ width: '100%', minHeight: width }}>
-        </View>
+      <View style={{ backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }}>
         <View style={{
-          width: '100%', backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light, paddingVertical: 20, paddingHorizontal: 20,
-          borderTopRightRadius: 30, borderTopLeftRadius: 30, shadowColor: theme.colors.dark,
-          shadowOffset: { width: 0, height: -10, }, shadowOpacity: 0.5, shadowRadius: 10, elevation: 5, flex: 1
+          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start',
+          paddingVertical: 15, gap: 10, paddingHorizontal: 20
         }}>
-          <View style={{
-            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start',
-            paddingBottom: 20, gap: 10
-          }}>
-            <View style={{ height: '100%', width: width - 165 }}>
-              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, color: theme.colors.backdrop, paddingBottom: 5, fontStyle: 'italic' }}>
-                @{userId ? ProfileInfo?.username : userInfo?.username}
-              </Text>
-              <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingBottom: 2.5 }}>
-                {userId ? ProfileInfo?.name : userInfo?.name}
-              </Text>
-              {ProfileInfo?.bio &&
-                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>{ProfileInfo?.bio}</Text>}
-              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>
-                <Text style={{ fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{ProfileInfo?.totalFriends}</Text>
-                &nbsp;{ProfileInfo?.totalFriends > 1 ? 'Friends' : 'Friend'} in {userId ? 'their' : 'your'} bubble
-              </Text>
-            </View>
-            <View style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <View style={{ flexDirection: 'row', gap: 5, alignItems: 'flex-end', marginBottom: 7.5 }}>
-                <MaterialIcons name="cake" size={20} color={theme.colors.darkgrey} />
-                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light }}>
+          <View style={{ height: '100%', width: width - 165 }}>
+            <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingBottom: 2.5 }}>
+              {userId ? ProfileInfo?.name : userInfo?.name}
+            </Text>
+            {ProfileInfo?.bio &&
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>{ProfileInfo?.bio}</Text>}
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>
+              <Text style={{ fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{ProfileInfo?.totalFriends}</Text>
+              &nbsp;{ProfileInfo?.totalFriends > 1 ? 'Friends' : 'Friend'} in {userId ? 'their' : 'your'} bubble
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 30, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', gap: 5, alignItems: 'flex-end', marginVertical: 10 }}>
+                <FontAwesome name="birthday-cake" size={13} color={theme.colors.backdrop} />
+                <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.ligh, marginBottom: -4 }}>
                   {(new Date(userId ? ProfileInfo?.dob : userInfo?.dob).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric'
+                    day: 'numeric',
+                    month: 'short'
                   }))}
                 </Text>
               </View>
@@ -224,9 +223,9 @@ const Profile = ({ navigation, route }) => {
                 RequestStatus?.status === 'pending' && userId === RequestStatus?.req_to_id ?
                   <Pressable onPress={callCancelRequest}>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                      <Ionicons name="time-sharp" size={18} color={theme.colors.darkgrey} />
-                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
-                        Pending
+                      <Ionicons name="time-sharp" size={16} color={theme.colors.backdrop} />
+                      <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: 1 }}>
+                        pending
                       </Text>
                     </View>
                   </Pressable>
@@ -234,8 +233,8 @@ const Profile = ({ navigation, route }) => {
                   RequestStatus?.status === 'pending' && userId === RequestStatus?.req_by_id ?
                     <Pressable onPress={() => setModalRequest(true)}>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                        <Ionicons name="time-sharp" size={18} color={theme.colors.darkgrey} />
-                        <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                        <Ionicons name="time-sharp" size={16} color={theme.colors.backdrop} />
+                        <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: 1 }}>
                           Accept
                         </Text>
                       </View>
@@ -246,17 +245,17 @@ const Profile = ({ navigation, route }) => {
                         setRemoveFriend(true);
                       }}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                          <MaterialCommunityIcons name="account-multiple-check" size={25} color={theme.colors.darkgrey}
+                          <MaterialCommunityIcons name="account-multiple-check" size={20} color={theme.colors.backdrop}
                             style={{ marginBottom: -3, marginRight: 3 }} />
-                          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                          <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: -1 }}>
                             Friends
                           </Text>
                         </View>
                       </Pressable> :
                       <Pressable onPress={callSendRequest}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                          <Ionicons name="md-person-add" size={18} color={theme.colors.darkgrey} />
-                          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline' }}>
+                          <Ionicons name="md-person-add" size={16} color={theme.colors.backdrop} />
+                          <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: -.5 }}>
                             Join bubble
                           </Text>
                         </View>
@@ -264,19 +263,97 @@ const Profile = ({ navigation, route }) => {
               }
             </View>
           </View>
-          <View style={{ paddingVertical: 10, height: 200, justifyContent: 'center', alignItems: 'center' }}>
+
+          <View>
+            {!userId ? editProfile?.image ? (<Image source={editProfile?.image}
+              style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
+              (<Image source={require('../assets/images/placeholder_profile.png')}
+                style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)
+              : ProfileInfo?.profile_pic ? (<Image source={BASE_URL + ProfileInfo?.profile_pic}
+                style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
+                (<Image source={require('../assets/images/placeholder_profile.png')}
+                  style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)}
+          </View>
+
+        </View>
+        <View style={{
+          flexDirection: "row", justifyContent: 'space-between', borderBottomWidth: 0.17,
+          borderBottomColor: theme.colors.backdrop
+        }}>
+          <Pressable onPress={() => setCurrentTab(0)} style={{
+            borderBottomColor: theme.colors.dark, width: '50%',
+            borderBottomWidth: CurrentTab === 0 ? 2 : 0, alignItems: 'center'
+          }}><Text style={styles.tabTitle}>Moments</Text>
+          </Pressable>
+          <Pressable onPress={() => setCurrentTab(1)} style={{
+            borderBottomColor: theme.colors.dark, width: '50%',
+            borderBottomWidth: CurrentTab === 1 ? 2 : 0, alignItems: 'center'
+          }}><Text style={styles.tabTitle}>Memos</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {
+        // if  userId is null then show the current user's profile
+        !userId ?
+          <View>
+            {CurrentTab === 0 ?
+              <Text style={{
+                fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+                textAlign: 'center', marginTop: 50
+              }}>When you share a moment it will show here.</Text>
+              :
+              AllMemos.length > 0 ?
+                <FlatList
+                  data={AllMemos}
+                  style={{ height: height, paddingTop: 5 }}
+                  showsVerticalScrollIndicator={false}
+                  ListFooterComponent={<View style={{ height: 300 }}></View>}
+                  renderItem={({ item }) => (
+                    <View style={{
+                      marginHorizontal: 10,
+                      backgroundColor: 'rgba(255,255,255,0.4)',
+                      flexDirection: 'column', borderColor: theme.colors.backdrop, borderWidth: 0.18,
+                      marginVertical: 5, borderRadius: 10, paddingVertical: 15, paddingHorizontal: 15
+                    }}>
+                      <Text style={{
+                        fontSize: fontSizes.large, fontWeight: fontWeights.normal, lineHeight:30
+                      }}>{item.memo}</Text>
+                      {/* Time */}
+                      <Text style={{
+                        marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
+                        textAlign: 'left', color: theme.colors.backdrop
+                      }}>
+                        posted on {convertTimestamp2(item.created_at)}
+                      </Text>
+                    </View>
+                  )}
+                  keyExtractor={item => item.id}
+                />
+                :
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+                  textAlign: 'center', marginTop: 50
+                }}>When you share a memo it will show here.</Text>
+            }
+          </View>
+          // else if userId is not null then show the other user's profile
+          :
+          // if the request is accepted then show the other user's profile
+          RequestStatus?.status === "accepted" ?
             <Text style={{
               fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
               textAlign: 'center'
             }}>
-              {!userId ? "You haven't posted anything yet,\npost a moment or memo to get started!"
-                : RequestStatus?.status === "accepted" ?
-                  ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + " hasn't posted anything yet." :
-                  "Join " + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + "'s bubble to see their posts."}
+              {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}  hasn't posted anything yet.
             </Text>
-          </View>
-        </View>
-      </ScrollView>
+            :
+            // else if not friends show hidden profile
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+              textAlign: 'center'
+            }}>
+              Join  + {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
       <Modal
         animationType="fade"
         transparent={true}
@@ -306,37 +383,39 @@ const Profile = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
-      {userId && <Modal
-        animationType="fade"
-        transparent={true}
-        visible={ModalRequest}>
-        <View style={styles.centeredView}>
-          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
-            <Text style={{ fontSize: fontSizes.large, textAlign: 'center', fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
-              {!RemoveFriend ? ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 50 }}>
-              <Pressable
-                onPress={() => {
-                  setModalRequest(false);
-                  callCancelRequest();
-                  CallGetUserProfile();
-                }}>
-                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>{!RemoveFriend ? 'Decline' : 'Remove'}</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  setModalRequest(false);
-                  CallGetUserProfile();
-                  if (!RemoveFriend)
-                    callAcceptRequest();
-                }}>
-                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>{!RemoveFriend ? 'Accept' : 'Cancel'}</Text>
-              </Pressable>
+      {
+        userId && <Modal
+          animationType="fade"
+          transparent={true}
+          visible={ModalRequest}>
+          <View style={styles.centeredView}>
+            <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+              <Text style={{ fontSize: fontSizes.large, textAlign: 'center', fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
+                {!RemoveFriend ? ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
+              </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 50 }}>
+                <Pressable
+                  onPress={() => {
+                    setModalRequest(false);
+                    callCancelRequest();
+                    CallGetUserProfile();
+                  }}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>{!RemoveFriend ? 'Decline' : 'Remove'}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    setModalRequest(false);
+                    CallGetUserProfile();
+                    if (!RemoveFriend)
+                      callAcceptRequest();
+                  }}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>{!RemoveFriend ? 'Accept' : 'Cancel'}</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>}
+        </Modal>
+      }
       <BottomSheet
         visible={SheetVisible}
         onBackdropPress={() => setSheetVisible(!SheetVisible)}
@@ -366,14 +445,14 @@ const Profile = ({ navigation, route }) => {
           </Pressable>
         </View>
       </BottomSheet>
-    </View >
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%'
+    height: height
   },
   card: {
     height: 160,
@@ -390,8 +469,12 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     padding: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     alignItems: 'center',
+  },
+  tabTitle: {
+    width: '50%', textAlign: 'center', fontSize: fontSizes.medium, fontWeight: fontWeights.normal,
+    paddingBottom: 3
   }
 })
 

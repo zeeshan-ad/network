@@ -87,3 +87,8 @@ export function convertTimeStamp(Timestamp) {
   const localTime = moment(Timestamp, 'MM/DD/YYYY, hh:mm a').format('MMMM Do YY, h:mm a');
   return localTime;
 }
+
+export function convertTimestamp2(timestamp) {
+  const formattedTimestamp = moment(timestamp, 'MM/DD/YYYY, HH:mm:ss a').format('D MMM YYYY, h:mm a');
+  return formattedTimestamp;
+}

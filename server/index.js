@@ -43,6 +43,14 @@ function convertToLocalTimezone(array) {
     }
   });
 }
+function convertToLocalTime(array) {
+  return array.map(obj => {
+    const utcTimestamp = new Date(obj.created_at);
+    const localTimestamp = utcTimestamp.toLocaleString();
+    return { ...obj, created_at: localTimestamp };
+  });
+}
+
 
 function separateArrayByDate(arr) {
   let result = [];
@@ -75,6 +83,19 @@ function separateArrayByDate(arr) {
   }
 
   return result;
+}
+
+function getLatestObjectsPerDay(array) {
+  const latestObjects = {};
+
+  array.forEach(obj => {
+    const date = new Date(obj.created_at).toLocaleDateString();
+    if (!latestObjects[date] || new Date(obj.created_at) > new Date(latestObjects[date].created_at)) {
+      latestObjects[date] = obj;
+    }
+  });
+
+  return Object.values(latestObjects);
 }
 
 function compareCreatedAt(a, b) {
@@ -569,8 +590,6 @@ app.get('/api/users/feed', checkToken, async (req, res) => {
     }));
 
     // get user memos and moments
-
-
     const user_posts_memos = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1 AND DATE(created_at)  BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id, prevDate, currentDate]);
     const user_posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 AND DATE(created_at)  BETWEEN $2 AND $3 ORDER BY id DESC', [session.rows[0].user_id, prevDate, currentDate]);
     const user = await pool.query('SELECT * FROM users WHERE id = $1', [session.rows[0].user_id]);
@@ -591,6 +610,35 @@ app.get('/api/users/feed', checkToken, async (req, res) => {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
 });
+
+// Get moments and memos of user for profile page moments clubbed by same date
+app.get('/api/users/user_profile_posts', checkToken, async (req, res) => {
+
+  const userId = req.query.userId;
+
+  console.log(userId);
+
+  try {
+    // get all memos of the user as array of objects
+    const user_posts_memos = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1 ORDER BY id DESC', [userId]);
+
+    // get last moment from each day of the user as array of objects
+    const user_posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 ORDER BY id DESC', [userId]);
+    const localTimeMoments = getLatestObjectsPerDay(convertToLocalTime(user_posts_moments.rows));
+    const localTimeMemos = convertToLocalTime(user_posts_memos.rows);
+
+    if (!user_posts_memos.rows.length && !user_posts_moments.rows.length)
+      return res.status(404).json({ status: 404, message: 'No data found' });
+
+    return res.status(200).json({ status: 200, data: { memos: localTimeMemos, moments: localTimeMoments } });
+
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+
 
 
 
