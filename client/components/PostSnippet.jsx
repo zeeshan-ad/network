@@ -35,7 +35,7 @@ const PostSnippet = ({ navigation, moment }) => {
         renderItem={({ index }) => {
           return (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('PostExpanded', {moment})}>
+              onPress={() => navigation.navigate('PostExpanded', { moment })}>
               <View
                 style={{ marginHorizontal: 10, borderWidth: 2, borderRadius: 22 }}
                 key={index}>
@@ -51,8 +51,13 @@ const PostSnippet = ({ navigation, moment }) => {
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <FontAwesome name="diamond" size={23} color={theme.colors.light} />
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+                    <View style={{
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                    }}>
+                      <FontAwesome name="diamond" size={23} color={theme.colors.light} />
+                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+                    </View>
                   </BlurView>
                 </View>
                 <View style={{
@@ -67,9 +72,14 @@ const PostSnippet = ({ navigation, moment }) => {
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
+                    <View style={{
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                    }}>
+                      <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
 
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
+                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
+                    </View>
                   </BlurView>
                 </View>
                 <View style={{
@@ -129,7 +139,7 @@ const PostSnippet = ({ navigation, moment }) => {
           )
         }}
       />
-    </View>
+    </View >
   )
 }
 

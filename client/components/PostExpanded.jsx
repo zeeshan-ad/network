@@ -98,14 +98,14 @@ const PostExpanded = ({ navigation, route }) => {
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Profile', { userId: moment?.user_id !== userInfo?.id ? moment?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-            <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
-              style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
-            <Text style={{
-              fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-              shadowRadius: 1, elevation: 10,
-            }}>
-              {moment?.[0]?.name}
-            </Text>
+              <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
+              <Text style={{
+                fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                shadowRadius: 1, elevation: 10,
+              }}>
+                {moment?.[0]?.name}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -133,12 +133,18 @@ const PostExpanded = ({ navigation, route }) => {
                   backgroundColor: "transparent",
                   position: 'absolute', right: 20, bottom: 150, zIndex: 9
                 }}>
-                  <BlurView intensity={20} style={{
+                  <BlurView intensity={60} style={{
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <FontAwesome name="diamond" size={23} color={theme.colors.light} />
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text></BlurView>
+                    <View style={{
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                    }}>
+                      <FontAwesome name="diamond" size={23} color={theme.colors.light} />
+                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+                    </View>
+                  </BlurView>
                 </View>}
                 <View style={{
                   position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
@@ -157,14 +163,19 @@ const PostExpanded = ({ navigation, route }) => {
                   backgroundColor: "transparent",
                   position: 'absolute', right: 20, bottom: 70, zIndex: 9
                 }}>
-                  <BlurView intensity={20} style={{
+                  <BlurView intensity={60} style={{
                     padding: 10,
                     alignItems: 'center',
                   }}>
-                    <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
-                      <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
-                    </TouchableWithoutFeedback>
-                    <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
+                    <View style={{
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                    }}>
+                      <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
+                        <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
+                      </TouchableWithoutFeedback>
+                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
+                    </View>
                   </BlurView>
                 </View>}
                 <View style={{

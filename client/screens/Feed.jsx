@@ -86,11 +86,10 @@ const FeedComponent = ({ navigation }) => {
             </View>
           }
         </View>
-
-        <Pressable onPress={() => navigation.navigate('Post', { editProfile })} style={styles.postBtn}>
-          <Feather name="plus" size={30} color={theme.colors.dark} />
-        </Pressable>
       </KeyboardAvoidingView>
+      <Pressable onPress={() => navigation.navigate('Post', { editProfile })} style={styles.postBtn}>
+        <Feather name="plus" size={30} color={theme.colors.dark} />
+      </Pressable>
     </SafeAreaView>
   )
 }
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
   },
   postBtn: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 15,
     right: 15,
     zIndex: 999,
     backgroundColor: theme.colors.secondary,
