@@ -10,7 +10,7 @@ const PostTextSnippet = ({ navigation, memo }) => {
   const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo, editProfile, userInfo })} style={{
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo})} style={{
       minHeight: 150, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, paddingVertical: 10, marginVertical: 10,
       borderWidth: 2, borderColor: theme.colors.dark, marginHorizontal: 10, borderRadius: 20, justifyContent: 'space-between'
     }}>

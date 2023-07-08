@@ -7,14 +7,32 @@ import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
+import { getMomentIdDate } from '../APIs';
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const PostExpanded = ({ navigation, route }) => {
-  const userInfo = useSelector(state => state.userInfo);
+  const userInfo = route?.params?.user ? route.params.user : useSelector(state => state.userInfo);
   const moment = route?.params?.moment;
+
+  const { date, user } = route.params;
+
+  const [MomentbyId, setMomentbyId] = useState();
+
+  const callGetMomentsIdDate = async () => {
+    const response = await getMomentIdDate(date, user?.id);
+    if (response?.status === 200) {
+      setMomentbyId(response?.data?.data);
+    }
+  }
+
+
+  useEffect(() => {
+    callGetMomentsIdDate();
+  }, [date, user])
+
 
   const comments = [
     { "comment": "My shadow says hi back!" },
@@ -26,16 +44,16 @@ const PostExpanded = ({ navigation, route }) => {
   ]
 
   const [CommentsVisible, setCommentsVisible] = useState(false);
-  const [ShowBtn, setShowBtn] = useState(false);
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowBtn(true);
-    }, 3000)
 
-    return () => {
-      clearInterval(timeout);
+  const [CarouselMoment, setCarouselMoment] = useState();
+  useEffect(() => {
+    if (moment) {
+      setCarouselMoment(moment);
+    } else if (MomentbyId) {
+      setCarouselMoment(MomentbyId);
     }
-  }, [])
+  }, [moment, MomentbyId])
+
 
 
   return (
@@ -97,142 +115,144 @@ const PostExpanded = ({ navigation, route }) => {
             }}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Profile', { userId: moment?.user_id !== userInfo?.id ? moment?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-              <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
+            <Pressable onPress={() => navigation.navigate('Profile', { userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+              <Image source={CarouselMoment?.[0]?.profile_pic ? BASE_URL + CarouselMoment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <Text style={{
                 fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                 shadowRadius: 1, elevation: 10,
               }}>
-                {moment?.[0]?.name}
+                {CarouselMoment?.[0]?.name}
               </Text>
             </Pressable>
           </View>
         </View>
-        <Carousel
-          panGestureHandlerProps={{
-            activeOffsetX: [-10, 10],
-          }}
-          width={width}
-          loop={false}
-          data={moment}
-          onSnapToItem={(index) => console.log('current index:', index)}
-          modeConfig={{
-            stackInterval: 18,
-          }}
-          renderItem={({ index }) => {
-            return (
-              <View
-                onPress={() => Keyboard.dismiss()}
-                style={{}}
-                key={index}>
-                {ShowBtn && <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  position: 'absolute', right: 20, bottom: 150, zIndex: 9
-                }}>
-                  <BlurView intensity={60} style={{
-                    padding: 10,
-                    alignItems: 'center',
-                  }}>
-                    <View style={{
-                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-                    }}>
-                      <FontAwesome name="diamond" size={23} color={theme.colors.light} />
-                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
-                    </View>
-                  </BlurView>
-                </View>}
-                <View style={{
-                  position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
-                  opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
-                  shadowRadius: 5, zIndex: 9
-                }}></View>
-                <View style={{
-                  position: 'absolute', bottom: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
-                  opacity: 0.2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: -20 }, shadowOpacity: 1,
-                  shadowRadius: 5, zIndex: 9
-                }}></View>
-                {ShowBtn && <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  position: 'absolute', right: 20, bottom: 70, zIndex: 9
-                }}>
-                  <BlurView intensity={60} style={{
-                    padding: 10,
-                    alignItems: 'center',
-                  }}>
-                    <View style={{
-                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-                    }}>
-                      <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
-                        <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
-                      </TouchableWithoutFeedback>
-                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
-                    </View>
-                  </BlurView>
-                </View>}
-                <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9,
-                  position: 'absolute', right: 30, bottom: 30,
-                }}>
-                  <Text style={{
-                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
-                    shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                    shadowRadius: 1, elevation: 10,
-                  }}>
-                    {`${index + 1}/${moment.length}`}</Text>
-                </View>
-
-                <View style={{
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9,
-                  position: 'absolute', right: 20, top: 75
-                }}>
-                  <Text style={{
-                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                    shadowRadius: 1, elevation: 10,
-                  }}>
-                    {convertTimeStamp(moment?.[index]?.created_at)}</Text>
-                </View>
-
-                {moment[index].caption &&
+        {CarouselMoment?.length > 0 &&
+          <Carousel
+            panGestureHandlerProps={{
+              activeOffsetX: [-10, 10],
+            }}
+            width={width}
+            loop={false}
+            data={CarouselMoment}
+            onSnapToItem={(index) => console.log('current index:', index)}
+            modeConfig={{
+              stackInterval: 18,
+            }}
+            renderItem={({ index }) => {
+              return (
+                <View
+                  onPress={() => Keyboard.dismiss()}
+                  style={{}}
+                  key={index}>
                   <View style={{
                     borderRadius: 100,
                     overflow: "hidden",
                     flex: 1,
-                    width: '80%',
                     backgroundColor: "transparent",
-                    position: 'absolute', left: 20, bottom: 30, zIndex: 9
+                    position: 'absolute', right: 20, bottom: 150, zIndex: 9
+                  }}>
+                    <BlurView intensity={60} style={{
+                      padding: 10,
+                      alignItems: 'center',
+                    }}>
+                      <View style={{
+                        shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                        shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                      }}>
+                        <FontAwesome name="diamond" size={23} color={theme.colors.light} />
+                        <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+                      </View>
+                    </BlurView>
+                  </View>
+                  <View style={{
+                    position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
+                    opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
+                    shadowRadius: 5, zIndex: 9
+                  }}></View>
+                  <View style={{
+                    position: 'absolute', bottom: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
+                    opacity: 0.2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: -20 }, shadowOpacity: 1,
+                    shadowRadius: 5, zIndex: 9
+                  }}></View>
+                  <View style={{
+                    borderRadius: 100,
+                    overflow: "hidden",
+                    flex: 1,
+                    backgroundColor: "transparent",
+                    position: 'absolute', right: 20, bottom: 70, zIndex: 9
+                  }}>
+                    <BlurView intensity={60} style={{
+                      padding: 10,
+                      alignItems: 'center',
+                    }}>
+                      <View style={{
+                        shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+                        shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+                      }}>
+                        <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
+                          <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
+                        </TouchableWithoutFeedback>
+                        <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
+                      </View>
+                    </BlurView>
+                  </View>
+                  <View style={{
+                    borderRadius: 100,
+                    overflow: "hidden",
+                    flex: 1,
+                    backgroundColor: "transparent",
+                    zIndex: 9,
+                    position: 'absolute', right: 30, bottom: 30,
                   }}>
                     <Text style={{
-                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
+                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                       shadowRadius: 1, elevation: 10,
                     }}>
-                      {moment[index].caption}
-                    </Text>
-                  </View>}
-                <Image style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-                  source={BASE_URL + moment[index].moment} />
-              </View>
-            )
-          }}
-        />
+                      {`${index + 1}/${CarouselMoment.length}`}</Text>
+                  </View>
+
+                  <View style={{
+                    overflow: "hidden",
+                    flex: 1,
+                    backgroundColor: "transparent",
+                    zIndex: 9,
+                    position: 'absolute', right: 20, top: 75
+                  }}>
+                    <Text style={{
+                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                      shadowRadius: 1, elevation: 10,
+                    }}>
+                      {date ? convertTimeStamp(CarouselMoment?.[index]?.date) : convertTimeStamp(CarouselMoment?.[index]?.created_at)}</Text>
+                  </View>
+
+                  {CarouselMoment[index].caption &&
+                    <View style={{
+                      borderRadius: 100,
+                      overflow: "hidden",
+                      flex: 1,
+                      width: '80%',
+                      backgroundColor: "transparent",
+                      position: 'absolute', left: 20, bottom: 30, zIndex: 9
+                    }}>
+                      <Text style={{
+                        color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                        shadowRadius: 1, elevation: 10,
+                      }}>
+                        {CarouselMoment[index].caption}
+                      </Text>
+                    </View>}
+                  <Image style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                    source={BASE_URL + CarouselMoment[index].moment} />
+                </View>
+              )
+            }}
+          />}
+
       </View>
     </KeyboardAvoidingView>
   )

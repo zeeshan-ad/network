@@ -306,7 +306,7 @@ const Profile = ({ navigation, route }) => {
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={<View style={{ height: 300 }}></View>}
                   renderItem={({ item }) => (
-                    <View style={{
+                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...userInfo } })} style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
                       marginBottom: 5, position: "relative"
                     }}>
@@ -328,7 +328,7 @@ const Profile = ({ navigation, route }) => {
                       }}>
                         <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
                       </View>
-                    </View>
+                    </Pressable>
                   )}
                   numColumns={2}
                 />
@@ -346,7 +346,7 @@ const Profile = ({ navigation, route }) => {
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={<View style={{ height: 300 }}></View>}
                   renderItem={({ item }) => (
-                    <View style={{
+                    <Pressable onPress={() => navigation.navigate('PostTextExpanded', { memo: item })} style={{
                       marginHorizontal: 10,
                       backgroundColor: 'rgba(255,255,255,0.4)',
                       flexDirection: 'column', borderColor: theme.colors.backdrop, borderWidth: 0.18,
@@ -362,7 +362,7 @@ const Profile = ({ navigation, route }) => {
                       }}>
                         posted on {convertTimestamp2(item.created_at)}
                       </Text>
-                    </View>
+                    </Pressable>
                   )}
                   keyExtractor={item => item.id}
                 />
@@ -386,7 +386,7 @@ const Profile = ({ navigation, route }) => {
                   style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => (
-                    <View style={{
+                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...ProfileInfo } })} style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
                       marginBottom: 5, position: "relative"
                     }}>
@@ -409,7 +409,7 @@ const Profile = ({ navigation, route }) => {
                           <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
                         </View>
                       </View>
-                    </View>
+                    </Pressable>
                   )}
                   numColumns={2}
                 />
@@ -425,7 +425,7 @@ const Profile = ({ navigation, route }) => {
                   style={{ height: height, paddingTop: 5 }}
                   showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => (
-                    <View style={{
+                    <Pressable onPress={() => navigation.navigate('PostTextExpanded', { memo: item })} style={{
                       marginHorizontal: 10,
                       backgroundColor: 'rgba(255,255,255,0.4)',
                       flexDirection: 'column', borderColor: theme.colors.backdrop, borderWidth: 0.18,
@@ -441,7 +441,7 @@ const Profile = ({ navigation, route }) => {
                       }}>
                         posted on {convertTimestamp2(item.created_at)}
                       </Text>
-                    </View>
+                    </Pressable>
                   )}
                   keyExtractor={item => item.id}
                 />
@@ -454,7 +454,7 @@ const Profile = ({ navigation, route }) => {
             // else if not friends show hidden profile
             <Text style={{
               fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
-              textAlign: 'center'
+              textAlign: 'center', marginTop: 50
             }}>
               Join  + {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
       <Modal

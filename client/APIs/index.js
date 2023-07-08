@@ -18,9 +18,10 @@ import { getFriendsMoods } from "./getFriendsMoods";
 import { postMoment } from "./postMoment";
 import { getFeed } from "./getFeed";
 import { getProfilePosts } from "./getProfilePosts";
+import { getMomentIdDate } from "./getMomentsIdDate";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, postMoment, getFeed,
   verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests, getFriendsMoods,
-  getProfilePosts
+  getProfilePosts, getMomentIdDate
 }

@@ -21,5 +21,6 @@
   "friends_mood": "/api/users/friends_moods",
   "post_moments": "/api/users/post_moments",
   "get_feed": "/api/users/feed",
-  "user_profile_posts": "/api/users/user_profile_posts"
+  "user_profile_posts": "/api/users/user_profile_posts",
+  "get_moments_by_date_Id": "/api/users/user_profile_posts_moments"
 }

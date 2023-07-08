@@ -4,14 +4,19 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
+import { useSelector } from 'react-redux';
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const PostTextExpanded = ({ navigation, route }) => {
+  const userInfo = useSelector(state => state.userInfo);
+  const editProfile = useSelector(state => state.editProfile);
 
-  const { memo, editProfile, userInfo } = route.params;
+  const { memo } = route.params;
+
+
 
   const comments = [
     { "comment": "My shadow says hi back!" },

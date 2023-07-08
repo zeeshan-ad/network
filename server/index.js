@@ -104,6 +104,11 @@ function compareCreatedAt(a, b) {
   return dateB - dateA;
 }
 
+function convertUtcTimestamp(utcTimestamp) {
+  const formattedTimestamp = moment.utc(utcTimestamp).local().format('M/D/YYYY, h:mm:ss A');
+  return formattedTimestamp;
+}
+
 app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/moments', express.static(__dirname + '/moments'));
 
@@ -616,27 +621,71 @@ app.get('/api/users/user_profile_posts', checkToken, async (req, res) => {
 
   const userId = req.query.userId;
 
-  console.log(userId);
-
   try {
     // get all memos of the user as array of objects
     const user_posts_memos = await pool.query('SELECT * FROM user_posts_memos WHERE user_id = $1 ORDER BY id DESC', [userId]);
 
     // get last moment from each day of the user as array of objects
     const user_posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 ORDER BY id DESC', [userId]);
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [userId]);
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
     const localTimeMoments = getLatestObjectsPerDay(convertToLocalTime(user_posts_moments.rows));
     const localTimeMemos = convertToLocalTime(user_posts_memos.rows);
 
     if (!user_posts_memos.rows.length && !user_posts_moments.rows.length)
       return res.status(404).json({ status: 404, message: 'No data found' });
 
-    return res.status(200).json({ status: 200, data: { memos: localTimeMemos, moments: localTimeMoments } });
+    return res.status(200).json({
+      status: 200, data: {
+        memos: localTimeMemos.map(item => ({
+          ...item,
+          profile_pic: profile?.rows?.[0]?.profile_pic,
+          theme: profile?.rows?.[0]?.theme,
+          name: user?.rows?.[0]?.name,
+        })), moments: localTimeMoments
+      }
+    });
 
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
 });
 
+
+// get moments as per that day and userID
+
+app.get('/api/users/user_profile_posts_moments', checkToken, async (req, res) => {
+
+  const userId = req.query.userId;
+  const date = req.query.date;
+  try {
+    // get all memos of the user as array of objects
+    const user_posts_moments = await pool.query('SELECT * FROM user_posts_moments WHERE user_id = $1 AND DATE(created_at) = $2 ORDER BY id DESC', [userId, date]);
+
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [userId]);
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
+    if (!user_posts_moments.rows.length || !profile.rows.length)
+      return res.status(404).json({ status: 404, message: 'No data found' });
+
+    const modifiedData = user_posts_moments.rows.map(item => ({
+      ...item,
+      date: convertUtcTimestamp(item?.created_at),
+      ...profile.rows[0],
+      name: user.rows[0].name,
+    })
+    );
+
+    console.log(modifiedData);
+
+
+    return res.status(200).json({
+      status: 200, data: modifiedData
+    });
+
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
 
 
 
