@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
-import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2 } from '../util/constants';
+import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2, convertTimestampMoment } from '../util/constants';
 import { Pressable } from 'react-native';
 import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
@@ -135,7 +135,6 @@ const Profile = ({ navigation, route }) => {
       alert('Something went wrong. Please try again later.');
     }
   }
-
 
   const [CurrentTab, setCurrentTab] = useState(0);
   const [SheetVisible, setSheetVisible] = useState(false);
@@ -298,13 +297,50 @@ const Profile = ({ navigation, route }) => {
         !userId ?
           <View>
             {CurrentTab === 0 ?
-              <Text style={{
-                fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
-                textAlign: 'center', marginTop: 50
-              }}>When you share a moment it will show here.</Text>
+              AllMoments?.length > 0 ?
+                // flatlists to show images in grid
+                <FlatList
+                  key={'_'}
+                  data={AllMoments}
+                  style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
+                  showsVerticalScrollIndicator={false}
+                  ListFooterComponent={<View style={{ height: 300 }}></View>}
+                  renderItem={({ item }) => (
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
+                      marginBottom: 5, position: "relative"
+                    }}>
+                      <View style={{ width: '100%', height: 200, marginTop: 5 }}>
+                        <Image source={{ uri: BASE_URL + item?.moment }} style={{
+                          width: '100%', height: '100%',
+                          borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
+                        }} />
+                        <Text style={{
+                          position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
+                          fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
+                          shadowOffset: { width: 0, height: 0 }, elevation: 1
+                        }}>
+                          {convertTimestampMoment(item.created_at)}</Text>
+                      </View>
+                      <View style={{
+                        position: 'absolute', top: 10, right: 5, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
+                        shadowOffset: { width: 0, height: 0 }, elevation: 1
+                      }}>
+                        <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
+                      </View>
+                    </View>
+                  )}
+                  numColumns={2}
+                />
+                :
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+                  textAlign: 'center', marginTop: 50
+                }}>When you share a moment it will show here.</Text>
               :
               AllMemos.length > 0 ?
                 <FlatList
+                  key={'#'}
                   data={AllMemos}
                   style={{ height: height, paddingTop: 5 }}
                   showsVerticalScrollIndicator={false}
@@ -317,7 +353,7 @@ const Profile = ({ navigation, route }) => {
                       marginVertical: 5, borderRadius: 10, paddingVertical: 15, paddingHorizontal: 15
                     }}>
                       <Text style={{
-                        fontSize: fontSizes.large, fontWeight: fontWeights.normal, lineHeight:30
+                        fontSize: fontSizes.large, fontWeight: fontWeights.normal, lineHeight: 30
                       }}>{item.memo}</Text>
                       {/* Time */}
                       <Text style={{
@@ -341,12 +377,79 @@ const Profile = ({ navigation, route }) => {
           :
           // if the request is accepted then show the other user's profile
           RequestStatus?.status === "accepted" ?
-            <Text style={{
-              fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
-              textAlign: 'center'
-            }}>
-              {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}  hasn't posted anything yet.
-            </Text>
+            CurrentTab === 0 ?
+              AllMoments?.length > 0 ?
+                // flatlists to show images in grid
+                <FlatList
+                  key={'_'}
+                  data={AllMoments}
+                  style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => (
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
+                      marginBottom: 5, position: "relative"
+                    }}>
+                      <View style={{ width: '100%', height: 200, marginTop: 5 }}>
+                        <Image source={{ uri: BASE_URL + item?.moment }} style={{
+                          width: '100%', height: '100%',
+                          borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
+                        }} />
+                        <Text style={{
+                          position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
+                          fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
+                          shadowOffset: { width: 0, height: 0 }, elevation: 1
+                        }}>
+                          {convertTimestampMoment(item.created_at)}
+                        </Text>
+                        <View style={{
+                          position: 'absolute', top: 5, right: 5, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
+                          shadowOffset: { width: 0, height: 0 }, elevation: 1
+                        }}>
+                          <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
+                        </View>
+                      </View>
+                    </View>
+                  )}
+                  numColumns={2}
+                />
+                :
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+                  textAlign: 'center', marginTop: 50
+                }}>{ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s moment will show here once they post.</Text> :
+              AllMemos.length > 0 ?
+                <FlatList
+                  key={'#'}
+                  data={AllMemos}
+                  style={{ height: height, paddingTop: 5 }}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => (
+                    <View style={{
+                      marginHorizontal: 10,
+                      backgroundColor: 'rgba(255,255,255,0.4)',
+                      flexDirection: 'column', borderColor: theme.colors.backdrop, borderWidth: 0.18,
+                      marginVertical: 5, borderRadius: 10, paddingVertical: 15, paddingHorizontal: 15
+                    }}>
+                      <Text style={{
+                        fontSize: fontSizes.large, fontWeight: fontWeights.normal, lineHeight: 30
+                      }}>{item.memo}</Text>
+                      {/* Time */}
+                      <Text style={{
+                        marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
+                        textAlign: 'left', color: theme.colors.backdrop
+                      }}>
+                        posted on {convertTimestamp2(item.created_at)}
+                      </Text>
+                    </View>
+                  )}
+                  keyExtractor={item => item.id}
+                />
+                :
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
+                  textAlign: 'center', marginTop: 50
+                }}>{ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s memos will show here once they post.</Text>
             :
             // else if not friends show hidden profile
             <Text style={{

@@ -41,7 +41,8 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.187:3000';
+// export const BASE_URL = 'http://192.168.0.187:3000'; //Home
+export const BASE_URL = "http://192.168.29.86:3000"; //BS
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",
@@ -90,5 +91,10 @@ export function convertTimeStamp(Timestamp) {
 
 export function convertTimestamp2(timestamp) {
   const formattedTimestamp = moment(timestamp, 'MM/DD/YYYY, HH:mm:ss a').format('D MMM YYYY, h:mm a');
+  return formattedTimestamp;
+}
+
+export function convertTimestampMoment(timestamp) {
+  const formattedTimestamp = moment(timestamp, 'MM/DD/YYYY, HH:mm:ss a').format('D MMM YYYY');
   return formattedTimestamp;
 }

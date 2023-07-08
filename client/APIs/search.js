@@ -7,7 +7,7 @@ export const search = async (searchTerm, offset) => {
   const config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: `${search_user}?search=${searchTerm}&offset=${offset}`,
+    url: `${search_user}?search=${searchTerm.trim()}&offset=${offset}`,
     headers: {
       'Content-Type': 'application/json',
     },
