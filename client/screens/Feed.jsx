@@ -73,7 +73,13 @@ const FeedComponent = ({ navigation }) => {
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
           unseenReq={unseenReq} />
         <View style={{ minHeight: height - 80, justifyContent: "center" }}>
-          <MemoizedFeed navigation={navigation} Feed={Feed} />
+          <MemoizedFeed 
+          navigation={navigation} 
+          Feed={Feed} 
+          callGetFeed={callGetFeed}
+          callGetPendingRequests={callGetPendingRequests}
+          callGetProfileData={callGetProfileData}
+          />
           {!Feed &&
             <View style={{ position: "absolute", flex: 1, height: '50%', justifyContent: "center", alignItems: "center", width: width }}>
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>

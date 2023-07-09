@@ -1,10 +1,12 @@
-import React, { useState, useRef, memo } from 'react';
-import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet } from 'react-native';
+import React, { useState, useRef, memo, useEffect } from 'react';
+import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
+import { isLiked, postLike, removeLike } from '../APIs';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const width = Dimensions.get("window").width;
@@ -13,8 +15,42 @@ const height = Dimensions.get("window").height;
 const PostTextExpanded = ({ navigation, route }) => {
   const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
+  const isFocused = useIsFocused();
+
 
   const { memo } = route.params;
+
+
+  const [liked, setLiked] = useState(false);
+
+  const CallIsliked = async () => {
+    const response = await isLiked(memo.id, 'memo');
+    if (response.status === 200) {
+      setLiked(response.data.data);
+    }
+  }
+
+
+
+  const callPostLike = async () => {
+    const response = await postLike(memo.id, 'memo');
+    if (response.status === 200) {
+      CallIsliked();
+    }
+  }
+
+  const callRemoveLIke = async () => {
+    const response = await removeLike(memo.id, 'memo');
+    if (response.status === 200) {
+      CallIsliked();
+    }
+  }
+
+
+  useEffect(() => {
+    CallIsliked();
+  }, [isFocused])
+
 
 
 
@@ -33,11 +69,11 @@ const PostTextExpanded = ({ navigation, route }) => {
     { "comment": "lol  😂" },
   ]
   return (
-    <View style={{ height: height }}>
+    <KeyboardAvoidingView behavior='padding' style={{ height: height }}>
       <View style={{ position: 'absolute', top: 0, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, width: width, height: 45, zIndex: 999 }}></View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={{
-        marginBottom: 10, marginBottom: 80, paddingHorizontal: 20,
+        paddingHorizontal: 20,
         backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost,
       }}>
         <View style={{
@@ -60,22 +96,31 @@ const PostTextExpanded = ({ navigation, route }) => {
             <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertTimeStamp(memo?.created_at)}</Text>
           </View>
           <View style={{ paddingVertical: 20 }}>
-            <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts }}>
+            <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>
               {memo?.memo}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', borderTopWidth: 2, paddingTop: 10 }}>
             <View style={{
               flexDirection: 'row', gap: 10, alignItems: 'center'
             }}>
-              <FontAwesome name="diamond" size={23} color={theme.colors.dark} />
-              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
+              {liked?.isLiked ?
+                <Pressable onPress={callRemoveLIke}>
+                  <FontAwesome name="heart" size={23} color={theme.colors.danger} />
+                </Pressable> :
+                <Pressable onPress={callPostLike}>
+                  <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
+                </Pressable>
+              }
+              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
+                <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
             </View>
             <View style={{
               flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
             }}>
               <Ionicons name="chatbubble-outline" size={25} color={theme.colors.dark} />
-              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>12</Text>
+              <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>12
+                <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;comments</Text></Text>
             </View>
           </View>
         </View>
@@ -107,7 +152,7 @@ const PostTextExpanded = ({ navigation, route }) => {
         })}
       </ScrollView>
       <View style={{
-        flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0,
+        flexDirection: 'row', alignItems: 'center',
         paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost
       }}>
         <Image source={editProfile?.image ? editProfile?.image : require('../assets/images/placeholder_profile.png')}
@@ -119,7 +164,7 @@ const PostTextExpanded = ({ navigation, route }) => {
           selectionColor={theme.colors.darkgrey}
           style={styles.input} placeholder="Add a comment" />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 

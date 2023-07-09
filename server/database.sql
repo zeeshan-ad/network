@@ -49,3 +49,22 @@ CREATE TABLE user_posts_moments (
     caption TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- DB to hold Likes
+CREATE TABLE user_posts_likes (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    post_type VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- DB to hold Comments
+CREATE TABLE user_posts_comments (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    post_type VARCHAR(255) NOT NULL,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

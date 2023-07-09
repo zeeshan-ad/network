@@ -35,14 +35,15 @@ export const fontSizes = {
   medium: 16,
   large: 18,
   yeetPosts: 22,
+  ice: 26,
   xlarge: 28,
   heading: 24,
   smallHightlight: 35,
   BigHightlight: 42,
   Logo: 70,
 }
-// export const BASE_URL = 'http://192.168.0.187:3000'; //Home
-export const BASE_URL = "http://192.168.29.86:3000"; //BS
+export const BASE_URL = 'http://192.168.0.187:3000'; //Home
+// export const BASE_URL = "http://192.168.29.86:3000"; //BS
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",

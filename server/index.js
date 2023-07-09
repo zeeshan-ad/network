@@ -670,13 +670,10 @@ app.get('/api/users/user_profile_posts_moments', checkToken, async (req, res) =>
     const modifiedData = user_posts_moments.rows.map(item => ({
       ...item,
       date: convertUtcTimestamp(item?.created_at),
-      ...profile.rows[0],
+      profile_pic: profile.rows[0].profile_pic,
       name: user.rows[0].name,
     })
     );
-
-    console.log(modifiedData);
-
 
     return res.status(200).json({
       status: 200, data: modifiedData
@@ -686,6 +683,55 @@ app.get('/api/users/user_profile_posts_moments', checkToken, async (req, res) =>
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }
 });
+
+// like posts api for moments and memos DB schema
+app.post('/api/users/like_post', checkToken, async (req, res) => {
+  const { postId, postType } = req.body;
+
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+    const like = await pool.query('INSERT INTO user_posts_likes (user_id, post_id, post_type) VALUES ($1, $2, $3) RETURNING *', [session.rows[0].user_id, postId, postType]);
+    return res.status(200).json({ status: 200, message: 'Post liked successfully', data: like.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// is post liked api for moments and memos and total likes of postId
+app.get('/api/users/is_post_liked', checkToken, async (req, res) => {
+  const { postId, postType } = req.query;
+
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    const isLiked = await pool.query('SELECT * FROM user_posts_likes WHERE user_id = $1 AND post_id = $2 AND post_type = $3', [session.rows[0].user_id, postId, postType]);
+    const totalLikes = await pool.query('SELECT COUNT(*) FROM user_posts_likes WHERE post_id = $1 AND post_type = $2', [postId, postType]);
+    return res.status(200).json({ status: 200, message: 'Post liked successfully', data: { isLiked: isLiked.rows.length > 0, totalLikes: totalLikes.rows[0].count } });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+// remove like posts api for moments and memos DB schema
+app.delete('/api/users/remove_like_post', checkToken, async (req, res) => {
+  const { postId, postType } = req.body;
+
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    const like = await pool.query('DELETE FROM user_posts_likes WHERE user_id = $1 AND post_id = $2 AND post_type = $3 RETURNING *', [session.rows[0].user_id, postId, postType]);
+    return res.status(200).json({ status: 200, message: 'Post unliked successfully', data: like.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+
+
 
 
 

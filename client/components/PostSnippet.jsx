@@ -1,13 +1,12 @@
-import React, { useState, useRef, memo } from 'react';
-import { View, Text, Dimensions, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useRef, memo, useEffect } from 'react';
+import { View, Text, Dimensions, Pressable } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
-import { BlurView } from 'expo-blur';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { Image } from 'expo-image';
+import MomentPostSnippet from './MomentPostSnippet';
+
 
 const PostSnippet = ({ navigation, moment }) => {
-
 
   const width = Dimensions.get("window").width;
 
@@ -32,110 +31,9 @@ const PostSnippet = ({ navigation, moment }) => {
         modeConfig={{
           stackInterval: 18,
         }}
-        renderItem={({ index }) => {
+        renderItem={({ item, index }) => {
           return (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('PostExpanded', { moment })}>
-              <View
-                style={{ marginHorizontal: 10, borderWidth: 2, borderRadius: 22 }}
-                key={index}>
-                <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9999,
-                  position: 'absolute', right: 10, top: 10,
-                }}>
-                  <BlurView intensity={60} style={{
-                    padding: 10,
-                    alignItems: 'center',
-                  }}>
-                    <View style={{
-                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-                    }}>
-                      <FontAwesome name="diamond" size={23} color={theme.colors.light} />
-                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>257</Text>
-                    </View>
-                  </BlurView>
-                </View>
-                <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9999,
-                  position: 'absolute', right: 10, top: 90,
-                }}>
-                  <BlurView intensity={60} style={{
-                    padding: 10,
-                    alignItems: 'center',
-                  }}>
-                    <View style={{
-                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-                      shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-                    }}>
-                      <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
-
-                      <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
-                    </View>
-                  </BlurView>
-                </View>
-                <View style={{
-                  borderRadius: 100,
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9999,
-                  position: 'absolute', right: 10, bottom: 10,
-                }}>
-                  <Text style={{
-                    color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                    shadowRadius: 1, elevation: 10,
-                  }}>
-                    {`${index + 1}/${moment.length}`}</Text>
-                </View>
-
-                <View style={{
-                  overflow: "hidden",
-                  flex: 1,
-                  backgroundColor: "transparent",
-                  zIndex: 9999,
-                  position: 'absolute', left: 10, top: 10,
-                }}>
-                  <Text style={{
-                    color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                    shadowRadius: 1, elevation: 10,
-                  }}>
-                    {convertTimeStamp(moment?.[index]?.created_at)}</Text>
-                </View>
-
-                {moment[index].caption &&
-                  <View style={{
-                    overflow: "hidden",
-                    flex: 1,
-                    width: '80%',
-                    backgroundColor: "transparent",
-                    zIndex: 9999,
-                    position: 'absolute', left: 10, bottom: 10,
-                  }}>
-                    <Text style={{
-                      color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
-                      shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                      shadowRadius: 1, elevation: 10,
-                    }}>
-                      {moment[index].caption}
-                    </Text>
-                  </View>}
-                <Image style={{
-                  height: '100%',
-                  width: '100%',
-                  borderRadius: 20
-                }}
-                  source={BASE_URL + moment[index].moment} />
-              </View>
-            </TouchableWithoutFeedback>
+            <MomentPostSnippet navigation={navigation} item={item} index={index} moment={moment}/>
           )
         }}
       />
