@@ -731,9 +731,54 @@ app.delete('/api/users/remove_like_post', checkToken, async (req, res) => {
 });
 
 
+// add comment api for moments and memos DB schema
+app.post('/api/users/add_comment', checkToken, async (req, res) => {
+  const { postId, postType, comment } = req.body;
+
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    const commentAdd = await pool.query('INSERT INTO user_posts_comments (user_id, post_id, post_type, comment, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *', [session.rows[0].user_id, postId, postType, comment, new Date()]);
+    return res.status(200).json({ status: 200, message: 'Comment added successfully', data: commentAdd.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+const getNamePic = async (arr) => {
+  const newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [arr[i].user_id]);
+    const user = await pool.query('SELECT * FROM users WHERE id = $1', [arr[i].user_id]);
+    newArr.push({
+      ...arr[i],
+      profile_pic: profile.rows[0].profile_pic,
+      name: user.rows[0].name,
+      user_id: user.rows[0].id,
+      date: moment(convertUtcTimestamp(arr[i]?.created_at)).format('DD/MM/YY hh:mm a'),
+    });
+  }
+  return newArr;
+}
 
 
+// get comments api for moments and memos DB schema
+app.get('/api/users/get_comments', checkToken, async (req, res) => {
+  const { postId, postType } = req.query;
 
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    const comments = await pool.query('SELECT * FROM user_posts_comments WHERE post_id = $1 AND post_type = $2', [postId, postType]);
+    const commentsWithUser = await getNamePic(comments.rows);
+
+    return res.status(200).json({ status: 200, message: 'Comments fetched successfully', data: commentsWithUser });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
 
 
 

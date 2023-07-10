@@ -1,25 +1,19 @@
 import React, { useState, useEffect, memo } from 'react';
-import { View, Text, Keyboard, Dimensions, Pressable } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
-import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
-import { isLiked, postLike, removeLike } from '../APIs';
+import { addComment, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
+import { getComments } from '../APIs/getComments';
+import { useSelector } from 'react-redux';
 
 
-const width = Dimensions.get("window").width;
-const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
-
-  const comments = [
-    { "comment": "My shadow says hi back!" },
-    { "comment": "lol  😂" },
-    { "comment": "Funny" },
-    { "comment": "I don't even at this point 😂" },
-    { "comment": "My shadow says hi back!" },
-    { "comment": "lol  😂" },
-  ]
+const { width, height } = Dimensions.get("window");
+const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) => {
+  const editProfile = useSelector(state => state.editProfile);
+  const userInfo = useSelector(state => state.userInfo);
 
   const [CommentsVisible, setCommentsVisible] = useState(false);
 
@@ -48,9 +42,31 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
       CallIsliked();
     }
   }
+  const [comment, setcomment] = useState('')
+
+  const callAddComment = async () => {
+    const response = await addComment(item.id, 'moment', comment);
+    if (response.status === 200) {
+      setcomment('');
+      callGetComment();
+    }
+  }
+
+  const [AllComments, setAllComments] = useState();
+
+  const callGetComment = async () => {
+    const response = await getComments(item.id, 'moment');
+    if (response.status === 200) {
+      setAllComments(response.data.data);
+    }
+  }
+
+  console.log(AllComments)
+
 
   useEffect(() => {
     CallIsliked();
+    callGetComment();
   }, [isFocused])
 
 
@@ -61,23 +77,35 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
           position: 'absolute', bottom: 70, marginLeft: 20, minWidth: 200,
           maxWidth: width - 100, maxHeight: height / 2.6, zIndex: 9
         }}>
-          <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 10 }}>
-            {comments.map((item, index) => {
+          <FlatList
+            data={AllComments}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => {
               return (
                 <View key={index} style={{ flexDirection: 'row' }}>
-                  <Image source={require('../assets/images/profilepic-dummy.jpg')}
-                    style={{
-                      height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
-                      borderColor: theme.colors.dark, overflow: 'hidden'
-                    }} />
+                  <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+                    <Image source={item?.profile_pic ? { uri: `${BASE_URL}${item?.profile_pic}` } : require('../assets/images/placeholder_profile.png')}
+                      style={{
+                        height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
+                        borderColor: theme.colors.dark, overflow: 'hidden'
+                      }} />
+                  </Pressable>
                   <View key={index} style={{
-                    backgroundColor: theme.colors.light, borderColor: theme.colors.dark, borderWidth: 2, borderRadius: 10, marginBottom: 10, maxWidth: width - 150
+                    backgroundColor: theme.colors.light, borderColor: theme.colors.dark, borderWidth: 2, borderRadius: 10, marginBottom: 10, maxWidth: width - 140
                   }}>
                     <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 10 }}>
                       <View>
-                        <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark }}>
-                          Zeeshan Ahmed
-                        </Text>
+                        <View style={{
+                          flexDirection: 'row', justifyContent: 'space-between', gap: 20, alignItems: "center"
+                        }}>
+                          <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+                            <Text ellipsizeMode='tail' numberOfLines={1} style={{
+                              fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark,
+                              maxWidth: width - 300
+                            }}>{item.name}</Text>
+                          </Pressable>
+                          <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>{item.date}</Text>
+                        </View>
                         <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                           {item.comment}
                         </Text>
@@ -86,17 +114,25 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
                   </View>
                 </View>
               )
-            })}
-          </ScrollView>
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={require('../assets/images/profilepic-dummy.jpg')}
+            <Image source={editProfile?.image ? editProfile?.image : require('../assets/images/placeholder_profile.png')}
               style={{
                 height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                 borderColor: theme.colors.dark, overflow: 'hidden'
               }} />
             <TextInput
               selectionColor={theme.colors.darkgrey}
+              onChangeText={(text) => setcomment(text)}
+              value={comment}
               style={styles.input} placeholder="Add a comment" />
+            {comment?.length > 0 && <Pressable
+              onPress={callAddComment}
+              style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
+              <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
+            </Pressable>}
           </View>
         </View>}
       <View
@@ -104,31 +140,24 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
         style={{}}
         key={index}>
         <View style={{
-          borderRadius: 100,
-          overflow: "hidden",
           flex: 1,
           backgroundColor: "transparent",
-          position: 'absolute', right: 20, bottom: 150, zIndex: 9
+          position: 'absolute', right: 20, bottom: 220, zIndex: 9
         }}>
-          <BlurView intensity={60} style={{
-            padding: 10,
-            alignItems: 'center',
+          <View style={{
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
-            <View style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-              shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-            }}>
-              {liked?.isLiked ?
-                <Pressable onPress={callRemoveLIke}>
-                  <FontAwesome name="heart" size={23} color={theme.colors.danger} />
-                </Pressable> :
-                <Pressable onPress={callPostLike}>
-                  <FontAwesome name="heart-o" size={23} color={theme.colors.light} />
-                </Pressable>
-              }
-              <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
-            </View>
-          </BlurView>
+            {liked?.isLiked ?
+              <Pressable onPress={callRemoveLIke}>
+                <FontAwesome name="heart" size={25} color={theme.colors.danger} />
+              </Pressable> :
+              <Pressable onPress={callPostLike}>
+                <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
+              </Pressable>
+            }
+            <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
+          </View>
         </View>
         <View style={{
           position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
@@ -145,22 +174,17 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
           overflow: "hidden",
           flex: 1,
           backgroundColor: "transparent",
-          position: 'absolute', right: 20, bottom: 70, zIndex: 9
+          position: 'absolute', right: 20, bottom: 150, zIndex: 9
         }}>
-          <BlurView intensity={60} style={{
-            padding: 10,
-            alignItems: 'center',
+          <View style={{
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
-            <View style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-              shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
-            }}>
-              <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
-                <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
-              </TouchableWithoutFeedback>
-              <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
-            </View>
-          </BlurView>
+            <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
+              <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
+            </TouchableWithoutFeedback>
+            <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}</Text>
+          </View>
         </View>
         <View style={{
           borderRadius: 100,
@@ -168,14 +192,14 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
           flex: 1,
           backgroundColor: "transparent",
           zIndex: 9,
-          position: 'absolute', right: 30, bottom: 30,
+          position: 'absolute', right: 20, bottom: 30,
         }}>
           <Text style={{
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
             shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10,
           }}>
-            {`${index + 1}/${CarouselMoment.length}`}</Text>
+            {`${index + 1}/${CarouselMoment?.length}`}</Text>
         </View>
 
         <View style={{
@@ -215,8 +239,37 @@ const MomentPostExpanded = ({ item, index, CarouselMoment, date }) => {
           source={BASE_URL + item.moment} />
       </View>
     </>
-
   )
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderWidth: 2,
+    borderRadius: 100,
+    borderColor: theme.colors.dark,
+    paddingHorizontal: 20,
+    paddingRight: 50,
+    backgroundColor: theme.colors.light,
+    width: width - 90,
+    height: 50,
+    color: theme.colors.dark,
+    fontSize: fontSizes.smallMedium,
+    fontWeight: 'medium'
+  },
+  button: {
+    position: 'absolute',
+    top: 10,
+    right: -50,
+    width: 30,
+    height: 30,
+    backgroundColor: theme.colors.secondary,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: theme.colors.dark,
+    borderRadius: 100,
+    borderWidth: 2,
+  },
+})
 
 export default memo(MomentPostExpanded)

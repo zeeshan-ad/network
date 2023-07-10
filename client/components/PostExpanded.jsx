@@ -88,7 +88,7 @@ const PostExpanded = ({ navigation, route }) => {
             }}
             renderItem={({ item, index }) => {
               return (
-                <MomentPostExpanded item={item} index={index} CarouselMoment={CarouselMoment} date={date} />
+                <MomentPostExpanded navigation={navigation} item={item} index={index} CarouselMoment={CarouselMoment} date={date} />
               )
             }}
           />}
@@ -98,20 +98,5 @@ const PostExpanded = ({ navigation, route }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 2,
-    borderRadius: 100,
-    borderColor: theme.colors.dark,
-    paddingHorizontal: 20,
-    backgroundColor: theme.colors.light,
-    width: width - 150,
-    maxWidth: 300,
-    height: 50,
-    color: theme.colors.dark,
-    fontSize: fontSizes.large,
-    fontWeight: 'medium'
-  }
-})
 
 export default memo(PostExpanded);

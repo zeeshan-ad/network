@@ -7,7 +7,7 @@ import { Image } from 'expo-image';
 import { isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 
-const MomentPostSnippet = ({navigation, item, index, moment }) => {
+const MomentPostSnippet = ({ navigation, item, index, moment }) => {
 
   const [liked, setLiked] = useState();
   const isFocused = useIsFocused();
@@ -44,59 +44,45 @@ const MomentPostSnippet = ({navigation, item, index, moment }) => {
     <View
       style={{ marginHorizontal: 10, borderWidth: 2, borderRadius: 22 }}
       key={index}>
-      <View style={{
-        borderRadius: 100,
-        overflow: "hidden",
-        flex: 1,
-        backgroundColor: "transparent",
-        zIndex: 9999,
-        position: 'absolute', right: 10, top: 10,
-      }}>
-        <BlurView intensity={60} style={{
-          padding: 10,
-          alignItems: 'center',
+        <View style={{
+          flex: 1,
+          backgroundColor: "transparent",
+          zIndex: 9999,
+          position: 'absolute', right: 10, top: 30,
         }}>
           <View style={{
+
             shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-            shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+            shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
             {liked?.isLiked ?
               <Pressable onPress={callRemoveLIke}>
-                <FontAwesome name="heart" size={23} color={theme.colors.danger} />
+                <FontAwesome name="heart" size={25} color={theme.colors.danger} />
               </Pressable> :
               <Pressable onPress={callPostLike}>
-                <FontAwesome name="heart-o" size={23} color={theme.colors.light} />
+                <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
               </Pressable>
             }
             <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
           </View>
-        </BlurView>
-      </View>
-      <View style={{
-        borderRadius: 100,
-        overflow: "hidden",
-        flex: 1,
-        backgroundColor: "transparent",
-        zIndex: 9999,
-        position: 'absolute', right: 10, top: 90,
-      }}>
-        <BlurView intensity={60} style={{
-          padding: 10,
-          alignItems: 'center',
+        </View>
+        <View style={{
+          flex: 1,
+          backgroundColor: "transparent",
+          zIndex: 9999,
+          position: 'absolute', right: 10, top: 90,
         }}>
+
           <View style={{
             shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-            shadowRadius: 1, elevation: 2, backgroundColor: 'transparent', alignItems: "center"
+            shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
             <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
 
             <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>14</Text>
           </View>
-        </BlurView>
-      </View>
+        </View>
       <View style={{
-        borderRadius: 100,
-        overflow: "hidden",
         flex: 1,
         backgroundColor: "transparent",
         zIndex: 9999,

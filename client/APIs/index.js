@@ -22,9 +22,11 @@ import { getMomentIdDate } from "./getMomentsIdDate";
 import { postLike } from "./postLike";
 import { isLiked } from "./isLiked";
 import { removeLike } from "./removeLike";
+import { addComment } from "./addComment";
+import { getComments } from "./getComments";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, postMoment, getFeed,
   verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests, getFriendsMoods,
-  getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike
+  getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike, addComment, getComments
 }

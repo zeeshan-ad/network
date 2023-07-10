@@ -25,5 +25,7 @@
   "get_moments_by_date_Id": "/api/users/user_profile_posts_moments",
   "like_posts": "/api/users/like_post",
   "is_liked": "/api/users/is_post_liked",
-  "remove_like": "/api/users/remove_like_post"
+  "remove_like": "/api/users/remove_like_post",
+  "add_comment": "/api/users/add_comment",
+  "get_comments": "/api/users/get_comments"
 }

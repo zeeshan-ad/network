@@ -83,7 +83,7 @@ const FeedComponent = ({ navigation }) => {
           {!Feed &&
             <View style={{ position: "absolute", flex: 1, height: '50%', justifyContent: "center", alignItems: "center", width: width }}>
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>
-                Add friends to your bubble{'\n'}to fill up this space.
+              There is nothing to show, add friends{'\n'}to your bubble to fill up this space.
               </Text>
               <Pressable onPress={() => navigation.navigate('Search', { editProfile })}
                 style={{ marginTop: 20, backgroundColor: theme.colors.secondary, padding: 10, borderRadius: 10, borderWidth: 2 }}>
