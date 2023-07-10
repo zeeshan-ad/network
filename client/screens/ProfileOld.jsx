@@ -345,7 +345,7 @@ const Profile = ({ navigation, route }) => {
                     fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
                     textAlign: 'center'
                   }}>
-                    ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) +  hasn't posted anything yet.
+                    {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))} hasn't posted anything yet.
                   </Text>
                   :
                   // else if not friends show hidden profile
@@ -353,7 +353,7 @@ const Profile = ({ navigation, route }) => {
                     fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
                     textAlign: 'center'
                   }}>
-                    Join  + {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
+                    Join {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
           </View>
         </View>
       </View >

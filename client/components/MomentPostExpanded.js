@@ -61,8 +61,6 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     }
   }
 
-  console.log(AllComments)
-
 
   useEffect(() => {
     CallIsliked();

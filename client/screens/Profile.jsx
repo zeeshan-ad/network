@@ -456,7 +456,7 @@ const Profile = ({ navigation, route }) => {
               fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
               textAlign: 'center', marginTop: 50
             }}>
-              Join  + {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
+              Join {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
       <Modal
         animationType="fade"
         transparent={true}
