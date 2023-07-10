@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
-import { Image } from 'expo-image';
 import MemoizedFeed from '../components/MemoizedFeed';
 
 

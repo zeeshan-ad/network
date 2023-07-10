@@ -4,10 +4,11 @@ import PostSnippet from './PostSnippet';
 import PostTextSnippet from './PostTextSnippet';
 import MemoizedFeedHeader from './MemoizedFeedHeader';
 import { getFriendsMoods, getMood } from '../APIs';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData }) => {
-
+  const isFocused = useIsFocused();
 
   const [FriendsMood, setFriendsMood] = useState(null);
   const [FetchedMood, setFetchedMood] = useState('');
@@ -41,7 +42,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
   useEffect(() => {
     callGetFriendsMood();
     callGetMood();
-  }, [])
+  }, [isFocused])
 
 
   return (
