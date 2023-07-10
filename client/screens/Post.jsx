@@ -4,10 +4,14 @@ import { theme, fontSizes, fontWeights } from '../util/constants';
 import { StyleSheet } from 'react-native';
 import PostMoments from '../components/PostMoments';
 import PostMemos from '../components/PostMemos';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Snackbar } from 'react-native-paper';
 
 
 
 const Post = ({ navigation, route }) => {
+  const [InfoSnack, setInfoSnack] = useState(false);
+
 
   const [PostType, setPostType] = useState('Moments');
 
@@ -15,6 +19,9 @@ const Post = ({ navigation, route }) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container} >
       <View style={styles.container}>
         <View style={styles.postOptions}>
+          {PostType === "Moments" && <Pressable onPress={() => setInfoSnack(true)} style={{ position: 'absolute', top: -5, left: -20, zIndex: 999 }}>
+            <MaterialIcons name="info" size={15} color={theme.colors.light} />
+          </Pressable>}
           <Pressable onPress={() => setPostType('Moments')} style={[styles.postOptionsContainer, {
             backgroundColor: PostType === 'Moments' ? theme.colors.secondary : theme.colors.light,
           }]}><Text style={styles.PostOptionsText}>Moments</Text>
@@ -29,6 +36,13 @@ const Post = ({ navigation, route }) => {
           <PostMemos navigation={navigation} route={route} />
         }
       </View>
+      <Snackbar
+        visible={InfoSnack}
+        onDismiss={() => setInfoSnack(false)}
+        duration={8000}
+      >
+        Share moments through out the day, all the moments from a day will be clubbed together and shown as a single post in a carousel. 🌆🌆🌆
+      </Snackbar>
     </KeyboardAvoidingView>
   )
 }

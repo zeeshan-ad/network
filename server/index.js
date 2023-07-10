@@ -254,6 +254,7 @@ app.get('/api/users/profile', checkToken, async (req, res) => {
     await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]).then(async (result) => {
       const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [result?.rows[0]?.user_id]);
       const friends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 OR req_to_id = $1) AND (status = $2)', [result?.rows[0]?.user_id, "accepted"]);
+      
       if (profile.rows.length === 0) {
         return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
       } else {

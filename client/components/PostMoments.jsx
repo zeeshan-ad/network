@@ -7,7 +7,9 @@ import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 
 
+
 export default function PostMoments({ navigation }) {
+
 
 
   const [type, setType] = useState(CameraType.front);

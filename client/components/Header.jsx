@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Modal, SafeAreaView, Dimensions, ScrollView } from 'react-native';
-import { Feather, Fontisto, Ionicons } from '@expo/vector-icons';
+import { Feather, Octicons, Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { APP_NAME, BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { useFonts } from 'expo-font';
@@ -44,7 +44,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq }) => {
         <Text style={styles.logo}>{APP_NAME}</Text>
         <View style={{ flexDirection: 'row', gap: 20, alignItems: "center" }}>
           <Pressable onPress={() => { setshowNotif(!showNotif) }}>
-            <Fontisto name="bell" size={25} color={theme.colors.dark} />
+            <Octicons name="people" size={25} color={theme.colors.dark} />
             {unseenReq ?
               <View style={{
                 height: 25, width: 25, position: 'absolute', top: -10, right: -10,
@@ -72,7 +72,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq }) => {
               <Ionicons name="close" size={30} color={theme.colors.dark} />
             </Pressable>
             <View style={{ paddingTop: 10 }}>
-              <Text style={{ textAlign: 'center', fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Notifs</Text>
+              <Text style={{ textAlign: 'center', fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Friend Requests</Text>
             </View>
           </View>
           <ScrollView contentContainerStyle={{
@@ -99,7 +99,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq }) => {
               )
             }) :
               <Text style={{ textAlign: 'center', fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>
-                Nothing to show here!
+                You have no pending requests.
               </Text>
             }
           </ScrollView>

@@ -5,6 +5,9 @@ import EmojiKeyboard from '../components/EmojiKeyboard';
 import { StyleSheet } from 'react-native';
 import { updateMood } from '../APIs';
 import CloseOrSave from '../components/CloseOrSave';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Snackbar } from 'react-native-paper';
+
 
 const width = Dimensions.get('window').width;
 
@@ -17,6 +20,8 @@ const PostMood = ({ navigation, route }) => {
     if ((text + emoji).length <= 6)
       setText(text + emoji);
   };
+
+  const [InfoSnack, setInfoSnack] = useState(false);
 
   const RemoveEmoji = (index) => {
     setText("");
@@ -41,6 +46,9 @@ const PostMood = ({ navigation, route }) => {
         <Text style={styles.text}>
           Use emojis to express your mood
         </Text>
+        <Pressable onPress={() =>setInfoSnack(true)} style={{ paddingTop: 5 }}>
+          <MaterialIcons name="info" size={15} color={theme.colors.backdrop} />
+        </Pressable>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         {text ?
@@ -59,6 +67,13 @@ const PostMood = ({ navigation, route }) => {
         }
       </View>
       <EmojiKeyboard onEmojiSelected={handleEmojiSelected} />
+      <Snackbar
+        visible={InfoSnack}
+        onDismiss={() => setInfoSnack(false)}
+        duration={5000}
+      >
+        Express how you are feeling with mood using emojis. You can add up to 3 emojis. 🎉🎉🎉
+      </Snackbar>
     </SafeAreaView>
   )
 }
@@ -73,7 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, paddingHorizontal: 20, paddingTop: 50, justifyContent: 'flex-start'
   },
-  marginVertical: { marginVertical: 20 },
+  marginVertical: { marginVertical: 20, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: "center" },
   text: {
     textAlign: 'center', fontSize: fontSizes.large, fontWeight: fontWeights.normal,
     paddingTop: 5, color: theme.colors.dark
