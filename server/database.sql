@@ -7,6 +7,15 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP dob DATE NOT NULL,
 );
+
+-- OTP reset password
+CREATE TABLE user_otp (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    otp VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE user_sessions (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,

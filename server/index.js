@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const pool = require('./db');
+const nodemailer = require('nodemailer');
 var bcrypt = require('bcrypt');
 const fs = require('fs');
 const moment = require('moment-timezone');
@@ -228,6 +229,54 @@ async function checkToken(req, res, next) {
   next();
 }
 
+// generate otp and send it in user's email and store it in user_otp table
+
+
+
+app.post('/api/users/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (user.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'User not found' });
+    }
+    const deleteInfo = await pool.query('DELETE FROM user_otp WHERE user_id = $1', [user.rows[0].id]);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otpInfo = await pool.query('INSERT INTO user_otp (user_id, otp) VALUES ($1, $2) RETURNING *', [user.rows[0].id, otp]);
+    if (otpInfo.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    } else {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.zoho.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.PASSWORD
+        }
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: 'Reset your yeet account password',
+        text: `Use ${otp} to reset your password for your yeet account.`,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+        }
+        res.status(200).json({ status: 200, message: 'OTP sent to your email' });
+      });
+
+    }
+
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
 
 
 // Logout
@@ -254,7 +303,7 @@ app.get('/api/users/profile', checkToken, async (req, res) => {
     await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]).then(async (result) => {
       const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [result?.rows[0]?.user_id]);
       const friends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 OR req_to_id = $1) AND (status = $2)', [result?.rows[0]?.user_id, "accepted"]);
-      
+
       if (profile.rows.length === 0) {
         return res.status(404).json({ status: 404, message: 'Profile not found', data: null });
       } else {
@@ -781,7 +830,41 @@ app.get('/api/users/get_comments', checkToken, async (req, res) => {
   }
 });
 
+// api to delete moment along with all its comments and likes
+app.delete('/api/users/delete_moment', checkToken, async (req, res) => {
+  const { momentId } = req.query;
 
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    await pool.query('DELETE FROM user_posts_likes WHERE post_id = $1 AND post_type = $2', [momentId, 'moment']);
+    await pool.query('DELETE FROM user_posts_comments WHERE post_id = $1 AND post_type = $2', [momentId, 'moment']);
+    await pool.query('DELETE FROM user_posts_moments WHERE id = $1', [momentId]);
+
+    return res.status(200).json({ status: 200, message: 'Moment deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
+
+// api to delete memo along with all its comments and likes
+app.delete('/api/users/delete_memo', checkToken, async (req, res) => {
+  const { memoId } = req.query;
+
+  try {
+    const token = req.headers.authorization;
+    const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
+
+    await pool.query('DELETE FROM user_posts_likes WHERE post_id = $1 AND post_type = $2', [memoId, 'memo']);
+    await pool.query('DELETE FROM user_posts_comments WHERE post_id = $1 AND post_type = $2', [memoId, 'memo']);
+    await pool.query('DELETE FROM user_posts_memos WHERE id = $1', [memoId]);
+
+    return res.status(200).json({ status: 200, message: 'Memo deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: 'Internal Server Error' });
+  }
+});
 
 
 
