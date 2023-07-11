@@ -27,5 +27,8 @@
   "is_liked": "/api/users/is_post_liked",
   "remove_like": "/api/users/remove_like_post",
   "add_comment": "/api/users/add_comment",
-  "get_comments": "/api/users/get_comments"
+  "get_comments": "/api/users/get_comments",
+  "forgot_password": "/api/users/forgot-password",
+  "delete_moment": "/api/users/delete_moment",
+  "delete_memo": "/api/users/delete_memo"
 }

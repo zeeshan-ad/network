@@ -36,7 +36,6 @@ const PostTextExpanded = ({ navigation, route }) => {
   const [AllComments, setAllComments] = useState([]);
 
   async function callGetComment() {
-    ('callGetComment------------', memo.id)
     const response = await getComments(memo.id, 'memo');
     if (response.status === 200) {
       setAllComments(response.data.data);

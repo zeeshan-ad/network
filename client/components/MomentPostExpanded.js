@@ -1,13 +1,14 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
-import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
-import { addComment, isLiked, postLike, removeLike } from '../APIs';
+import { addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
 import { useSelector } from 'react-redux';
+import { BottomSheet } from 'react-native-btr';
 
 
 const { width, height } = Dimensions.get("window");
@@ -58,6 +59,16 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     const response = await getComments(item.id, 'moment');
     if (response.status === 200) {
       setAllComments(response.data.data);
+    }
+  }
+
+  const [ShowOption, setShowOption] = useState(false)
+
+  const callDeleteMoment = async () => {
+    const response = await deleteMoment(item.id);
+    if (response.status === 200) {
+      setShowOption(false);
+      navigation.goBack();
     }
   }
 
@@ -157,6 +168,25 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
           </View>
         </View>
+        {userInfo?.id === item?.user_id &&
+          <View style={{
+            borderRadius: 100,
+            overflow: "hidden",
+            flex: 1,
+            backgroundColor: "transparent",
+            position: 'absolute', right: 20, bottom: 105, zIndex: 9
+          }}>
+            <View style={{
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+              shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
+            }}>
+              <Pressable onPress={() => setShowOption(true)}>
+                <Ionicons name="ellipsis-horizontal" size={24} color={theme.colors.light} />
+              </Pressable>
+            </View>
+          </View>
+        }
+
         <View style={{
           position: 'absolute', top: 0, width: width, minHeight: 100, backgroundColor: theme.colors.dark,
           opacity: 0.1, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 20 }, shadowOpacity: 1,
@@ -236,6 +266,20 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
         }}
           source={BASE_URL + item.moment} />
       </View>
+      <BottomSheet
+        visible={ShowOption}
+        onBackdropPress={() => setShowOption(!ShowOption)}
+      >
+        <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
+          <Pressable onPress={callDeleteMoment} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+            borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+          }}>
+            <Feather name="trash" size={22} color={theme.colors.danger} />
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Delete this moment</Text>
+          </Pressable>
+        </View>
+      </BottomSheet>
     </>
   )
 }
@@ -253,6 +297,12 @@ const styles = StyleSheet.create({
     color: theme.colors.dark,
     fontSize: fontSizes.smallMedium,
     fontWeight: 'medium'
+  },
+  card: {
+    height: 90,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    paddingHorizontal: 20,
   },
   button: {
     position: 'absolute',

@@ -24,9 +24,12 @@ import { isLiked } from "./isLiked";
 import { removeLike } from "./removeLike";
 import { addComment } from "./addComment";
 import { getComments } from "./getComments";
+import { sendOTP } from "./sendOTP";
+import { deleteMoment } from "./deleteMoment";
+import { deleteMemo } from "./deleteMemo";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, postMoment, getFeed,
   verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests, getFriendsMoods,
-  getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike, addComment, getComments
+  getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike, addComment, getComments, sendOTP, deleteMoment, deleteMemo
 }

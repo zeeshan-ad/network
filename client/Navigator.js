@@ -13,6 +13,7 @@ import Profile from './screens/Profile';
 import PostMood from './screens/PostMood';
 import Post from './screens/Post';
 import Search from './screens/Search';
+import ResetPassword from './screens/ResetPassword';
 import { StatusBar } from 'expo-status-bar';
 import CameraPreview from './components/CameraPreview';
 import FeedComponent from './screens/Feed';
@@ -48,6 +49,7 @@ export default function Navigator() {
           <>
             <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
             <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+            <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
           </>
         }
       </Stack.Navigator>

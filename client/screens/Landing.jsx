@@ -88,11 +88,11 @@ const Landing = ({ navigation }) => {
             <View>
               <Text style={styles.logo}>{APP_NAME}</Text>
             </View>
-            <View>
+            {/* <View>
               <Text style={styles.title}>
-                Be authentic. Make friends. Have Fun.{'\n'}Be the unfiltered you.
+                Be authentic. Find friends.
               </Text>
-            </View>
+            </View> */}
             <View style={styles.form}>
               {DisplayPasswordInput ?
                 <View style={{ justifyContent: 'center' }}>
@@ -122,9 +122,11 @@ const Landing = ({ navigation }) => {
             </View>
             <View>
               {DisplayPasswordInput &&
-                <Text style={[styles.link, { fontSize: fontSizes.medium, fontWeight: fontWeights.normal }]}>
-                  Recover Password
-                </Text>
+                <Pressable onPress={() => navigation.navigate('ResetPassword', { email: UserCred.email })}>
+                  <Text style={[styles.link, { fontSize: fontSizes.medium, fontWeight: fontWeights.normal }]}>
+                    Reset Password
+                  </Text>
+                </Pressable>
               }
             </View>
           </View>
@@ -152,16 +154,16 @@ const Landing = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+ container: {
     paddingTop: 70,
     height: '100%',
     justifyContent: 'space-between',
     backgroundColor: theme.colors.light,
-  },
+  }, 
   title: { textAlign: 'center', marginTop: -20, fontSize: fontSizes.large, fontWeight: fontWeights.normal },
   form: { flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center' },
   link: { textDecorationLine: 'underline' },
-  centerContainer: { height: '80%', justifyContent: 'center', alignItems: 'center', gap: 30 },
+  centerContainer: { height: '80%', justifyContent: 'center', alignItems: 'center', gap: 20 },
   logo: {
     fontFamily: 'Pacifico',
     fontSize: fontSizes.Logo,

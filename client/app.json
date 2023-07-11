@@ -24,7 +24,6 @@
     "splash": {
       "image": "./assets/images/yeet.png",
       "backgroundColor": "#f2ecde",
-      "resizeMode": "auto"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -33,11 +32,21 @@
       "supportsTablet": false,
       "infoPlist": {
         "NSAllowsArbitraryLoads": true
-      }
+      },
+      "bundleIdentifier": "com.yeet.network"
     },
     "android": {
-      "adaptiveIcon": {}
+      "adaptiveIcon": {},
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
-    "web": {}
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "ddc26a41-8d2f-47e7-9b88-40e255e1c239"
+      }
+    }
   }
 }
