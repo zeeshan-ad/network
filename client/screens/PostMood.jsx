@@ -17,7 +17,7 @@ const PostMood = ({ navigation, route }) => {
   const [text, setText] = useState(FetchedMood?.mood ? FetchedMood?.mood : "");
 
   const handleEmojiSelected = (emoji) => {
-    if ((text + emoji).length <= 6)
+    if ((text + emoji)?.length <= 6)
       setText(text + emoji);
   };
 

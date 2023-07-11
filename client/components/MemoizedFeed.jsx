@@ -5,6 +5,7 @@ import PostTextSnippet from './PostTextSnippet';
 import MemoizedFeedHeader from './MemoizedFeedHeader';
 import { getFriendsMoods, getMood } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
+import { fontSizes, fontWeights } from '../util/constants';
 
 
 const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData }) => {
@@ -14,6 +15,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
   const [FetchedMood, setFetchedMood] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
+  const noFeed = [{ id: 1, text: "No posts to show." }];
 
   async function callGetFriendsMood() {
     const response = await getFriendsMoods();
@@ -26,8 +28,6 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
     const response = await getMood();
     if (response?.status === 200) {
       setFetchedMood(response?.data?.data);
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 
@@ -44,13 +44,12 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
     callGetMood();
   }, [isFocused])
 
-
   return (
     <>
       {refreshing ? <ActivityIndicator /> : null}
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={Feed}
+        data={Feed?.length === 0 ? noFeed : Feed}
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
         ListFooterComponent={<View style={{ height: 150 }}></View>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -59,12 +58,20 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
             return (
               <PostSnippet navigation={navigation} moment={item} />
             )
-          } else {
+          } else if (item?.text === "No posts to show.") {
+            return (
+              <View style={{ height: Dimensions.get('window').height / 2, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>No posts to show.</Text>
+              </View>
+            )
+          }
+          else {
             return (
               <PostTextSnippet navigation={navigation} memo={item} />
             )
           }
-        }}
+        }
+        }
         keyExtractor={(item, index) => index}
       />
     </>

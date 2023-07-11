@@ -103,7 +103,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
           shadowRadius: 1, elevation: 10,
         }}>
-          {`${index + 1}/${moment.length}`}</Text>
+          {`${index + 1}/${moment?.length}`}</Text>
       </View>
 
       <View style={{

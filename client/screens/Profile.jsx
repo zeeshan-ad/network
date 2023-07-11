@@ -48,18 +48,14 @@ const Profile = ({ navigation, route }) => {
         image: response?.data?.data?.profile_pic ? BASE_URL + response?.data?.data?.profile_pic : null,
         theme: response?.data?.data?.theme,
       }));
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
+    } 
   }
 
   const callGetMood = async () => {
     const response = await getMood();
     if (response?.status === 200) {
       setFetchedMood(response?.data?.data);
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
+    } 
   }
 
   const CallGetUserProfile = async () => {
@@ -69,9 +65,7 @@ const Profile = ({ navigation, route }) => {
         ...response?.data?.data,
         theme: response?.data?.data?.theme ? response?.data?.data?.theme : theme.colors.light,
       });
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
+    } 
   }
 
   const [RequestStatus, setRequestStatus] = useState(null);
@@ -99,9 +93,7 @@ const Profile = ({ navigation, route }) => {
     if (response?.status === 200) {
       setAllMemos(response?.data?.data?.memos);
       setAllMoments(response?.data?.data?.moments);
-    } else {
-      alert('Something went wrong. Please try again later.');
-    }
+    } 
   }
 
 
@@ -338,7 +330,7 @@ const Profile = ({ navigation, route }) => {
                   textAlign: 'center', marginTop: 50
                 }}>When you share a moment it will show here.</Text>
               :
-              AllMemos.length > 0 ?
+              AllMemos?.length > 0 ?
                 <FlatList
                   key={'#'}
                   data={AllMemos}
@@ -418,7 +410,7 @@ const Profile = ({ navigation, route }) => {
                   fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
                   textAlign: 'center', marginTop: 50
                 }}>{ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s moment will show here once they post.</Text> :
-              AllMemos.length > 0 ?
+              AllMemos?.length > 0 ?
                 <FlatList
                   key={'#'}
                   data={AllMemos}

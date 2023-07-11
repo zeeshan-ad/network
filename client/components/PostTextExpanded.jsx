@@ -135,7 +135,7 @@ const PostTextExpanded = ({ navigation, route }) => {
           onChangeText={(text) => setcomment(text)}
           value={comment}
           style={styles.input} placeholder="Add a comment" />
-        {comment.length > 0 && <Pressable
+        {comment?.length > 0 && <Pressable
           onPress={callAddComment}
           style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
           <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />

@@ -47,14 +47,14 @@ const Search = ({ navigation, route }) => {
   const debouncedSearch = _.debounce(callSearch, 500);
 
   const LoadMore = () => {
-    if (searchTerm.length > 2)
+    if (searchTerm?.length > 2)
       setOffset(prev => prev + 20);
     else
       setOffset(0)
     debouncedSearch(searchTerm);
   }
   useEffect(() => {
-    if (searchTerm.length > 2)
+    if (searchTerm?.length > 2)
       debouncedSearch(searchTerm);
     else
       setsearchResult(null);
@@ -76,7 +76,7 @@ const Search = ({ navigation, route }) => {
               value={searchTerm}
               style={[styles.input, { backgroundColor: theme.colors.light }]} placeholder='find a friend'
               onChangeText={(text) => {
-                if (searchTerm.length > text.length) {
+                if (searchTerm?.length > text?.length) {
                   setsearchResult(null);
                   setOffset(0);
                 }
@@ -88,7 +88,7 @@ const Search = ({ navigation, route }) => {
         {searchResult?.length > 0 ?
           <View style={styles.resultContainer}>
             <FlatList
-              data={[...searchResult, searchResult[searchResult.length - 1]?.flag === false ? { loadmore: false } : { loadmore: true }]}
+              data={[...searchResult, searchResult[searchResult?.length - 1]?.flag === false ? { loadmore: false } : { loadmore: true }]}
               renderItem={({ item }) => {
                 if (item.id) {
                   return (

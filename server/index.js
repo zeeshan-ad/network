@@ -57,13 +57,13 @@ function separateArrayByDate(arr) {
   let result = [];
   let tempDict = {};
 
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr?.length; i++) {
     const item = arr[i];
 
     if (Array.isArray(item)) {
       let tempArr = [];
 
-      for (let j = 0; j < item.length; j++) {
+      for (let j = 0; j < item?.length; j++) {
         const obj = item[j];
         const created_at = obj.created_at;
         const day = created_at.split(",")[0].trim();
@@ -121,7 +121,7 @@ app.get('/api/users/verify-email', async (req, res) => {
 
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (result.rows.length > 0) {
+    if (result.rows?.length > 0) {
       return res.status(409).json({ status: 409, message: 'Email already exists, Please try logging In.' });
     } else {
       return res.status(200).json({ status: 200, message: 'Email does not exists' });

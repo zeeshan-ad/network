@@ -32,8 +32,6 @@ const FeedComponent = ({ navigation }) => {
         theme: response?.data?.data?.theme,
         username: response?.data?.data?.username,
       }));
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 

@@ -310,7 +310,7 @@ const Profile = ({ navigation, route }) => {
                         textAlign: 'center', marginTop: 50
                       }}>When you share a moment it will show here.</Text>
                       :
-                      AllMemos.length > 0 ?
+                      AllMemos?.length > 0 ?
                         <View style={{ justifyContent: 'center' }}>
                           <FlatList
                             numColumns={2}
