@@ -8,7 +8,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 const Document = ({ navigation, route }) => {
   const { DocType } = route.params;
 
-  console.log(DocType)
 
   return (
     <SafeAreaView style={styles.container}>

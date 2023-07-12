@@ -10,6 +10,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListHeaderMemo from './FlatListHeaderMemo';
+import { BottomSheet } from 'react-native-btr';
 
 
 const width = Dimensions.get("window").width;
@@ -33,6 +34,8 @@ const PostTextExpanded = ({ navigation, route }) => {
     }
   }
 
+  const [ShowLikedUsers, setShowLikedUsers] = useState(false);
+
   const [AllComments, setAllComments] = useState([]);
 
   async function callGetComment() {
@@ -41,7 +44,6 @@ const PostTextExpanded = ({ navigation, route }) => {
       setAllComments(response.data.data);
     }
   }
-
 
   const callPostLike = async () => {
     const response = await postLike(memo.id, 'memo');
@@ -82,7 +84,8 @@ const PostTextExpanded = ({ navigation, route }) => {
         style={{ paddingHorizontal: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, }}
         ListHeaderComponent={<FlatListHeaderMemo
           liked={liked} navigation={navigation} callPostLike={callPostLike} callRemoveLIke={callRemoveLIke}
-          memo={memo} AllComments={AllComments} userInfo={userInfo} />}
+          memo={memo} AllComments={AllComments} userInfo={userInfo} setShowLikedUsers={setShowLikedUsers}
+          ShowLikedUser={ShowLikedUsers} />}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           return (
@@ -117,10 +120,8 @@ const PostTextExpanded = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
-          )
-        }
-        }
-      />
+          );
+        }} />
       <View style={{
         flexDirection: 'row', alignItems: 'center',
         paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost
@@ -141,6 +142,33 @@ const PostTextExpanded = ({ navigation, route }) => {
           <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
         </Pressable>}
       </View>
+      <BottomSheet
+        visible={ShowLikedUsers}
+        onBackdropPress={() => setShowLikedUsers(false)}>
+        <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
+          <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+          paddingTop:20, textDecorationLine: 'underline' }}>Likes</Text>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={liked?.likedByUsers}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => {
+              return (
+                <Pressable onPress={() => {
+                  setShowLikedUsers(false);
+                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                }} style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+                  borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+                }}>
+                  <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                    style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
+                </Pressable>
+              )
+            }} />
+        </View>
+      </BottomSheet>
     </KeyboardAvoidingView>
   )
 }
@@ -158,6 +186,12 @@ const styles = StyleSheet.create({
     color: theme.colors.dark,
     fontSize: fontSizes.smallMedium,
     fontWeight: 'medium',
+  },
+  card: {
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    paddingHorizontal: 20,
+    maxHeight: height - 50
   },
   button: {
     position: 'absolute',

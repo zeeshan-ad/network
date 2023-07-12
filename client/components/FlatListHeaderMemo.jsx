@@ -7,7 +7,8 @@ import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
 import { BottomSheet } from 'react-native-btr';
 
-const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo }) => {
+const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
+  ShowLikedUsers }) => {
   const [ShowOption, setShowOption] = useState(false);
 
   const callDeleteMemo = async () => {
@@ -54,8 +55,10 @@ const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, m
             <Pressable onPress={callPostLike}>
               <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
             </Pressable>}
-          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
-            <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
+          <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
+              <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
+          </Pressable>
         </View>
         <View style={{
           flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
@@ -74,10 +77,10 @@ const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, m
           </View>}
       </View>
     </View>
-    <BottomSheet
-      visible={ShowOption}
-      onBackdropPress={() => setShowOption(!ShowOption)}
-    >
+      <BottomSheet
+        visible={ShowOption}
+        onBackdropPress={() => setShowOption(!ShowOption)}
+      >
         <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
           <Pressable onPress={callDeleteMemo} style={{
             flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
-  },
+  }
 });
 
 export default memo(FlatListHeaderMemo);
