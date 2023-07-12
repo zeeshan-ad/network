@@ -144,8 +144,8 @@ const Landing = ({ navigation }) => {
         <View>
           <Text style={styles.text}>
             By continuing, you accept our{'\n'}
-            <Link style={styles.link} to={{ screen: '' }}>Privacy Policy</Link>&nbsp;and
-            &nbsp;<Link style={styles.link} to={{ screen: '' }}>Terms of Service</Link>
+            <Link style={styles.link} to={{ screen: 'Document', params: {DocType: 'Policy'} }}>Privacy Policy</Link>&nbsp;and
+            &nbsp;<Link style={styles.link} to={{ screen: 'Document', params: {DocType: 'Terms'} }}>Terms of Service</Link>
           </Text>
         </View>
       }

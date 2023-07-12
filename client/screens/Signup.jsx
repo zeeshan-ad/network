@@ -32,7 +32,7 @@ const Signup = ({ route, navigation }) => {
 
   useEffect(() => {
     if (UserDetails.name && UserDetails.dob && UserDetails.password
-      && UserDetails.email && UserDetails.password.length >= 8) {
+      && UserDetails?.email && UserDetails?.password?.length >= 8) {
       setLoginStatus(true);
     } else {
       setLoginStatus(false);
@@ -67,9 +67,9 @@ const Signup = ({ route, navigation }) => {
   }, [UserDetails?.username])
 
   const handleDateChange = (prevText, text) => {
-    if (text.length > 10) return;
+    if (text?.length > 10) return;
     let formattedDate = text;
-    if (text.length === 2 && prevText.length < text.length || text.length === 5 && prevText.length < text.length) {
+    if (text?.length === 2 && prevText?.length < text?.length || text?.length === 5 && prevText?.length < text?.length) {
       formattedDate += '/';
     }
     setUserDetails((prevDetails) => ({
@@ -88,7 +88,7 @@ const Signup = ({ route, navigation }) => {
   const handleUserNamechange = (text) => {
     setUserDetails((prevDetails) => ({
       ...prevDetails,
-      username: text.toLowerCase(),
+      username: text.toLowerCase().replaceAll(' ',''),
     }));
   }
 
@@ -103,7 +103,7 @@ const Signup = ({ route, navigation }) => {
     setUserDetails((prevDetails) => ({
       ...prevDetails,
       password: text,
-      passwordWarning: text.length < 8,
+      passwordWarning: text?.length < 8,
     }));
   };
 
@@ -138,7 +138,7 @@ const Signup = ({ route, navigation }) => {
                       value={UserDetails.dob} placeholder='Birthday (dd/mm/yyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
                       <TextInput secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
                         style={styles.input} placeholder='Password' value={UserDetails.password} onFocus={() => {
-                          if (UserDetails.password.length < 8) {
+                          if (UserDetails?.password?.length < 8) {
                             setUserDetails((prevDetails) => ({
                               ...prevDetails,
                               passwordWarning: true,

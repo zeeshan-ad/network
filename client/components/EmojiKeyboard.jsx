@@ -14,7 +14,7 @@ const EmojiKeyboard = ({ onEmojiSelected }) => {
       numColumns={7}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.emojiContainer}
-      data={emojis.filter((emoji) => emoji.length === 2)}
+      data={emojis.filter((emoji) => emoji?.length === 2)}
       renderItem={({ item }) => {
         return (
           <TouchableOpacity

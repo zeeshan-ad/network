@@ -60,8 +60,8 @@ const PostMemos = ({ navigation, route }) => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.memoContainer}>
         <TextInput multiline={true} selectionColor={theme.colors.darkgrey}
           style={[styles.input, {
-            fontSize: Memo.length < 200 ? fontSizes.xlarge : fontSizes.yeetPosts,
-            fontWeight: Memo.length < 200 ? "500" : "400",
+            fontSize: Memo?.length < 200 ? fontSizes.xlarge : fontSizes.yeetPosts,
+            fontWeight: Memo?.length < 200 ? "500" : "400",
           }]}
           value={Memo}
           onChangeText={setMemo}

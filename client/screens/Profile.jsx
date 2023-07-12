@@ -19,8 +19,17 @@ const Profile = ({ navigation, route }) => {
   const [FetchedMood, setFetchedMood] = useState('');
   const isFocused = useIsFocused();
 
-  const userInfo = userId ? null : useSelector(state => state.userInfo);
-  const editProfile = userId ? null : useSelector(state => state.editProfile);
+  let userInfo = useSelector(state => state.userInfo);
+  let editProfile = useSelector(state => state.editProfile);
+
+  useEffect(() => {
+    if (userId) {
+      userInfo = null;
+      editProfile = null;
+    }
+  }, [userInfo, editProfile])
+
+
   const dispatch = useDispatch();
 
 

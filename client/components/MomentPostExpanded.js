@@ -54,6 +54,8 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
   }
 
   const [AllComments, setAllComments] = useState();
+  const [ShowLikedUsers, setShowLikedUsers] = useState(false);
+
 
   const callGetComment = async () => {
     const response = await getComments(item.id, 'moment');
@@ -78,6 +80,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     callGetComment();
   }, [isFocused])
 
+  console.log('YO', liked)
 
   return (
     <>
@@ -165,7 +168,10 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                 <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
               </Pressable>
             }
-            <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
+            <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
+              <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
+            </Pressable>
+
           </View>
         </View>
         {userInfo?.id === item?.user_id &&
@@ -280,6 +286,35 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
           </Pressable>
         </View>
       </BottomSheet>
+      <BottomSheet
+        visible={ShowLikedUsers}
+        onBackdropPress={() => setShowLikedUsers(false)}>
+        <View style={[styles.card2, { backgroundColor: theme.colors.light }]}>
+          <Text style={{
+            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+            paddingTop: 20, textDecorationLine: 'underline'
+          }}>Likes</Text>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={liked?.likedByUsers}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => {
+              return (
+                <Pressable onPress={() => {
+                  setShowLikedUsers(false);
+                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                }} style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+                  borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+                }}>
+                  <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                    style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
+                </Pressable>
+              )
+            }} />
+        </View>
+      </BottomSheet>
     </>
   )
 }
@@ -303,6 +338,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
+  },
+  card2: {
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    paddingHorizontal: 20,
+    maxHeight: height - 50
   },
   button: {
     position: 'absolute',

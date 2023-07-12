@@ -57,13 +57,13 @@ function separateArrayByDate(arr) {
   let result = [];
   let tempDict = {};
 
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr?.length; i++) {
     const item = arr[i];
 
     if (Array.isArray(item)) {
       let tempArr = [];
 
-      for (let j = 0; j < item.length; j++) {
+      for (let j = 0; j < item?.length; j++) {
         const obj = item[j];
         const created_at = obj.created_at;
         const day = created_at.split(",")[0].trim();
@@ -121,7 +121,7 @@ app.get('/api/users/verify-email', async (req, res) => {
 
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (result.rows.length > 0) {
+    if (result.rows?.length > 0) {
       return res.status(409).json({ status: 409, message: 'Email already exists, Please try logging In.' });
     } else {
       return res.status(200).json({ status: 200, message: 'Email does not exists' });
@@ -757,8 +757,15 @@ app.get('/api/users/is_post_liked', checkToken, async (req, res) => {
     const session = await pool.query('SELECT * FROM user_sessions WHERE token = $1', [token]);
 
     const isLiked = await pool.query('SELECT * FROM user_posts_likes WHERE user_id = $1 AND post_id = $2 AND post_type = $3', [session.rows[0].user_id, postId, postType]);
+    const likedByUsers = await pool.query('SELECT * FROM user_posts_likes WHERE post_id = $1 AND post_type = $2', [postId, postType]);
+    // get name and profile pic of users bu user_id in likedbyusers
+    const NameProfile = await Promise.all(likedByUsers.rows.map(async (item) => {
+      const user = await pool.query('SELECT * FROM users WHERE id = $1', [item.user_id]);
+      const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [item.user_id]);
+      return { name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic, id: item.user_id };
+    }));
     const totalLikes = await pool.query('SELECT COUNT(*) FROM user_posts_likes WHERE post_id = $1 AND post_type = $2', [postId, postType]);
-    return res.status(200).json({ status: 200, message: 'Post liked successfully', data: { isLiked: isLiked.rows.length > 0, totalLikes: totalLikes.rows[0].count } });
+    return res.status(200).json({ status: 200, message: 'Post liked successfully', data: { isLiked: isLiked.rows.length > 0, totalLikes: totalLikes.rows[0].count, likedByUsers: NameProfile } });
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Internal Server Error' });
   }

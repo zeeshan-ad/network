@@ -121,7 +121,7 @@ export default function AppCamera({ navigation }) {
           imageStyle={{ borderWidth: 5, borderRadius: 30 }}
         />
         <Text style={{ position: 'absolute', bottom: 150, fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginTop: 20 }}>
-          {compliments[Math.floor(Math.random() * compliments.length)]}
+          {compliments[Math.floor(Math.random() * compliments?.length)]}
         </Text>
       </View >
     )
