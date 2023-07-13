@@ -2,16 +2,17 @@ import { axiosInstance } from "../util/api";
 import APIconfig from '../util/api.config.json';
 
 
-export const sendOTP = async (email) => {
-  const { forgot_password } = APIconfig;
+export const verifyOTP = async (email, otp) => {
+  const { verify_otp } = APIconfig;
 
   let data = JSON.stringify({
-    email: email
+    email: email,
+    otp: otp
   });
 
   let config = {
     method: 'post',
-    url: `${forgot_password}`,
+    url: `${verify_otp}`,
     headers: {
       'Content-Type': 'application/json',
     },

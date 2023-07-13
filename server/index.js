@@ -247,9 +247,8 @@ app.post('/api/users/forgot-password', async (req, res) => {
       return res.status(500).json({ status: 500, message: 'Internal Server Error' });
     } else {
       const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.com',
-        port: 465,
-        secure: true,
+        host: 'smtppro.zoho.in',
+        port: 587,
         auth: {
           user: process.env.EMAIL,
           pass: process.env.PASSWORD
@@ -260,23 +259,67 @@ app.post('/api/users/forgot-password', async (req, res) => {
         from: process.env.EMAIL,
         to: email,
         subject: 'Reset your yeet account password',
-        text: `Use ${otp} to reset your password for your yeet account.`,
+        text: `Use ${otp} to reset password for your yeet account.`,
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
-          console.log(err);
           return res.status(500).json({ status: 500, message: 'Internal Server Error' });
         }
         res.status(200).json({ status: 200, message: 'OTP sent to your email' });
       });
-
     }
 
   } catch (err) {
     res.status(400).json({ status: 400, message: 'Bad Request' });
   }
 });
+
+// verify otp
+app.post('/api/users/verify-otp', async (req, res) => {
+  const { email, otp } = req.body;
+  console.log(email, otp)
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (user.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'User not found' });
+    }
+    const otpInfo = await pool.query('SELECT * FROM user_otp WHERE user_id = $1', [user.rows[0].id]);
+    if (otpInfo.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'OTP not found' });
+    }
+    if (otpInfo.rows[0].otp === otp) {
+      return res.status(200).json({ status: 200, message: 'OTP verified' });
+    } else {
+      console.log('Wrong OTP');
+      return res.status(200).json({ status: 401, message: 'You have entered an invalid OTP' });
+    }
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
+// reset password
+app.post('/api/users/reset-password', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (user.rows.length === 0) {
+      return res.status(404).json({ status: 404, message: 'User not found' });
+    }
+    const deleteInfo = await pool.query('DELETE FROM user_otp WHERE user_id = $1', [user.rows[0].id]);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const updateInfo = await pool.query('UPDATE users SET password = $1 WHERE email = $2 RETURNING *', [hashedPassword, email]);
+    if (updateInfo.rows.length === 0) {
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
+    }
+    res.status(200).json({ status: 200, message: 'Password reset successful' });
+  } catch (err) {
+    res.status(400).json({ status: 400, message: 'Bad Request' });
+  }
+});
+
 
 
 // Logout

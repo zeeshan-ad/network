@@ -31,5 +31,7 @@
   "forgot_password": "/api/users/forgot-password",
   "delete_moment": "/api/users/delete_moment",
   "delete_memo": "/api/users/delete_memo",
-  "get_Friends_list": "/api/users/get_friends"
+  "get_Friends_list": "/api/users/get_friends",
+  "verify_otp": "/api/users/verify-otp",
+  "reset_password": "/api/users/reset-password"
 }
