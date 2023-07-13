@@ -873,6 +873,28 @@ app.delete('/api/users/delete_memo', checkToken, async (req, res) => {
   }
 });
 
+// get List of friends by user id
+app.get('/api/users/get_friends', checkToken, async (req, res) => {
+  const { userId } = req.query;
+
+
+  try {
+    const allFriends = await pool.query('SELECT * FROM friends_requests WHERE (req_by_id = $1 AND status = $2) OR (req_to_id = $1 AND status = $2)', [userId, 'accepted']);
+
+    const data = await Promise.all(allFriends.rows.map(async (item) => {
+      const user = await pool.query('SELECT * FROM users WHERE id = $1', [userId == item?.req_by_id ? item?.req_to_id : item?.req_by_id]);
+      const profile = await pool.query('SELECT * FROM user_profile WHERE user_id = $1', [userId == item?.req_by_id ? item?.req_to_id : item?.req_by_id]);
+      return { name: user.rows[0].name, profile_pic: profile.rows[0].profile_pic, id: user.rows[0].id };
+    }))
+
+    console.log(data);
+
+    return res.status(200).json({ status: 200, message: 'Friends fetched successfully', data });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: "Internal Server Error" })
+  }
+})
+
 
 
 app.listen(port, () => console.log(`app listening on port ${port}!`));

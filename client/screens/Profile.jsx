@@ -7,7 +7,7 @@ import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -32,6 +32,12 @@ const Profile = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
 
+  const [FriendsList, setFriendsList] = useState()
+  const callGetFriendsList = async (userId) => {
+    setFriendsList(null);
+    const response = await getFriendsList(userId);
+    setFriendsList(response?.data?.data);
+  }
 
   const callLogout = async () => {
     const response = await logoutUser();
@@ -45,9 +51,12 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const [ShowFriendList, setShowFriendList] = useState(false)
   const [ProfileInfo, setProfileInfo] = useState();
 
   const callGetProfileData = async () => {
+    setProfileInfo(null);
+    setProfileData(null);
     const response = await getProfileData();
     if (response?.status === 200) {
       setProfileInfo(response?.data?.data);
@@ -57,35 +66,32 @@ const Profile = ({ navigation, route }) => {
         image: response?.data?.data?.profile_pic ? BASE_URL + response?.data?.data?.profile_pic : null,
         theme: response?.data?.data?.theme,
       }));
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 
   const callGetMood = async () => {
+    setFetchedMood(null);
     const response = await getMood();
     if (response?.status === 200) {
       setFetchedMood(response?.data?.data);
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 
   const CallGetUserProfile = async () => {
+    setProfileInfo(null);
     const response = await getUserProfile(userId);
     if (response?.status === 200) {
       setProfileInfo({
         ...response?.data?.data,
         theme: response?.data?.data?.theme ? response?.data?.data?.theme : theme.colors.light,
       });
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 
   const [RequestStatus, setRequestStatus] = useState(null);
 
   const callGetRequestStatus = async () => {
+    setRequestStatus(null);
     const response = await getRequestStatus(userId);
     if (response?.status === 200) {
       setRequestStatus(response?.data?.data);
@@ -104,12 +110,12 @@ const Profile = ({ navigation, route }) => {
   const [AllMemos, setAllMemos] = useState();
   const [AllMoments, setAllMoments] = useState();
   callGetPosts = async (userId) => {
+    setAllMemos(null);
+    setAllMoments(null);
     const response = await getProfilePosts(userId);
     if (response?.status === 200) {
       setAllMemos(response?.data?.data?.memos);
       setAllMoments(response?.data?.data?.moments);
-    } else {
-      alert('Something went wrong. Please try again later.');
     }
   }
 
@@ -120,12 +126,14 @@ const Profile = ({ navigation, route }) => {
       callGetMood();
       callGetProfileData();
       callGetPosts(userInfo?.id);
+      callGetFriendsList(userInfo?.id)
     } else {
       callGetRequestStatus();
       CallGetUserProfile();
       callGetPosts(userId);
+      callGetFriendsList(userId)
     }
-  }, [isFocused, userId])
+  }, [isFocused, userId, userInfo?.id])
 
   const callSendRequest = async () => {
     const response = await sendRequest(userId);
@@ -144,6 +152,7 @@ const Profile = ({ navigation, route }) => {
       alert('Something went wrong. Please try again later.');
     }
   }
+
 
   const [CurrentTab, setCurrentTab] = useState(0);
   const [SheetVisible, setSheetVisible] = useState(false);
@@ -213,10 +222,10 @@ const Profile = ({ navigation, route }) => {
             </Text>
             {ProfileInfo?.bio &&
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>{ProfileInfo?.bio}</Text>}
-            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>
+            <Pressable onPress={RequestStatus?.status === 'accepted' || !userId ? () => setShowFriendList(true) : null} style={{ flexDirection: 'row', alignItems: "ceneter", paddingVertical: 5 }} >
               <Text style={{ fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{ProfileInfo?.totalFriends}</Text>
-              &nbsp;{ProfileInfo?.totalFriends > 1 ? 'Friends' : 'Friend'} in {userId ? 'their' : 'your'} bubble
-            </Text>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light }}>&nbsp;{ProfileInfo?.totalFriends > 1 ? 'Friends' : 'Friend'} in {userId ? 'their' : 'your'} bubble</Text>
+            </Pressable>
             <View style={{ flexDirection: 'row', gap: 30, alignItems: 'center' }}>
               <View style={{ flexDirection: 'row', gap: 5, alignItems: 'flex-end', marginVertical: 10 }}>
                 <FontAwesome name="birthday-cake" size={13} color={theme.colors.backdrop} />
@@ -347,7 +356,7 @@ const Profile = ({ navigation, route }) => {
                   textAlign: 'center', marginTop: 50
                 }}>When you share a moment it will show here.</Text>
               :
-              AllMemos.length > 0 ?
+              AllMemos?.length > 0 ?
                 <FlatList
                   key={'#'}
                   data={AllMemos}
@@ -427,7 +436,7 @@ const Profile = ({ navigation, route }) => {
                   fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
                   textAlign: 'center', marginTop: 50
                 }}>{ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s moment will show here once they post.</Text> :
-              AllMemos.length > 0 ?
+              AllMemos?.length > 0 ?
                 <FlatList
                   key={'#'}
                   data={AllMemos}
@@ -465,7 +474,8 @@ const Profile = ({ navigation, route }) => {
               fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
               textAlign: 'center', marginTop: 50
             }}>
-              Join {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>}
+              Join {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}'s bubble to see their posts.</Text>
+      }
       <Modal
         animationType="fade"
         transparent={true}
@@ -557,7 +567,37 @@ const Profile = ({ navigation, route }) => {
           </Pressable>
         </View>
       </BottomSheet>
-    </SafeAreaView>
+      <BottomSheet
+        visible={ShowFriendList}
+        onBackdropPress={() => setShowFriendList(!ShowFriendList)}
+      >
+        <View style={[styles.card2, { backgroundColor: theme.colors.light }]}>
+          <Text style={{
+            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+            paddingTop: 20, textDecorationLine: 'underline'
+          }}>Friends</Text>
+          <FlatList
+            data={FriendsList}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => {
+              return (
+                <Pressable onPress={() => {
+                  setShowFriendList(false);
+                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                }} style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+                  borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+                }}>
+                  <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                    style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
+                </Pressable>
+              )
+            }} />
+        </View>
+      </BottomSheet>
+    </SafeAreaView >
   )
 }
 
@@ -571,6 +611,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
+  },
+  card2: {
+    maxHeight: height - 50,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    paddingHorizontal: 20,
+    paddingBottom: 20
   },
   centeredView: {
     height: '100%',

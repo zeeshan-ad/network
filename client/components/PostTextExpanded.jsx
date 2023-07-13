@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
-    maxHeight: height - 50
+    maxHeight: height - 50,
+    paddingBottom: 20
   },
   button: {
     position: 'absolute',

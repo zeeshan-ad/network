@@ -72,7 +72,7 @@ const PostMood = ({ navigation, route }) => {
         onDismiss={() => setInfoSnack(false)}
         duration={5000}
       >
-        Express how you are feeling with mood using emojis. You can add up to 3 emojis. 🎉🎉🎉
+        Express your mood using emojis. You can add up to 3 emojis. 🎉🎉🎉
       </Snackbar>
     </SafeAreaView>
   )

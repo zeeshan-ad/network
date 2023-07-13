@@ -30,5 +30,6 @@
   "get_comments": "/api/users/get_comments",
   "forgot_password": "/api/users/forgot-password",
   "delete_moment": "/api/users/delete_moment",
-  "delete_memo": "/api/users/delete_memo"
+  "delete_memo": "/api/users/delete_memo",
+  "get_Friends_list": "/api/users/get_friends"
 }
