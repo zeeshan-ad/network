@@ -115,6 +115,10 @@ app.use('/moments', express.static(__dirname + '/moments'));
 
 // routes
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the server');
+});
+
 // verify email exits or not
 app.get('/api/users/verify-email', async (req, res) => {
   const email = req.query.email;

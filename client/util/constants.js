@@ -42,7 +42,7 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.185:3000'; //Home
+export const BASE_URL = 'http://192.168.0.187:3000'; //Home
 // export const BASE_URL = 'http://192.168.0.181:3000'; // FD Home
 
 // export const BASE_URL = "http://192.168.29.86:3000"; //BS
