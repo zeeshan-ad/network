@@ -6,7 +6,7 @@ build/
 dist/
 
 # Environment variables
-.env
+# .env
 
 # Client specific
 client/node_modules/
