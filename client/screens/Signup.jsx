@@ -111,6 +111,7 @@ const Signup = ({ route, navigation }) => {
     if (Step === 2) {
       if (LoginStatus === false) return;
       const response = await createAccount(UserDetails);
+      console.log(response)
       if (response?.status === 200) {
         dispatch(setUserInfo(response.data.data));
       } else {
