@@ -88,17 +88,29 @@ export const compliments = [
 
 export const APP_NAME = 'Yeet!';
 
+// a function to convert 2023-07-16T00:00:00.000Z time format to  16/07/2023 hh:mm a format
+export function convertDatetimeFormat(date) {
+  const formattedDate = moment.utc(date).local().format('DD/MM/YYYY, hh:mm a');
+  return formattedDate;
+}
+
+export function convertDatetimeFormat2(date) {
+  const formattedDate = moment.utc(date).local().format('MMMM Do YY, h:mm a');
+  return formattedDate;
+}
+
 export function convertTimeStamp(Timestamp) {
-  const localTime = moment(Timestamp, 'MM/DD/YYYY, hh:mm a').format('MMMM Do YY, h:mm a');
+  const localTime = moment.utc(Timestamp, 'MM/DD/YYYY, hh:mm a').local().format('MMMM Do YY, h:mm a');
   return localTime;
 }
 
+// convert to local time format
 export function convertTimestamp2(timestamp) {
-  const formattedTimestamp = moment(timestamp, 'MM/DD/YYYY, HH:mm:ss a').format('D MMM YYYY, h:mm a');
-  return formattedTimestamp;
+  const localTime = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('MMMM Do YY, h:mm a');
+  return localTime;
 }
 
 export function convertTimestampMoment(timestamp) {
-  const formattedTimestamp = moment(timestamp, 'MM/DD/YYYY, HH:mm:ss a').format('D MMM YYYY');
+  const formattedTimestamp = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('D MMM YYYY');
   return formattedTimestamp;
 }

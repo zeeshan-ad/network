@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
 import { FontAwesome, Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertDateFormat, convertDatetimeFormat, convertDatetimeFormat2, convertDatetimeFormat3, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
@@ -80,7 +80,6 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     callGetComment();
   }, [isFocused])
 
-  console.log('YO', liked)
 
   return (
     <>
@@ -116,7 +115,8 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                               maxWidth: width - 300
                             }}>{item.name}</Text>
                           </Pressable>
-                          <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>{item.date}</Text>
+                          <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>
+                            {convertDatetimeFormat(item.date)}</Text>
                         </View>
                         <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                           {item.comment}
@@ -247,7 +247,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10,
           }}>
-            {date ? convertTimeStamp(item?.date) : convertTimeStamp(item?.created_at)}</Text>
+            {date ? convertDatetimeFormat2(item?.date) : convertTimeStamp(item?.created_at)}</Text>
         </View>
 
         {item.caption &&

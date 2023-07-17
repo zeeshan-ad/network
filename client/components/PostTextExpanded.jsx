@@ -1,7 +1,7 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, convertDatetimeFormat, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
@@ -111,7 +111,8 @@ const PostTextExpanded = ({ navigation, route }) => {
                           maxWidth: width - 300
                         }}>{item.name}</Text>
                       </Pressable>
-                      <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>{item.date}</Text>
+                      <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>
+                        {convertDatetimeFormat(item.date)}</Text>
                     </View>
                     <Text style={{ fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                       {item.comment}
