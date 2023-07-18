@@ -14,7 +14,7 @@ const Mood = ({ navigation, FriendsMood }) => {
               style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />}
           <View style={{
             position: 'absolute', borderWidth: 1, borderColor: theme.colors.dark, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: item?.theme ? item.theme : theme.colors.secondary, left: 0, top: -15, padding: 3, borderRadius: 100
+            backgroundColor: item?.theme ? item.theme : theme.colors.light, left: 0, top: -15, padding: 3, borderRadius: 100
           }} >
             <Text numberOfLines={1} ellipsizeMode='clip' style={{
               width: 70, textAlign: 'center', fontSize: fontSizes.medium, height: 22, paddingVertical: 2, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
