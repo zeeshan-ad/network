@@ -643,7 +643,7 @@ const Profile = ({ navigation, route }) => {
         <KeyboardAvoidingView behavior='padding' style={styles.centeredView}>
           <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 10, paddingHorizontal: 10, lineHeight: 20 }}>
-              Please tell us why you are reporting {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}.
+              Please tell us why you are reporting {ProfileInfo?.name+' '?.substring(0, ProfileInfo?.name+' '?.indexOf(' '))}.
               {RequestStatus?.status === 'accepted' && '\nAs a precautionary measure we will also remove them from your bubble.'}
             </Text>
             <TextInput
