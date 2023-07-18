@@ -66,7 +66,7 @@ export default function AppCamera({ navigation }) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center', fontSize: fontSizes.medium, fontWeight: fontWeights.normal, marginHorizontal: 20 }}>
-          We need your permission to show the camera
+          We need your permission to show the camera, this will enable you to take pictures and share them to your profile.
         </Text>
         <Pressable onPress={requestPermission}>
           <Text style={{

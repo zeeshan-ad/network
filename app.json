@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Yeet network",
-    "slug": "network",
+    "slug": "Yeet network",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -12,7 +12,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow Yeet to access your camera."
+          "cameraPermission": "Allow Yeet to access your camera. This lets you capture and share photos with others on the platform"
         }
       ],
       "expo-localization"
@@ -23,7 +23,7 @@
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/yeet.png",
-      "backgroundColor": "#f2ecde",
+      "backgroundColor": "#f2ecde"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
