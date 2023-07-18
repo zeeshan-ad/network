@@ -21,7 +21,8 @@ const Mood = ({ navigation, FriendsMood }) => {
               shadowRadius: 1, elevation: 10,
             }}>{item?.mood}</Text>
           </View>
-          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{item?.name.substring(0, item.name.indexOf(' '))}</Text>
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>
+            {item?.name + ' '.substring(0, item.name + ' '.indexOf(' '))}</Text>
         </Pressable>
       )
     })
