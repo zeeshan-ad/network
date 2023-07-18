@@ -7,7 +7,8 @@ import { createAccount, verifyUsername } from '../APIs';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfoSlice';
-import _, { set } from 'lodash';
+import _ from 'lodash';
+import Checkbox from 'expo-checkbox';
 
 
 const Signup = ({ route, navigation }) => {
@@ -26,6 +27,7 @@ const Signup = ({ route, navigation }) => {
     usernameWarning: false,
   })
 
+  const [isChecked, setChecked] = useState(false);
 
   const [LoginStatus, setLoginStatus] = useState(false);
   const [Step, setStep] = useState(1);
@@ -88,7 +90,7 @@ const Signup = ({ route, navigation }) => {
   const handleUserNamechange = (text) => {
     setUserDetails((prevDetails) => ({
       ...prevDetails,
-      username: text.toLowerCase().replaceAll(' ',''),
+      username: text.toLowerCase().replaceAll(' ', ''),
     }));
   }
 
@@ -171,8 +173,8 @@ const Signup = ({ route, navigation }) => {
                 }
               </View>
               <Pressable
-                onPress={LoginStatus ? callCreateAccount : null}
-                style={[styles.button, { backgroundColor: LoginStatus ? theme.colors.secondary : theme.colors.disabled }]}>
+                onPress={LoginStatus && isChecked ? callCreateAccount : null}
+                style={[styles.button, { backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
                 <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
               </Pressable>
               {Step === 2 &&
@@ -197,6 +199,13 @@ const Signup = ({ route, navigation }) => {
                   Use a different email
                 </Link>
               </Text>
+              <View style={styles.section}>
+                <Checkbox
+                  color={isChecked ? theme.colors.secondary : undefined} style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+                <Text style={styles.text}>You agree to&nbsp;
+                  <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
+                  &nbsp;on signing up</Text>
+              </View>
             </View>
           </ScrollView>
 
@@ -211,9 +220,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingTop: 5,
     height: '100%',
     backgroundColor: theme.colors.light,
+  },
+  section: {
+    marginTop: -10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    margin: 8,
+    borderColor: theme.colors.dark,
   },
   infoText: {
     color: theme.colors.grey, fontSize: fontSizes.smallMedium,
@@ -230,7 +248,7 @@ const styles = StyleSheet.create({
   link: { textDecorationLine: 'underline' },
   button: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 20,
     width: '100%',
     height: 52,
     alignSelf: 'center',

@@ -21,7 +21,7 @@ const Document = ({ navigation, route }) => {
               <Text style={styles.heading}>Privacy Policy</Text>
             </View>
             <View style={styles.contentContainer}>
-              <Text style={styles.sectionHeading}>Effective Date: [12th July, 2023]</Text>
+              <Text style={styles.sectionHeading}>Effective Date: 12th July, 2023</Text>
 
               <Text style={styles.sectionText}>
                 This Privacy Policy ("Policy") outlines how we collect, use, store, and disclose your information when you use the yeet mobile application ("App") as a user. Please read this Policy carefully to understand our practices regarding your personal information. By using the App, you agree to the terms of this Policy.
@@ -107,92 +107,184 @@ const Document = ({ navigation, route }) => {
 
             </View>
           </View>
-          : <View style={{ paddingVertical: 20 }}>
-            <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
-              <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
-                <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
-              </Pressable>
-              <Text style={styles.heading}>Terms of Service</Text>
+          : DocType === 'Terms' ?
+            <View style={{ paddingVertical: 20 }}>
+              <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
+                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
+                  <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
+                </Pressable>
+                <Text style={styles.heading}>Terms of Service</Text>
+              </View>
+              <View style={styles.contentContainer}>
+
+                <Text style={styles.sectionHeading}>App Usage</Text>
+
+                <Text style={styles.sectionSubHeading}>1.1 Eligibility:</Text>
+                <Text style={styles.sectionText}>
+                  You must be at least 13 years old to use the App. By using the App, you represent and warrant that you meet the age requirement.
+                </Text>
+
+                <Text style={styles.sectionSubHeading}>1.2 License:</Text>
+                <Text style={styles.sectionText}>
+                  We grant you a limited, non-exclusive, non-transferable, revocable license to use the App for personal, non-commercial purposes.
+                </Text>
+
+                <Text style={styles.sectionSubHeading}>1.3 Prohibited Conduct:</Text>
+                <Text style={styles.sectionText}>
+                  You agree not to engage in any of the following activities: violating any applicable laws or regulations, uploading, sharing, or transmitting any unlawful, defamatory, or abusive content, impersonating another person or entity, interfering with the App's functionality, or engaging in any conduct that may harm the App or its users.
+                </Text>
+
+                <Text style={styles.sectionText}>
+                  • Violating any applicable laws or regulations.
+                </Text>
+
+                <Text style={styles.sectionText}>•
+                  Uploading, sharing, or transmitting any content that is unlawful, defamatory, abusive, or violates any third-party rights. </Text>
+
+                <Text style={styles.sectionText}>•
+                  Impersonating another person or entity or falsely representing your affiliation with any person or entity. </Text>
+
+                <Text style={styles.sectionText}>•
+                  Interfering with the App's functionality or attempting to gain unauthorized access to any systems or networks connected to the App. </Text>
+
+                <Text style={styles.sectionText}>•
+                  Engaging in any conduct that may harm the App or its users.
+                </Text>
+
+
+                <Text style={styles.sectionHeading}>Intellectual Property</Text>
+
+                <Text style={styles.sectionText}>
+                  TAll intellectual property rights in the App, including but not limited to trademarks, copyrights, and proprietary information, are owned by us or our licensors. You agree not to reproduce, modify, distribute, or create derivative works based on the App without our explicit permission. </Text>
+
+                <Text style={styles.sectionHeading}>Disclaimers and Limitations of Liability</Text>
+
+                <Text style={styles.sectionSubHeading}>3.1 App Availability:</Text>
+                <Text style={styles.sectionText}>
+                  We strive to provide a reliable and accessible App but do not guarantee uninterrupted or error-free operation.
+                </Text>
+
+                <Text style={styles.sectionSubHeading}>3.2 User Content:</Text>
+                <Text style={styles.sectionText}>
+                  We do not endorse or guarantee the accuracy, reliability, or legality of User Content. You use User Content at your own risk.
+                </Text>
+
+                <Text style={styles.sectionSubHeading}>3.3 Third-Party Links:</Text>
+                <Text style={styles.sectionText}>
+                  The App may contain links to third-party websites or services. We do not endorse or control these third-party sites and are not responsible for their content or privacy practices.
+                </Text>
+
+                <Text style={styles.sectionSubHeading}>3.4 Limitation of Liability:</Text>
+                <Text style={styles.sectionText}>
+                  To the extent permitted by applicable law, we shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your use of the App.
+                </Text>
+
+                <Text style={styles.sectionHeading}>Indemnification</Text>
+
+                <Text style={styles.sectionText}>
+                  You agree to indemnify and hold us harmless from any claims, damages, losses, liabilities, costs, and expenses (including legal fees) arising out of your use of the App or violation of these Terms of Service.
+                </Text>
+
+                <Text style={styles.sectionHeading}>Governing Law and Jurisdiction</Text>
+
+                <Text style={styles.sectionSubHeading}>3.1 Data Storage:</Text>
+                <Text style={styles.sectionText}>
+                  These Terms of Service shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in Kolkata.</Text>
+              </View>
             </View>
-            <View style={styles.contentContainer}>
+            : DocType === 'EULA' &&
+            <View style={{ paddingVertical: 20 }}>
+              <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
+                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
+                  <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
+                </Pressable>
+                <Text style={styles.heading}>End User License Agreement (EULA)</Text>
+              </View>
+              <View style={styles.contentContainer}>
+                <Text style={styles.sectionHeading}></Text>
+                <Text style={styles.sectionText}>
+                  PLEASE READ THIS END USER LICENSE AGREEMENT ("EULA") CAREFULLY BEFORE SIGNING UP ON THE YEET APP ("APP"). BY SIGNING UP ON THE APP, YOU AGREE TO BE BOUND BY THE TERMS AND CONDITIONS OF THIS EULA. IF YOU DO NOT AGREE TO THE TERMS AND CONDITIONS OF THIS EULA, DO NOT INSTALL OR USE THE APP.
+                </Text>
 
-              <Text style={styles.sectionHeading}>App Usage</Text>
+                <Text style={styles.sectionHeading}>1. LICENSE GRANT</Text>
 
-              <Text style={styles.sectionSubHeading}>1.1 Eligibility:</Text>
-              <Text style={styles.sectionText}>
-                You must be at least 13 years old to use the App. By using the App, you represent and warrant that you meet the age requirement.
-              </Text>
+                <Text style={styles.sectionText}>
+                  Subject to your compliance with this EULA, we grant you a limited, non-exclusive, non-transferable, revocable license to install and use the App on your iOS device solely for personal, non-commercial purposes.
+                </Text>
 
-              <Text style={styles.sectionSubHeading}>1.2 License:</Text>
-              <Text style={styles.sectionText}>
-                We grant you a limited, non-exclusive, non-transferable, revocable license to use the App for personal, non-commercial purposes.
-              </Text>
+                <Text style={styles.sectionHeading}>2. PROHIBITED CONDUCT</Text>
 
-              <Text style={styles.sectionSubHeading}>1.3 Prohibited Conduct:</Text>
-              <Text style={styles.sectionText}>
-                You agree not to engage in any of the following activities: violating any applicable laws or regulations, uploading, sharing, or transmitting any unlawful, defamatory, or abusive content, impersonating another person or entity, interfering with the App's functionality, or engaging in any conduct that may harm the App or its users.
-              </Text>
+                <Text style={styles.sectionText}>
+                  You agree that you will not engage in any of the following prohibited conduct while using the App:</Text>
+                <Text style={styles.sectionSubHeading}>2.1 Posting Objectionable Content: </Text>
+                <Text style={styles.sectionText}>You must not post or share any content that is unlawful, defamatory, abusive, harassing, obscene, sexually explicit, or otherwise objectionable. We have a zero-tolerance policy towards objectionable content.</Text>
 
-              <Text style={styles.sectionText}>
-                • Violating any applicable laws or regulations.
-              </Text>
+                <Text style={styles.sectionSubHeading}>2.2 Abusive Behavior: </Text>
+                <Text style={styles.sectionText}>You must not engage in any abusive or harassing behavior towards other users. This includes but is not limited to bullying, stalking, threatening, or any other behavior that is intended to intimidate, harm, or harass others.</Text>
 
-              <Text style={styles.sectionText}>•
-                Uploading, sharing, or transmitting any content that is unlawful, defamatory, abusive, or violates any third-party rights. </Text>
+                <Text style={styles.sectionSubHeading}>2.3 Illegal Activities: </Text>
+                <Text style={styles.sectionText}>You must not use the App for any illegal activities, including but not limited to copyright infringement, hacking, or distributing unauthorized or illegal content.</Text>
 
-              <Text style={styles.sectionText}>•
-                Impersonating another person or entity or falsely representing your affiliation with any person or entity. </Text>
+                <Text style={styles.sectionSubHeading}>2.4 Impersonation: </Text>
+                <Text style={styles.sectionText}>You must not impersonate another person or entity or falsely represent your affiliation with any person or entity.
+                </Text>
 
-              <Text style={styles.sectionText}>•
-                Interfering with the App's functionality or attempting to gain unauthorized access to any systems or networks connected to the App. </Text>
+                <Text style={styles.sectionSubHeading}>2.5 Unauthorized Use: </Text>
+                <Text style={styles.sectionText}>You must not use the App in any way that violates this EULA or any applicable laws or regulations.</Text>
 
-              <Text style={styles.sectionText}>•
-                Engaging in any conduct that may harm the App or its users.
-              </Text>
+                <Text style={styles.sectionHeading}>3. CONTENT MONITORING</Text>
+
+                <Text style={styles.sectionText}>
+                  We have the right, but not the obligation, to monitor and review the content posted or shared through the App. We reserve the right to remove any content that violates this EULA or is deemed objectionable in our sole discretion. However, we do not guarantee that all objectionable content will be identified and removed.
+                </Text>
+
+                <Text style={styles.sectionHeading}>4. ACCOUNT TERMINATION</Text>
+
+                <Text style={styles.sectionText}>
+                  In the event of a violation of this EULA, we reserve the right to terminate your account and restrict your access to the App, with or without prior notice. We may also take legal action or cooperate with law enforcement authorities if necessary.
+                </Text>
+
+                <Text style={styles.sectionHeading}>5. INTELLECTUAL PROPERTY</Text>
+
+                <Text style={styles.sectionText}>
+                  The App and its associated trademarks, copyrights, and other intellectual property rights are owned by us or our licensors. You acknowledge that you have no ownership or proprietary rights in the App.
+                </Text>
+
+                <Text style={styles.sectionHeading}>6. DISCLAIMER OF WARRANTIES</Text>
+
+                <Text style={styles.sectionText}>
+                  THE APP IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED. WE DISCLAIM ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE APP WILL BE ERROR-FREE OR UNINTERRUPTED.
+                </Text>
+
+                <Text style={styles.sectionHeading}>7. LIMITATION OF LIABILITY</Text>
+
+                <Text style={styles.sectionText}>
+                  TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL WE BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE APP, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+                </Text>
+
+                <Text style={styles.sectionHeading}>8. GOVERNING LAW AND JURISDICTION</Text>
+
+                <Text style={styles.sectionText}>
+                  This EULA shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising from this EULA shall be subject to the exclusive jurisdiction of the courts located in [Jurisdiction].
+                </Text>
+
+                <Text style={styles.sectionHeading}>9. ENTIRE AGREEMENT</Text>
+
+                <Text style={styles.sectionText}>
+                  This EULA constitutes the entire agreement between you and us regarding the App and supersedes all prior or contemporaneous understandings or agreements, whether written or oral.
+                </Text>
 
 
-              <Text style={styles.sectionHeading}>Intellectual Property</Text>
+                <Text style={styles.sectionText}>
+                  If you have any questions or concerns regarding this EULA, please contact us at hello@yeet.network
+                </Text>
 
-              <Text style={styles.sectionText}>
-                TAll intellectual property rights in the App, including but not limited to trademarks, copyrights, and proprietary information, are owned by us or our licensors. You agree not to reproduce, modify, distribute, or create derivative works based on the App without our explicit permission. </Text>
-
-              <Text style={styles.sectionHeading}>Disclaimers and Limitations of Liability</Text>
-
-              <Text style={styles.sectionSubHeading}>3.1 App Availability:</Text>
-              <Text style={styles.sectionText}>
-                We strive to provide a reliable and accessible App but do not guarantee uninterrupted or error-free operation.
-              </Text>
-
-              <Text style={styles.sectionSubHeading}>3.2 User Content:</Text>
-              <Text style={styles.sectionText}>
-                We do not endorse or guarantee the accuracy, reliability, or legality of User Content. You use User Content at your own risk.
-              </Text>
-
-              <Text style={styles.sectionSubHeading}>3.3 Third-Party Links:</Text>
-              <Text style={styles.sectionText}>
-                The App may contain links to third-party websites or services. We do not endorse or control these third-party sites and are not responsible for their content or privacy practices.
-              </Text>
-
-              <Text style={styles.sectionSubHeading}>3.4 Limitation of Liability:</Text>
-              <Text style={styles.sectionText}>
-                To the extent permitted by applicable law, we shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your use of the App.
-              </Text>
-
-              <Text style={styles.sectionHeading}>Indemnification</Text>
-
-              <Text style={styles.sectionText}>
-                You agree to indemnify and hold us harmless from any claims, damages, losses, liabilities, costs, and expenses (including legal fees) arising out of your use of the App or violation of these Terms of Service.
-              </Text>
-
-              <Text style={styles.sectionHeading}>Governing Law and Jurisdiction</Text>
-
-              <Text style={styles.sectionSubHeading}>3.1 Data Storage:</Text>
-              <Text style={styles.sectionText}>
-                These Terms of Service shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in Kolkata.</Text>
-            </View>
-          </View>}
+                <Text style={styles.sectionText}>
+                  Last updated: 7/18/2023</Text>
+              </View>
+            </View>}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   )
 }
 
