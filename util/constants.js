@@ -42,11 +42,10 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-// export const BASE_URL = 'http://192.168.0.185:3000'; //Home
-// export const BASE_URL = 'http://192.168.0.181:3000'; // FD Home
-export const BASE_URL = 'https://yeet-app.azurewebsites.net'
+export const BASE_URL = 'http://192.168.0.185:8080'; //Home
+// export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
 
-// export const BASE_URL = "http://192.168.29.86:3000"; //BS
+// export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",
