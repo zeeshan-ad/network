@@ -91,7 +91,7 @@ const PostTextExpanded = ({ navigation, route }) => {
           return (
             <View style={{ flexDirection: 'row' }}>
               <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
-                <Image source={item.profile_pic ? BASE_URL + item.profile_pic : require('../assets/images/tzara.jpg')}
+                <Image source={item.profile_pic ? BASE_URL + item.profile_pic : require('../assets/images/../assets/images/placeholder_profile.png')}
                   style={{
                     height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                     borderColor: theme.colors.dark, overflow: 'hidden'

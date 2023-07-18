@@ -8,7 +8,7 @@ const Mood = ({ navigation, FriendsMood }) => {
     FriendsMood?.map((item, index) => {
       return (
         <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.userID })} key={index} style={{ position: 'relative', alignItems: 'center', zIndex: 9 }}>
-          {!item?.profile_pic ? <Image source={require('../assets/images/tzara.jpg')}
+          {!item?.profile_pic ? <Image source={require('../assets/images/placeholder_profile.png')}
             style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
             : <Image source={BASE_URL + item?.profile_pic}
               style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />}
