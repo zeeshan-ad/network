@@ -20,7 +20,6 @@ export const getFeed = async () => {
     .catch((error) => {
       return error;
     });
-
   return result;
 
 }

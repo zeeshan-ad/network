@@ -17,6 +17,8 @@ export const createAccount = async (UserDetails) => {
     created_at: new Date(),
   });
 
+  console.log(`${BASE_URL}${create_account}`);
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -33,6 +35,7 @@ export const createAccount = async (UserDetails) => {
       return response;
     })
     .catch((error) => {
+      console.log(error)
       return error.response.data
     });
 
