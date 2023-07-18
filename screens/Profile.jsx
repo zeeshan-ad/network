@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2, convertTimestampMoment } from '../util/constants';
 import { Pressable } from 'react-native';
-import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList, reportUser } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
+import { TextInput } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 
 const { width, height } = Dimensions.get('window');
@@ -50,6 +52,20 @@ const Profile = ({ navigation, route }) => {
       alert('Something went wrong. Please try again later.');
     }
   }
+
+  const [ReportMessage, setReportMessage] = useState(false);
+  const callReportUser = async () => {
+    const response = await reportUser(userId, ReportReason);
+    if (response?.data?.status === 200) {
+      setModalReport(false);
+      setReportReason('');
+      callCancelRequest();
+      setReportMessage(true)
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
 
   const [ShowFriendList, setShowFriendList] = useState(false)
   const [ProfileInfo, setProfileInfo] = useState();
@@ -154,6 +170,9 @@ const Profile = ({ navigation, route }) => {
   }
 
 
+  const [ReportReason, setReportReason] = useState('');
+  const [OtherOptions, setOtherOptions] = useState(false);
+  const [ModalReport, setModalReport] = useState(false);
   const [CurrentTab, setCurrentTab] = useState(0);
   const [SheetVisible, setSheetVisible] = useState(false);
   const [ModalLogout, setModalLogout] = useState(false);
@@ -167,11 +186,8 @@ const Profile = ({ navigation, route }) => {
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Pressable onPress={() => navigation.goBack()} style={{
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
-          }}>
-            <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
+          <Pressable onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
           </Pressable>
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: 'italic' }}>
             @{userId ? ProfileInfo?.username : userInfo?.username}
@@ -201,12 +217,12 @@ const Profile = ({ navigation, route }) => {
               }
             </Pressable>
           </View> : null}
-          {!userId &&
-            <Pressable onPress={() => setSheetVisible(!SheetVisible)} style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-              shadowRadius: 1, elevation: 10, backgroundColor: 'transparent'
-            }}>
-              <Feather name="settings" size={20} color={theme.colors.light} />
+          {!userId ?
+            <Pressable onPress={() => setSheetVisible(!SheetVisible)}>
+              <Feather name="settings" size={20} color={theme.colors.dark} />
+            </Pressable>
+            : <Pressable onPress={() => setOtherOptions(!OtherOptions)}>
+              <Ionicons name="ellipsis-horizontal" size={24} color={theme.colors.dark} />
             </Pressable>
           }
         </View>
@@ -564,6 +580,86 @@ const Profile = ({ navigation, route }) => {
           }}>
             <Ionicons name="log-out-outline" size={25} color={theme.colors.danger} />
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Log Out</Text>
+          </Pressable>
+        </View>
+      </BottomSheet>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ModalReport}>
+        <KeyboardAvoidingView behavior='padding' style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 10, paddingHorizontal: 10, lineHeight: 20 }}>
+              Please tell us why you are reporting {ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' '))}.
+              {RequestStatus?.status === 'accepted' && '\nAs a precautionary measure we will also remove them from your bubble.'}
+            </Text>
+            <TextInput
+              selectionColor={theme.colors.dark}
+              style={[{ backgroundColor: theme.colors.light, color: theme.colors.dark, padding: 10, margin: 10, borderRadius: 10, borderWidth: 1, borderColor: theme.colors.dark, width: '100%', height: 150 }]}
+              placeholder="Add reason"
+              placeholderTextColor={theme.colors.backdrop}
+              onChangeText={text => setReportReason(text)}
+              value={ReportReason}
+              multiline={true}
+              numberOfLines={4}
+            />
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center', justifyContent: "flex-end", width: '100%' }}>
+              <Pressable
+                onPress={() => setModalReport(!ModalReport)}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={ReportReason.length > 0 ? callReportUser : null}
+                style={{
+                  borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
+                  backgroundColor: ReportReason.length > 0 ? theme.colors.warning : theme.colors.grey, height: 45
+                }}
+              >
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Report</Text>
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ReportMessage}>
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 20, paddingHorizontal: 20 }}>
+              Thank your for reporting this user. We appreciate your assistance in maintaining a safe community. Our team will review the report and take appropriate action if needed. If you have any additional information, please include it in the report description. Thank you for helping us keep Yeet a positive platform.
+              {'\n'}{'\n'}
+              Best regards,{'\n'}
+              The Yeet Team
+            </Text>
+            <Pressable
+              onPress={() => {
+                setReportMessage(false);
+              }}>
+              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20, textDecorationLine: 'underline' }}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <BottomSheet
+        visible={OtherOptions}
+        onBackdropPress={() => setOtherOptions(!OtherOptions)}
+      >
+        <View style={[styles.card2, { backgroundColor: theme.colors.light }]}>
+          <Pressable onPress={() => {
+            setOtherOptions(!OtherOptions);
+            setTimeout(() => {
+              setModalReport(!ModalReport);
+            }, 400)
+          }} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+            borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+          }}>
+            <Octicons name="report" size={20} color={theme.colors.danger} />
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Report {userId ? ProfileInfo?.name : userInfo?.name}</Text>
           </Pressable>
         </View>
       </BottomSheet>
