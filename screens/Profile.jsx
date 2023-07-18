@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2, convertTimestampMoment } from '../util/constants';
 import { Pressable } from 'react-native';
-import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons, AntDesign } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList, reportUser } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList, reportUser, deleteUser } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -116,6 +116,17 @@ const Profile = ({ navigation, route }) => {
   }
 
 
+  const callDeleteUser = async () => {
+    const response = await deleteUser();
+    if (response?.data?.status === 200) {
+      dispatch(resetUserInfo());
+      dispatch(resetProfileData());
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+  
+
   const callCancelRequest = async () => {
     const response = await cancelRequest(userId);
     if (response?.data?.status === 200) {
@@ -170,6 +181,8 @@ const Profile = ({ navigation, route }) => {
   }
 
 
+
+  const [ModalDelete, setModalDelete] = useState(false)
   const [ReportReason, setReportReason] = useState('');
   const [OtherOptions, setOtherOptions] = useState(false);
   const [ModalReport, setModalReport] = useState(false);
@@ -521,6 +534,34 @@ const Profile = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ModalDelete}>
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.danger }]}>
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
+              Are you sure you delete your account?{'\n'}{'\n'}Once the account is deleted all your data will be lost and cannot be recovered.
+            </Text>
+            <View style={{ flexDirection: 'row', width: '100%', gap:50, justifyContent: 'space-evenly', alignItems: 'center' }}>
+              <Pressable
+                onPress={() => {
+                  setModalDelete(!ModalDelete);
+                  setTimeout(() => {
+                    callDeleteUser();
+                  }, 400)
+                }}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.light }}>Delete Account</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setModalDelete(!ModalDelete)}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       {
         userId && <Modal
           animationType="fade"
@@ -580,6 +621,18 @@ const Profile = ({ navigation, route }) => {
           }}>
             <Ionicons name="log-out-outline" size={25} color={theme.colors.danger} />
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Log Out</Text>
+          </Pressable>
+          <Pressable onPress={() => {
+            setSheetVisible(!SheetVisible);
+            setTimeout(() => {
+              setModalDelete(!ModalDelete);
+            }, 400)
+          }} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+            borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+          }}>
+            <AntDesign name="deleteuser" size={25} color={theme.colors.danger} />
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Delete Account</Text>
           </Pressable>
         </View>
       </BottomSheet>
@@ -703,10 +756,10 @@ const styles = StyleSheet.create({
     height: height
   },
   card: {
-    height: 160,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   card2: {
     maxHeight: height - 50,

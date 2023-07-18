@@ -138,7 +138,7 @@ const Signup = ({ route, navigation }) => {
                   <>
                     <TextInput style={styles.input} placeholder='Name' value={UserDetails.name} onChangeText={handleNameChange} />
                     <TextInput keyboardType="numeric" style={styles.input}
-                      value={UserDetails.dob} placeholder='Birthday (dd/mm/yyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
+                      value={UserDetails.dob} placeholder='Birthday (dd/mm/yyyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
                       <TextInput secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
                         style={styles.input} placeholder='Password' value={UserDetails.password} onFocus={() => {
                           if (UserDetails?.password?.length < 8) {
@@ -172,16 +172,19 @@ const Signup = ({ route, navigation }) => {
                   </View>
                 }
               </View>
-              <Pressable
-                onPress={LoginStatus && isChecked ? callCreateAccount : null}
-                style={[styles.button, { backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
-                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
-              </Pressable>
+              {Step === 1 &&
+                <Pressable
+                  onPress={LoginStatus && isChecked ? callCreateAccount : null}
+                  style={[styles.button, { bottom: 20, backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
+                </Pressable>
+              }
+
               {Step === 2 &&
                 <>
                   <Pressable
                     onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
-                    style={[styles.button, { backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
+                    style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
                     <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
                   </Pressable>
                   <Pressable
@@ -199,13 +202,15 @@ const Signup = ({ route, navigation }) => {
                   Use a different email
                 </Link>
               </Text>
-              <View style={styles.section}>
-                <Checkbox
-                  color={isChecked ? theme.colors.secondary : undefined} style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-                <Text style={styles.text}>You agree to&nbsp;
-                  <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
-                  &nbsp;on signing up</Text>
-              </View>
+              {Step === 1 &&
+                <View style={styles.section}>
+                  <Checkbox
+                    color={isChecked ? theme.colors.secondary : undefined} style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+                  <Text style={styles.text}>You agree to&nbsp;
+                    <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
+                    &nbsp;on signing up</Text>
+                </View>
+              }
             </View>
           </ScrollView>
 
@@ -248,7 +253,6 @@ const styles = StyleSheet.create({
   link: { textDecorationLine: 'underline' },
   button: {
     position: 'absolute',
-    bottom: 20,
     width: '100%',
     height: 52,
     alignSelf: 'center',

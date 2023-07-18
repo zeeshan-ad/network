@@ -31,10 +31,11 @@ import { getFriendsList } from "./getFriendsList";
 import { verifyOTP } from "./verifyOTP";
 import { resetPassword } from "./resetPassword";
 import { reportUser } from "./reportUser";
+import { deleteUser } from "./deleteUser";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, postMoment, getFeed,
   verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests, getFriendsMoods,
   getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike, addComment, getComments, sendOTP, deleteMoment, deleteMemo, getFriendsList,
-  verifyOTP, resetPassword, reportUser
+  verifyOTP, resetPassword, reportUser, deleteUser
 }

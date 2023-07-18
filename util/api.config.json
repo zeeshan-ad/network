@@ -34,5 +34,6 @@
   "get_Friends_list": "/api/users/get_friends",
   "verify_otp": "/api/users/verify-otp",
   "reset_password": "/api/users/reset-password",
-  "report_user": "/api/users/report_user"
+  "report_user": "/api/users/report_user",
+  "delete_user": "/api/users/delete_user"
 }
