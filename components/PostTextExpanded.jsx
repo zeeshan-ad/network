@@ -24,6 +24,8 @@ const PostTextExpanded = ({ navigation, route }) => {
 
   const { memo } = route.params;
 
+  console.log(memo)
+
 
   const [liked, setLiked] = useState(false);
 

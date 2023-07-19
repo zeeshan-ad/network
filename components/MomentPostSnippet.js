@@ -138,7 +138,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           </Text>
         </View>}
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('PostExpanded', { moment, id: item.id })}>
+        onPress={() => navigation.navigate('PostExpanded', { moment, id: item.id, jumpToIndex: index })}>
         <Image style={{
           height: '100%',
           width: '100%',

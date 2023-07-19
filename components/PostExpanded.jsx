@@ -16,7 +16,9 @@ const PostExpanded = ({ navigation, route }) => {
   const userInfo = route?.params?.user ? route.params.user : useSelector(state => state.userInfo);
   const moment = route?.params?.moment;
 
-  const { date, user } = route.params;
+  console.log('moment', moment);
+
+  const { date, user, jumpToIndex } = route.params;
 
   const [MomentbyId, setMomentbyId] = useState();
 
@@ -26,7 +28,6 @@ const PostExpanded = ({ navigation, route }) => {
       setMomentbyId(response?.data?.data);
     }
   }
-
 
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const PostExpanded = ({ navigation, route }) => {
             panGestureHandlerProps={{
               activeOffsetX: [-10, 10],
             }}
+            defaultIndex={jumpToIndex}
             width={width}
             loop={false}
             data={CarouselMoment}

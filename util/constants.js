@@ -12,7 +12,7 @@ export const theme = {
     accent: '#F4ABAD',
     grey: '#b9b9b9',
     light: '#f2ecde',
-    lightDisabled: "#b2a589",
+    lightDisabled: "#e2dccc",
     darkgrey: '#444',
     dark: '#0A0A0A',
     disabled: '#4c9648',
@@ -42,7 +42,7 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.185:8080'; //Home
+export const BASE_URL = 'http://192.168.0.187:8080'; //Home
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
 // export const BASE_URL = 'https://yeet-app.azurewebsites.net'
 

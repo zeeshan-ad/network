@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
 import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed } from '../APIs';
+import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed, getNotifications } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import MemoizedFeed from '../components/MemoizedFeed';
@@ -38,6 +38,7 @@ const FeedComponent = ({ navigation }) => {
 
   const [PendingRequests, setPendingRequests] = useState(null);
   const [unseenReq, setunseenReq] = useState(0);
+  const [Notifications, setNotifications] = useState(null);
 
   async function callGetPendingRequests() {
     setPendingRequests(null);
@@ -46,6 +47,10 @@ const FeedComponent = ({ navigation }) => {
     if (response?.status === 200) {
       setPendingRequests(response?.data?.data);
       setunseenReq(response?.data?.data?.filter((item) => item?.notify === true)?.length)
+    }
+    const resp = await getNotifications();
+    if (resp?.status === 200) {
+      setNotifications(resp?.data?.data);
     }
   }
 
@@ -68,7 +73,7 @@ const FeedComponent = ({ navigation }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
-          unseenReq={unseenReq} />
+          unseenReq={unseenReq} Notifications={Notifications}/>
         <View style={{ minHeight: height - 80, justifyContent: "center" }}>
           <MemoizedFeed
             navigation={navigation}

@@ -35,5 +35,8 @@
   "verify_otp": "/api/users/verify-otp",
   "reset_password": "/api/users/reset-password",
   "report_user": "/api/users/report_user",
-  "delete_user": "/api/users/delete_user"
+  "delete_user": "/api/users/delete_user",
+  "get_notifs": "/api/users/get_notifications",
+  "getMemo_OR_Moment": "/api/users/get_memo_moment",
+  "set_is_view": "/api/users/set_is_view"
 }

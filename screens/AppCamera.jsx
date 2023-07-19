@@ -73,7 +73,7 @@ export default function AppCamera({ navigation }) {
             textAlign: 'center', fontSize: fontSizes.medium, fontWeight: fontWeights.normal, marginHorizontal: 20,
             textDecorationLine: 'underline', marginTop: 20
           }}>
-            Grant Permission
+            Continue
           </Text>
         </Pressable>
       </View>
