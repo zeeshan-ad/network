@@ -252,7 +252,6 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
 
         {item.caption &&
           <View style={{
-            borderRadius: 100,
             overflow: "hidden",
             flex: 1,
             width: '80%',

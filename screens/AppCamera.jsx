@@ -46,7 +46,7 @@ export default function AppCamera({ navigation }) {
     const manipResult = await manipulateAsync(
       photo,
       type === 'front' ? [{ rotate: 0 }, { flip: FlipType.Horizontal }] : [],
-      { compress: 1, format: SaveFormat.PNG },
+      { compress: 0 },
     );
     setImage(manipResult);
     dispatch(setProfileData({

@@ -36,7 +36,7 @@ const PostSnippet = ({ navigation, moment }) => {
         }}
         renderItem={({ item, index }) => {
           return (
-            <MomentPostSnippet navigation={navigation} item={item} index={index} moment={moment}/>
+            <MomentPostSnippet  key={index} navigation={navigation} item={item} index={index} moment={moment}/>
           )
         }}
       />

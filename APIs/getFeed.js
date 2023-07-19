@@ -3,7 +3,7 @@ import APIconfig from "../util/api.config.json";
 
 export const getFeed = async () => {
   const { get_feed } = APIconfig;
-
+  
   const config = {
     method: "get",
     url: `${get_feed}`,

@@ -53,10 +53,10 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
         ListFooterComponent={<View style={{ height: 150 }}></View>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           if (Array.isArray(item)) {
             return (
-              <PostSnippet navigation={navigation} moment={item} />
+              <PostSnippet key={index} navigation={navigation} moment={item} />
             )
           } else if (item?.text === "No posts to show.") {
             return (

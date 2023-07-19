@@ -36,7 +36,7 @@ export default function PostMoments({ navigation }) {
     const manipResult = await manipulateAsync(
       photo,
       type === 'front' ? [{ rotate: 0 }, { flip: FlipType.Horizontal }] : [{ rotate: 0 }],
-      { compress: 1, format: SaveFormat.PNG }
+      { compress: 0 }
     );
     navigation.navigate('CameraPreview', { Image: manipResult });
   };
