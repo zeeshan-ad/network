@@ -113,6 +113,7 @@ const PostTextExpanded = ({ navigation, route }) => {
   }, [isFocused])
 
 
+
   return (
     <KeyboardAvoidingView behavior='padding' style={{ height: height }}>
       <View style={{ position: 'absolute', top: 0, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, width: width, height: 45, zIndex: 999 }}></View>
