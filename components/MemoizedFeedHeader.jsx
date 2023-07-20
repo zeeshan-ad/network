@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.light
   },
   text: {
-    fontSize: fontSizes.medium,
+    fontSize: fontSizes.smallMedium,
     fontWeight: fontWeights.normal,
     paddingTop: 5
   },
