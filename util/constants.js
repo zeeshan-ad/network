@@ -42,9 +42,9 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.187:8080'; //Home
+// export const BASE_URL = 'http://192.168.0.187:8080'; //Home
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
-// export const BASE_URL = 'https://yeet-app.azurewebsites.net'
+export const BASE_URL = 'https://yeet-app.azurewebsites.net'
 
 // export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [
@@ -95,18 +95,18 @@ export function convertDatetimeFormat(date) {
 }
 
 export function convertDatetimeFormat2(date) {
-  const formattedDate = moment.utc(date).local().format('MMMM Do YY, h:mm a');
+  const formattedDate = moment.utc(date).local().format('MMM Do YY, h:mm a');
   return formattedDate;
 }
 
 export function convertTimeStamp(Timestamp) {
-  const localTime = moment.utc(Timestamp, 'MM/DD/YYYY, hh:mm a').local().format('MMMM Do YY, h:mm a');
+  const localTime = moment.utc(Timestamp, 'MM/DD/YYYY, hh:mm a').local().format('MMM Do YY, h:mm a');
   return localTime;
 }
 
 // convert to local time format
 export function convertTimestamp2(timestamp) {
-  const localTime = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('MMMM Do YY, h:mm a');
+  const localTime = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('MMM Do YY, h:mm a');
   return localTime;
 }
 

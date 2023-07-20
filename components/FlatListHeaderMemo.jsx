@@ -7,7 +7,7 @@ import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
 import { BottomSheet } from 'react-native-btr';
 
-const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
+const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
   ShowLikedUsers }) => {
   const [ShowOption, setShowOption] = useState(false);
 
@@ -52,9 +52,12 @@ const FlatListHeaderMemo = ({ liked, navigation, callPostLike, callRemoveLIke, m
             <Pressable onPress={callRemoveLIke}>
               <FontAwesome name="heart" size={23} color={theme.colors.danger} />
             </Pressable> :
-            <Pressable onPress={callPostLike}>
+            !isPostingLike ?
+              <Pressable onPress={callPostLike}>
+                <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
+              </Pressable> :
               <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
-            </Pressable>}
+          }
           <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
             <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
               <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>

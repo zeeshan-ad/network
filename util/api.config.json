@@ -38,5 +38,6 @@
   "delete_user": "/api/users/delete_user",
   "get_notifs": "/api/users/get_notifications",
   "getMemo_OR_Moment": "/api/users/get_memo_moment",
-  "set_is_view": "/api/users/set_is_view"
+  "set_is_view": "/api/users/set_is_view",
+  "add_replied_comment_notification": "/api/users/add_replied_comment_notification"
 }

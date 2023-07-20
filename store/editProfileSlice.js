@@ -5,6 +5,7 @@ const initialState = {
   image: null,
   theme: null,
   is_public: false,
+  user_id: null,
 }
 
 const editProfileSlice = createSlice({
@@ -16,12 +17,14 @@ const editProfileSlice = createSlice({
       state.image = action.payload.image;
       state.theme = action.payload.theme;
       state.is_public = action.payload.is_public;
+      state.user_id = action.payload.user_id;
     },
     resetProfileData: (state) => {
       state.bio = null;
       state.image = null;
       state.theme = null;
       state.is_public = null;
+      state.user_id = null;
     }
   }
 })

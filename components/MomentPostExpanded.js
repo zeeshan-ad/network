@@ -1,14 +1,15 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
-import { FontAwesome, Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialCommunityIcons, Feather, Octicons } from '@expo/vector-icons';
 import { BASE_URL, convertDateFormat, convertDatetimeFormat, convertDatetimeFormat2, convertDatetimeFormat3, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
-import { addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
+import { AddRepliedComment, addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
 import { useSelector } from 'react-redux';
 import { BottomSheet } from 'react-native-btr';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 const { width, height } = Dimensions.get("window");
@@ -20,6 +21,8 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
 
   const [liked, setLiked] = useState();
   const isFocused = useIsFocused();
+  const [ReplyingTo, setReplyingTo] = useState(null)
+
 
 
   const CallIsliked = async () => {
@@ -29,11 +32,15 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     }
   }
 
-
+  const [isPostingLike, setisPostingLike] = useState(false)
   const callPostLike = async () => {
+    setisPostingLike(true);
     const response = await postLike(item.id, 'moment');
     if (response.status === 200) {
+      setisPostingLike(false);
       CallIsliked();
+    } else {
+      setisPostingLike(false);
     }
   }
 
@@ -45,11 +52,19 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
   }
   const [comment, setcomment] = useState('')
 
+  const [isPostingComment, setisPostingComment] = useState(false);
   const callAddComment = async () => {
+    setisPostingComment(true);
     const response = await addComment(item.id, 'moment', comment);
     if (response.status === 200) {
+      setisPostingComment(false);
       setcomment('');
       callGetComment();
+      if (ReplyingTo !== null) {
+        callAddRepliedComment()
+      }
+    } else {
+      setisPostingComment(false);
     }
   }
 
@@ -74,6 +89,28 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     }
   }
 
+  const callAddRepliedComment = async () => {
+    const response = await AddRepliedComment(editProfile?.user_id, ReplyingTo?.user_id, item?.id, 'moment');
+    if (response.status === 200) {
+      console.log(response.data)
+    }
+  }
+
+
+  useEffect(() => {
+    if (ReplyingTo !== null) {
+      if (!comment.includes(ReplyingTo?.name)) {
+        setReplyingTo(null);
+        setcomment('');
+      }
+    }
+  }, [comment, ReplyingTo])
+
+  const CatchUserToReply = (item) => {
+    setReplyingTo(item);
+    setcomment(`@${item.name} `);
+  }
+
 
   useEffect(() => {
     CallIsliked();
@@ -85,7 +122,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     <>
       {CommentsVisible &&
         <View style={{
-          position: 'absolute', bottom: 70, marginLeft: 20, minWidth: 200,
+          position: 'absolute', bottom: 30, marginLeft: 20, minWidth: 200,
           maxWidth: width - 100, maxHeight: height / 2.6, zIndex: 9
         }}>
           <FlatList
@@ -121,6 +158,14 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                         <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                           {item.comment}
                         </Text>
+                        {item?.user_id !== userInfo?.id &&
+                          <Pressable onPress={() => CatchUserToReply(item)}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 3, alignItems: "center", marginTop: 5 }}>
+                              <Octicons name="reply" size={10} color={theme.colors.backdrop} />
+                              <Text style={{ fontStyle: 'italic', color: theme.colors.backdrop }}>reply</Text>
+                            </View>
+                          </Pressable>
+                        }
                       </View>
                     </View>
                   </View>
@@ -140,11 +185,16 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               onChangeText={(text) => setcomment(text)}
               value={comment}
               style={styles.input} placeholder="Add a comment" />
-            {comment?.length > 0 && <Pressable
+            {comment?.length > 0 && !isPostingComment && <Pressable
               onPress={callAddComment}
               style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
               <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
             </Pressable>}
+            {isPostingComment &&
+              <View style={{ position: "absolute", top: 13, right: -50 }}>
+                <ActivityIndicator size="small" color={theme.colors.secondary} />
+              </View>
+            }
           </View>
         </View>}
       <View
@@ -164,9 +214,11 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               <Pressable onPress={callRemoveLIke}>
                 <FontAwesome name="heart" size={25} color={theme.colors.danger} />
               </Pressable> :
-              <Pressable onPress={callPostLike}>
+              !isPostingLike ?
+                <Pressable onPress={callPostLike}>
+                  <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
+                </Pressable> :
                 <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
-              </Pressable>
             }
             <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
               <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
@@ -220,7 +272,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}</Text>
           </View>
         </View>
-        <View style={{
+        {!CommentsVisible && <View style={{
           borderRadius: 100,
           overflow: "hidden",
           flex: 1,
@@ -235,6 +287,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
           }}>
             {`${index + 1}/${CarouselMoment?.length}`}</Text>
         </View>
+        }
 
         <View style={{
           overflow: "hidden",
@@ -250,7 +303,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             {date ? convertDatetimeFormat2(item?.date) : convertTimeStamp(item?.created_at)}</Text>
         </View>
 
-        {item.caption &&
+        {item.caption && !CommentsVisible &&
           <View style={{
             overflow: "hidden",
             flex: 1,

@@ -81,6 +81,7 @@ const Profile = ({ navigation, route }) => {
         is_public: response?.data?.data?.is_public,
         image: response?.data?.data?.profile_pic ? BASE_URL + response?.data?.data?.profile_pic : null,
         theme: response?.data?.data?.theme,
+        user_id: response?.data?.data?.user_id,
       }));
     }
   }

@@ -1,16 +1,17 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import { BASE_URL, convertDatetimeFormat, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
-import { addComment, isLiked, postLike, removeLike } from '../APIs';
+import { AddRepliedComment, addComment, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListHeaderMemo from './FlatListHeaderMemo';
 import { BottomSheet } from 'react-native-btr';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 const width = Dimensions.get("window").width;
@@ -23,8 +24,6 @@ const PostTextExpanded = ({ navigation, route }) => {
 
 
   const { memo } = route.params;
-
-  console.log(memo)
 
 
   const [liked, setLiked] = useState(false);
@@ -47,10 +46,15 @@ const PostTextExpanded = ({ navigation, route }) => {
     }
   }
 
+  const [isPostingLike, setisPostingLike] = useState(false)
   const callPostLike = async () => {
+    setisPostingLike(true);
     const response = await postLike(memo.id, 'memo');
     if (response.status === 200) {
+      setisPostingLike(false);
       CallIsliked();
+    } else {
+      setisPostingLike(false);
     }
   }
 
@@ -62,13 +66,44 @@ const PostTextExpanded = ({ navigation, route }) => {
   }
 
   const [comment, setcomment] = useState('');
+  const [isPostingComment, setisPostingComment] = useState(false);
+  const [ReplyingTo, setReplyingTo] = useState(null)
+
 
   const callAddComment = async () => {
+    setisPostingComment(true);
     const response = await addComment(memo.id, 'memo', comment);
     if (response.status === 200) {
+      setisPostingComment(false);
       setcomment('');
       callGetComment();
+      if (ReplyingTo !== null) {
+        callAddRepliedComment()
+      }
+    } else {
+      setisPostingComment(false);
     }
+  }
+  const callAddRepliedComment = async () => {
+    const response = await AddRepliedComment(editProfile.user_id, ReplyingTo?.user_id, memo?.id, 'memo');
+    if (response.status === 200) {
+      console.log(response.data)
+    }
+  }
+
+
+  useEffect(() => {
+    if (ReplyingTo !== null) {
+      if (!comment.includes(ReplyingTo?.name)) {
+        setReplyingTo(null);
+        setcomment('');
+      }
+    }
+  }, [comment, ReplyingTo])
+
+  const CatchUserToReply = (item) => {
+    setReplyingTo(item);
+    setcomment(`@${item.name} `);
   }
 
 
@@ -85,6 +120,7 @@ const PostTextExpanded = ({ navigation, route }) => {
         data={AllComments}
         style={{ paddingHorizontal: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, }}
         ListHeaderComponent={<FlatListHeaderMemo
+          isPostingLike={isPostingLike}
           liked={liked} navigation={navigation} callPostLike={callPostLike} callRemoveLIke={callRemoveLIke}
           memo={memo} AllComments={AllComments} userInfo={userInfo} setShowLikedUsers={setShowLikedUsers}
           ShowLikedUser={ShowLikedUsers} />}
@@ -119,6 +155,14 @@ const PostTextExpanded = ({ navigation, route }) => {
                     <Text style={{ fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                       {item.comment}
                     </Text>
+                    {item?.user_id !== userInfo?.id &&
+                      <Pressable onPress={() => CatchUserToReply(item)}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 3, alignItems: "center", marginTop: 5 }}>
+                          <Octicons name="reply" size={10} color={theme.colors.backdrop} />
+                          <Text style={{ fontStyle: 'italic', color: theme.colors.backdrop }}>reply</Text>
+                        </View>
+                      </Pressable>
+                    }
                   </View>
                 </View>
               </View>
@@ -139,18 +183,25 @@ const PostTextExpanded = ({ navigation, route }) => {
           onChangeText={(text) => setcomment(text)}
           value={comment}
           style={styles.input} placeholder="Add a comment" />
-        {comment?.length > 0 && <Pressable
+        {comment?.length > 0 && !isPostingComment && <Pressable
           onPress={callAddComment}
           style={[styles.button, { backgroundColor: theme.colors.secondary }]}>
           <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
         </Pressable>}
+        {isPostingComment &&
+          <View style={{ position: "absolute", top: 23, right: 35, zIndex: 9999 }}>
+            <ActivityIndicator size="small" color={theme.colors.secondary} />
+          </View>
+        }
       </View>
       <BottomSheet
         visible={ShowLikedUsers}
         onBackdropPress={() => setShowLikedUsers(false)}>
         <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
-          <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
-          paddingTop:20, textDecorationLine: 'underline' }}>Likes</Text>
+          <Text style={{
+            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+            paddingTop: 20, textDecorationLine: 'underline'
+          }}>Likes</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={liked?.likedByUsers}

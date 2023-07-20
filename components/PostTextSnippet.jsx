@@ -23,11 +23,15 @@ const PostTextSnippet = ({ navigation, memo }) => {
     }
   }
 
-
+  const [isPostingLike, setisPostingLike] = useState(false)
   const callPostLike = async () => {
+    setisPostingLike(true);
     const response = await postLike(memo.id, 'memo');
     if (response.status === 200) {
+      setisPostingLike(false);
       CallIsliked();
+    } else {
+      setisPostingLike(false);
     }
   }
 
@@ -79,9 +83,11 @@ const PostTextSnippet = ({ navigation, memo }) => {
             <Pressable onPress={callRemoveLIke}>
               <FontAwesome name="heart" size={23} color={theme.colors.danger} />
             </Pressable> :
-            <Pressable onPress={callPostLike}>
+            !isPostingLike ?
+              <Pressable onPress={callPostLike}>
+                <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
+              </Pressable> :
               <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
-            </Pressable>
           }
           <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
             <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>

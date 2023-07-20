@@ -34,10 +34,10 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
     if (response?.status === 200) {
       if (response?.data?.data?.post_type === 'moment') {
         setshowNotif(false);
-        navigation.navigate('PostExpanded', { moment: [{ ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).local().format('MM/DD/YYYY, hh:mm:ss a') }] });
+        navigation.navigate('PostExpanded', { moment: [{ ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).format('MM/DD/YYYY, hh:mm:ss a') }] });
       } else {
         setshowNotif(false);
-        navigation.push('PostTextExpanded', { memo: { ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).local().format('MM/DD/YYYY, hh:mm:ss a') } });
+        navigation.push('PostTextExpanded', { memo: { ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).format('MM/DD/YYYY, hh:mm:ss a') } });
       }
     }
   }
@@ -154,7 +154,11 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                         style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
                       <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, }}>
                         <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>
-                        &nbsp;has {item?.interaction_type} {item?.interaction_type === 'commented' && 'on\n'}your {item?.post_type}.</Text>
+                        &nbsp;
+                        has {item?.interaction_type} 
+                        {item?.interaction_type === 'commented' && ` on\nyour ${item?.post_type}`}
+                        {item?.interaction_type === 'liked' && `\nyour ${item?.post_type}`} 
+                        {item?.interaction_type === 'replied' && ` to\nyour comment`}.</Text>
                     </View>
                   </Pressable>
                 )
