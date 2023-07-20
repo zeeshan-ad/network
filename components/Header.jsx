@@ -57,6 +57,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
     return null;
   }
 
+
   return (
     <>
       <View style={styles.header} onLayout={onLayoutRootView}>
@@ -130,41 +131,49 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
               </ScrollView>
             </View>
           }
-          <View>
-            <Text style={{
-              paddingHorizontal: 10, fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
-              textDecorationLine: 'underline', paddingBottom: 10
-            }}>Alerts</Text>
-            <FlatList
-              data={Notifications}
-              ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? 250 : 50 }} />}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => {
-                return (
-                  <Pressable key={index} onPress={() => {
-                    callupdateIsView(item?.post_id, item?.post_type, item?.interaction_type);
-                    callGetMemoOrMoment(item?.post_id, item?.post_type);
+          {Notifications?.length > 0 &&
+            <View>
+              <Text style={{
+                paddingHorizontal: 10, fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
+                textDecorationLine: 'underline', paddingBottom: 10
+              }}>Alerts</Text>
+              <FlatList
+                data={Notifications}
+                ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? 250 : 50 }} />}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                  return (
+                    <Pressable key={index} onPress={() => {
+                      callupdateIsView(item?.post_id, item?.post_type, item?.interaction_type);
+                      callGetMemoOrMoment(item?.post_id, item?.post_type);
                     }}>
-                    <View key={index} style={{
-                      backgroundColor: item?.is_view ? theme.colors.lightDisabled : theme.colors.light,
-                      borderBottomWidth: 1, borderColor: theme.colors.divider, height: 65, flexDirection: 'row', width: width,
-                      alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10, gap: 10, height: 70
-                    }}>
-                      <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
-                        style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
-                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, }}>
-                        <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>
-                        &nbsp;
-                        has {item?.interaction_type} 
-                        {item?.interaction_type === 'commented' && ` on\nyour ${item?.post_type}`}
-                        {item?.interaction_type === 'liked' && `\nyour ${item?.post_type}`} 
-                        {item?.interaction_type === 'replied' && ` to\nyour comment`}.</Text>
-                    </View>
-                  </Pressable>
-                )
-              }}
-            />
-          </View>
+                      <View key={index} style={{
+                        backgroundColor: item?.is_view ? theme.colors.lightDisabled : theme.colors.light,
+                        borderBottomWidth: 1, borderColor: theme.colors.divider, height: 65, flexDirection: 'row', width: width,
+                        alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10, gap: 10, height: 70
+                      }}>
+                        <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                          style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
+                        <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, }}>
+                          <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>
+                          &nbsp;
+                          has {item?.interaction_type}
+                          {item?.interaction_type === 'commented' && ` on\nyour ${item?.post_type}`}
+                          {item?.interaction_type === 'liked' && `\nyour ${item?.post_type}`}
+                          {item?.interaction_type === 'replied' && ` to\nyour comment`}.</Text>
+                      </View>
+                    </Pressable>
+                  )
+                }}
+              />
+            </View>}
+
+          {!Notifications?.length && !PendingRequests?.length &&
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>No Notifications</Text>
+            </View>
+          }
+
         </SafeAreaView>
       </Modal>
     </>

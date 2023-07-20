@@ -36,10 +36,15 @@ import { getNotifications } from "./getNotifications";
 import { getMemoORMoment } from "./getMemoORMoment";
 import { updateIsView } from "./updateIsView";
 import { AddRepliedComment } from "./AddRepliedComment";
+import { blockUser } from "./blockUser";
+import { getBlockedList } from "./getBlockedList";
+import { unblockUser } from "./UnblockUser";
+import { getBlockedListByUser } from "./getBlockedListByUser";
 
 export {
   createAccount, verifyEmail, loginUser, getProfileData, updateMood, getMood, postMemos, getMemos, search, postMoment, getFeed,
   verifyUsername, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getPendingRequests, getFriendsMoods,
   getProfilePosts, getMomentIdDate, postLike, isLiked, removeLike, addComment, getComments, sendOTP, deleteMoment, deleteMemo, getFriendsList,
-  verifyOTP, resetPassword, reportUser, deleteUser, getNotifications, getMemoORMoment, updateIsView, AddRepliedComment
+  verifyOTP, resetPassword, reportUser, deleteUser, getNotifications, getMemoORMoment, updateIsView, AddRepliedComment, blockUser, 
+  getBlockedList, unblockUser, getBlockedListByUser
 }

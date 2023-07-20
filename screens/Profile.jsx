@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2, convertTimestampMoment } from '../util/constants';
 import { Pressable } from 'react-native';
-import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons, AntDesign } from '@expo/vector-icons';
+import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons, AntDesign, Entypo } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../APIs/logoutUser';
 import { BottomSheet } from "react-native-btr";
-import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList, reportUser, deleteUser } from '../APIs';
+import { getProfileData, getMood, getUserProfile, sendRequest, getRequestStatus, cancelRequest, acceptRequest, getProfilePosts, getFriendsList, reportUser, deleteUser, blockUser, getBlockedList, getBlockedListByUser } from '../APIs';
 import { resetProfileData, setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
+import BlockedUsers from '../components/BlockedUsers';
 
 
 const { width, height } = Dimensions.get('window');
@@ -126,7 +127,7 @@ const Profile = ({ navigation, route }) => {
       alert('Something went wrong. Please try again later.');
     }
   }
-  
+
 
   const callCancelRequest = async () => {
     const response = await cancelRequest(userId);
@@ -160,6 +161,7 @@ const Profile = ({ navigation, route }) => {
       CallGetUserProfile();
       callGetPosts(userId);
       callGetFriendsList(userId)
+      callGetBlockedList(userId)
     }
   }, [isFocused, userId, userInfo?.id])
 
@@ -181,8 +183,53 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const callBlockUser = async () => {
+    const response = await blockUser(userId);
+    if (response?.data?.status === 200) {
+      setModalBlock(false);
+      callCancelRequest();
+      navigation.navigate('Feed');
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
+
+  const [BlockedListData, setBlockedListData] = useState(null);
+  const [BlockedListData2, setBlockedListData2] = useState(null);
 
 
+  const callGetBlockedList = async (userId) => {
+    const response = await getBlockedList();
+    if (response?.data?.status === 200) {
+      setBlockedListData(response?.data?.data);
+    }
+    const response2 = await getBlockedListByUser(userId);
+    if (response2?.data?.status === 200) {
+      setBlockedListData2(response2?.data?.data);
+    }
+  }
+
+  console.log(BlockedListData2, 'BlockedListData2');
+
+  // if BlockedListData has user_id || blocked_user_id == userId then show user can't be  viewed [{"blocked_user_id": 22, "created_at": "2023-07-20T20:17:06.876Z", "id": 7, "name": "Tzara Ali", "profile_pic": "/uploads/profile_pic-1689233273285.png", "user_id": 21}]
+
+  const [UserBlocked, setUserBlocked] = useState(false);
+  
+  useEffect(() => {
+    if (BlockedListData && BlockedListData2) {
+      const isBlocked = [...BlockedListData, ...BlockedListData2]?.filter((item) => item?.blocked_user_id === userId || item?.user_id === userId);
+      if (isBlocked?.length > 0) {
+        setUserBlocked(true);
+      } else {
+        setUserBlocked(false);
+      }
+    }
+  }, [BlockedListData, BlockedListData2])
+
+
+  const [BlockedShow, setBlockedShow] = useState();
+
+  const [ModalBlock, setModalBlock] = useState(false);
   const [ModalDelete, setModalDelete] = useState(false)
   const [ReportReason, setReportReason] = useState('');
   const [OtherOptions, setOtherOptions] = useState(false);
@@ -192,6 +239,24 @@ const Profile = ({ navigation, route }) => {
   const [ModalLogout, setModalLogout] = useState(false);
   const [ModalRequest, setModalRequest] = useState(false);
   const [RemoveFriend, setRemoveFriend] = useState(false);
+
+
+  if (UserBlocked) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>You can't view this profile
+          </Text>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark,
+              textDecorationLine: "underline"
+            }}>Go Back</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    )
+  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
@@ -545,7 +610,7 @@ const Profile = ({ navigation, route }) => {
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
               Are you sure you delete your account?{'\n'}{'\n'}Once the account is deleted all your data will be lost and cannot be recovered.
             </Text>
-            <View style={{ flexDirection: 'row', width: '100%', gap:50, justifyContent: 'space-evenly', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: '100%', gap: 50, justifyContent: 'space-evenly', alignItems: 'center' }}>
               <Pressable
                 onPress={() => {
                   setModalDelete(!ModalDelete);
@@ -596,6 +661,7 @@ const Profile = ({ navigation, route }) => {
           </View>
         </Modal>
       }
+      <BlockedUsers BlockedShow={BlockedShow} setBlockedShow={setBlockedShow} />
       <BottomSheet
         visible={SheetVisible}
         onBackdropPress={() => setSheetVisible(!SheetVisible)}
@@ -610,6 +676,18 @@ const Profile = ({ navigation, route }) => {
           }}>
             <Feather name="edit" size={22} color={theme.colors.dark} />
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Edit Vibe</Text>
+          </Pressable>
+          <Pressable onPress={() => {
+            setSheetVisible(!SheetVisible);
+            setTimeout(() => {
+              setBlockedShow(!BlockedShow);
+            }, 400)
+          }} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+            borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+          }}>
+            <Entypo name="block" size={22} color={theme.colors.dark} />
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Block list</Text>
           </Pressable>
           <Pressable onPress={() => {
             setSheetVisible(!SheetVisible);
@@ -644,7 +722,7 @@ const Profile = ({ navigation, route }) => {
         <KeyboardAvoidingView behavior='padding' style={styles.centeredView}>
           <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 10, paddingHorizontal: 10, lineHeight: 20 }}>
-              Please tell us why you are reporting {ProfileInfo?.name+' '?.substring(0, ProfileInfo?.name+' '?.indexOf(' '))}.
+              Please tell us why you are reporting {ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '?.indexOf(' '))}.
               {RequestStatus?.status === 'accepted' && '\nAs a precautionary measure we will also remove them from your bubble.'}
             </Text>
             <TextInput
@@ -698,6 +776,34 @@ const Profile = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ModalBlock}>
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 10, paddingHorizontal: 10, lineHeight: 20 }}>
+              Are you sure you want to block {ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '?.indexOf(' '))}?
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center', justifyContent: "flex-end", width: '100%' }}>
+              <Pressable
+                onPress={() => setModalBlock(!ModalBlock)}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={callBlockUser}
+                style={{
+                  borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
+                  backgroundColor: theme.colors.warning, height: 45
+                }}
+              >
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Block</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <BottomSheet
         visible={OtherOptions}
         onBackdropPress={() => setOtherOptions(!OtherOptions)}
@@ -713,7 +819,23 @@ const Profile = ({ navigation, route }) => {
             borderBottomWidth: 1, borderBottomColor: theme.colors.divider
           }}>
             <Octicons name="report" size={20} color={theme.colors.danger} />
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>Report {userId ? ProfileInfo?.name : userInfo?.name}</Text>
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>
+              Report {userId ? ProfileInfo?.name : userInfo?.name}
+            </Text>
+          </Pressable>
+          <Pressable onPress={() => {
+            setOtherOptions(!OtherOptions);
+            setTimeout(() => {
+              setModalBlock(!ModalBlock);
+            }, 400)
+          }} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
+            borderBottomWidth: 1, borderBottomColor: theme.colors.divider
+          }}>
+            <Entypo name="block" size={22} color={theme.colors.danger} />
+            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.danger }}>
+              Block
+            </Text>
           </Pressable>
         </View>
       </BottomSheet>
@@ -722,10 +844,16 @@ const Profile = ({ navigation, route }) => {
         onBackdropPress={() => setShowFriendList(!ShowFriendList)}
       >
         <View style={[styles.card2, { backgroundColor: theme.colors.light }]}>
-          <Text style={{
-            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
-            paddingTop: 20, textDecorationLine: 'underline'
-          }}>Friends</Text>
+          <Pressable onPress={() => setShowFriendList(!ShowFriendList)} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 5,
+            paddingTop: 20, paddingBottom: 5,
+          }}>
+            <AntDesign name="circledowno" size={15} color={theme.colors.dark} />
+            <Text style={{
+              fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+              textDecorationLine: 'underline'
+            }}>Friends</Text>
+          </Pressable>
           <FlatList
             data={FriendsList}
             showsVerticalScrollIndicator={false}

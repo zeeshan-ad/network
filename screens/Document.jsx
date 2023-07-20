@@ -155,7 +155,7 @@ const Document = ({ navigation, route }) => {
                 <Text style={styles.sectionHeading}>Intellectual Property</Text>
 
                 <Text style={styles.sectionText}>
-                  TAll intellectual property rights in the App, including but not limited to trademarks, copyrights, and proprietary information, are owned by us or our licensors. You agree not to reproduce, modify, distribute, or create derivative works based on the App without our explicit permission. </Text>
+                  All intellectual property rights in the App, including but not limited to trademarks, copyrights, and proprietary information, are owned by us or our licensors. You agree not to reproduce, modify, distribute, or create derivative works based on the App without our explicit permission. </Text>
 
                 <Text style={styles.sectionHeading}>Disclaimers and Limitations of Liability</Text>
 
@@ -187,9 +187,8 @@ const Document = ({ navigation, route }) => {
 
                 <Text style={styles.sectionHeading}>Governing Law and Jurisdiction</Text>
 
-                <Text style={styles.sectionSubHeading}>3.1 Data Storage:</Text>
                 <Text style={styles.sectionText}>
-                  These Terms of Service shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in Kolkata.</Text>
+                  These Terms of Service shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in India.</Text>
               </View>
             </View>
             : DocType === 'EULA' &&
@@ -265,7 +264,7 @@ const Document = ({ navigation, route }) => {
                 <Text style={styles.sectionHeading}>8. GOVERNING LAW AND JURISDICTION</Text>
 
                 <Text style={styles.sectionText}>
-                  This EULA shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising from this EULA shall be subject to the exclusive jurisdiction of the courts located in [Jurisdiction].
+                  This EULA shall be governed by and construed in accordance with the laws of State of West Bengal. Any disputes arising from this EULA shall be subject to the exclusive jurisdiction of the courts located in West Bengal.
                 </Text>
 
                 <Text style={styles.sectionHeading}>9. ENTIRE AGREEMENT</Text>

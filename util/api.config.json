@@ -39,5 +39,9 @@
   "get_notifs": "/api/users/get_notifications",
   "getMemo_OR_Moment": "/api/users/get_memo_moment",
   "set_is_view": "/api/users/set_is_view",
-  "add_replied_comment_notification": "/api/users/add_replied_comment_notification"
+  "add_replied_comment_notification": "/api/users/add_replied_comment_notification",
+  "block_user": "/api/users/block_user",
+  "get_blocked_users": "/api/users/get_blocked_users",
+  "unblock_user": "/api/users/unblock_user",
+  "get_blocked_users_by_user_id": "/api/users/get_blocked_users_by_user_id"
 }
