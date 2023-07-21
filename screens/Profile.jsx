@@ -14,6 +14,7 @@ import { Image } from 'expo-image';
 import { TextInput } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import BlockedUsers from '../components/BlockedUsers';
+import { BlurView } from 'expo-blur';
 
 
 const { width, height } = Dimensions.get('window');
@@ -214,7 +215,7 @@ const Profile = ({ navigation, route }) => {
   // if BlockedListData has user_id || blocked_user_id == userId then show user can't be  viewed [{"blocked_user_id": 22, "created_at": "2023-07-20T20:17:06.876Z", "id": 7, "name": "Tzara Ali", "profile_pic": "/uploads/profile_pic-1689233273285.png", "user_id": 21}]
 
   const [UserBlocked, setUserBlocked] = useState(false);
-  
+
   useEffect(() => {
     if (BlockedListData && BlockedListData2) {
       const isBlocked = [...BlockedListData, ...BlockedListData2]?.filter((item) => item?.blocked_user_id === userId || item?.user_id === userId);
@@ -428,12 +429,18 @@ const Profile = ({ navigation, route }) => {
                           width: '100%', height: '100%',
                           borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
                         }} />
-                        <Text style={{
-                          position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
-                          fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
-                          shadowOffset: { width: 0, height: 0 }, elevation: 1
-                        }}>
-                          {convertTimestampMoment(item.created_at)}</Text>
+                        <BlurView intensity={100} style={{
+                          position: "absolute", bottom: 10, left: 0, width: '100%', height: 30,
+                          borderLeftColor: theme.colors.backdrop, borderLeftWidth: 2, borderRightWidth: 2, borderRightColor: theme.colors.backdrop
+                        }} >
+                          <Text style={{
+                            position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
+                            fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
+                            shadowOffset: { width: 0, height: 0 }, elevation: 1
+                          }}>
+                            {convertTimestampMoment(item.created_at)}
+                          </Text>
+                        </BlurView>
                       </View>
                       <View style={{
                         position: 'absolute', top: 10, right: 5, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,

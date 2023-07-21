@@ -128,13 +128,14 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
       </View>
 
       {item.caption &&
-        <View style={{
+        <BlurView style={{
           overflow: "hidden",
           flex: 1,
           width: '80%',
           backgroundColor: "transparent",
           zIndex: 9999,
           position: 'absolute', left: 10, bottom: 10,
+          padding: 10, borderRadius: 10
         }}>
           <Text style={{
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
@@ -143,7 +144,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           }}>
             {item.caption}
           </Text>
-        </View>}
+        </BlurView>}
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('PostExpanded', { moment, id: item.id, jumpToIndex: index })}>
         <Image style={{
@@ -157,4 +158,4 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
   )
 }
 
-export default memo(MomentPostSnippet);
+export default MomentPostSnippet;

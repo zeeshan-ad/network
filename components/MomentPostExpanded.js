@@ -10,6 +10,7 @@ import { getComments } from '../APIs/getComments';
 import { useSelector } from 'react-redux';
 import { BottomSheet } from 'react-native-btr';
 import { ActivityIndicator } from 'react-native-paper';
+import { BlurView } from 'expo-blur';
 
 
 const { width, height } = Dimensions.get("window");
@@ -304,12 +305,13 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
         </View>
 
         {item.caption && !CommentsVisible &&
-          <View style={{
+          <BlurView style={{
             overflow: "hidden",
             flex: 1,
             width: '80%',
             backgroundColor: "transparent",
-            position: 'absolute', left: 20, bottom: 30, zIndex: 9
+            position: 'absolute', left: 20, bottom: 30, zIndex: 9,
+            padding: 10, borderRadius: 10
           }}>
             <Text style={{
               color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
@@ -317,7 +319,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             }}>
               {item.caption}
             </Text>
-          </View>}
+          </BlurView>}
         <Image style={{
           height: '100%',
           width: '100%',

@@ -44,4 +44,4 @@ const PostSnippet = ({ navigation, moment }) => {
   )
 }
 
-export default memo(PostSnippet);
+export default PostSnippet;

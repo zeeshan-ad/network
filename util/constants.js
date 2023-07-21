@@ -44,9 +44,9 @@ export const fontSizes = {
 }
 // export const BASE_URL = 'http://192.168.0.187:8080'; //Home
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
-export const BASE_URL = 'https://yeet-app.azurewebsites.net'
+// export const BASE_URL = 'https://yeet-app.azurewebsites.net'
 
-// export const BASE_URL = "http://192.168.29.86:8080"; //BS
+export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [
   "#f2ecde",
   "#FFA5A5",
