@@ -1,8 +1,7 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { FontAwesome, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import { BASE_URL, convertDatetimeFormat, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
-import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { AddRepliedComment, addComment, isLiked, postLike, removeLike } from '../APIs';
@@ -199,10 +198,16 @@ const PostTextExpanded = ({ navigation, route }) => {
         visible={ShowLikedUsers}
         onBackdropPress={() => setShowLikedUsers(false)}>
         <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
-          <Text style={{
-            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
-            paddingTop: 20, textDecorationLine: 'underline'
-          }}>Likes</Text>
+        <Pressable onPress={() => setShowLikedUsers(false)} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 5,
+            paddingTop: 20, paddingBottom: 5,
+          }}>
+            <AntDesign name="circledowno" size={15} color={theme.colors.dark} />
+            <Text style={{
+              fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+              textDecorationLine: 'underline'
+            }}>Likes</Text>
+          </Pressable>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={liked?.likedByUsers}

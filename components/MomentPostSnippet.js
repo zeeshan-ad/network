@@ -52,7 +52,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
   useEffect(() => {
     CallIsliked();
     callGetComment();
-  }, [isFocused])
+  }, [isFocused, moment])
 
 
   return (

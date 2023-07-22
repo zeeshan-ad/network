@@ -197,7 +197,7 @@ const Signup = ({ route, navigation }) => {
                 </>}
 
               <Text style={styles.text}>
-                You are using {`${Email}\n`}to sign-up. &nbsp;
+                {`${Email}\n`}
                 <Link to={{ screen: 'Landing' }} style={styles.link}>
                   Use a different email
                 </Link>
@@ -205,7 +205,8 @@ const Signup = ({ route, navigation }) => {
               {Step === 1 &&
                 <View style={styles.section}>
                   <Checkbox
-                    color={isChecked ? theme.colors.secondary : undefined} style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+                    color={isChecked ? theme.colors.secondary : undefined}
+                    style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
                   <Text style={styles.text}>You agree to&nbsp;
                     <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
                     &nbsp;on signing up</Text>
@@ -237,6 +238,7 @@ const styles = StyleSheet.create({
   checkbox: {
     margin: 8,
     borderColor: theme.colors.dark,
+    borderWidth: 2
   },
   infoText: {
     color: theme.colors.grey, fontSize: fontSizes.smallMedium,

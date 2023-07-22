@@ -20,7 +20,7 @@
     "platforms": [
       "ios"
     ],
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/appicon.png",
     "splash": {
       "image": "./assets/images/yeet.png",
       "backgroundColor": "#f2ecde"
@@ -33,7 +33,7 @@
       "infoPlist": {
         "NSAllowsArbitraryLoads": true
       },
-      "buildNumber": "7",
+      "buildNumber": "11",
       "bundleIdentifier": "com.yeet.network"
     },
     "android": {

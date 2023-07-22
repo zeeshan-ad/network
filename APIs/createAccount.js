@@ -14,10 +14,8 @@ export const createAccount = async (UserDetails) => {
     password: UserDetails?.password,
     dob: convertDateFormat(UserDetails?.dob),
     username: UserDetails?.username.trim(),
-    created_at: new Date(),
   });
 
-  console.log(`${BASE_URL}${create_account}`);
 
   let config = {
     method: 'post',

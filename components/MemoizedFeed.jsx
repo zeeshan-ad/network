@@ -5,10 +5,12 @@ import PostTextSnippet from './PostTextSnippet';
 import MemoizedFeedHeader from './MemoizedFeedHeader';
 import { getFriendsMoods, getMood } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
-import { fontSizes, fontWeights } from '../util/constants';
+import { fontSizes, fontWeights, theme } from '../util/constants';
+import { Pressable } from 'react-native';
 
+const { height, width } = Dimensions.get('window');
 
-const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData }) => {
+const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData, editProfile }) => {
   const isFocused = useIsFocused();
 
   const [FriendsMood, setFriendsMood] = useState(null);
@@ -60,8 +62,14 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
             )
           } else if (item?.text === "No posts to show.") {
             return (
-              <View style={{ height: Dimensions.get('window').height / 2, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>No posts to show.</Text>
+              <View style={{ position: "absolute", flex: 1, height: height/2, justifyContent: "center", alignItems: "center", width: width }}>
+                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>
+                  There is nothing to show, add friends{'\n'}to your bubble to fill up this space.
+                </Text>
+                <Pressable onPress={() => navigation.navigate('Search', { editProfile })}
+                  style={{ marginTop: 20, backgroundColor: theme.colors.secondary, padding: 10, borderRadius: 10, borderWidth: 2 }}>
+                  <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Find friends</Text>
+                </Pressable>
               </View>
             )
           }

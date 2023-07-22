@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
-import { FontAwesome, Ionicons, MaterialCommunityIcons, Feather, Octicons } from '@expo/vector-icons';
-import { BASE_URL, convertDateFormat, convertDatetimeFormat, convertDatetimeFormat2, convertDatetimeFormat3, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { FontAwesome, AntDesign, Ionicons, MaterialCommunityIcons, Feather, Octicons } from '@expo/vector-icons';
+import { BASE_URL, convertDatetimeFormat, convertDatetimeFormat2, convertDatetimeFormat3, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { AddRepliedComment, addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
@@ -344,10 +344,16 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
         visible={ShowLikedUsers}
         onBackdropPress={() => setShowLikedUsers(false)}>
         <View style={[styles.card2, { backgroundColor: theme.colors.light }]}>
-          <Text style={{
-            fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
-            paddingTop: 20, textDecorationLine: 'underline'
-          }}>Likes</Text>
+          <Pressable onPress={() => setShowLikedUsers(false)} style={{
+            flexDirection: 'row', alignItems: 'center', gap: 5,
+            paddingTop: 20, paddingBottom: 5,
+          }}>
+            <AntDesign name="circledowno" size={15} color={theme.colors.dark} />
+            <Text style={{
+              fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark,
+              textDecorationLine: 'underline'
+            }}>Likes</Text>
+          </Pressable>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={liked?.likedByUsers}

@@ -9,6 +9,7 @@ import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed, 
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import MemoizedFeed from '../components/MemoizedFeed';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 const { height, width } = Dimensions.get('window');
@@ -73,7 +74,7 @@ const FeedComponent = ({ navigation }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
-          unseenReq={unseenReq} Notifications={Notifications}/>
+          unseenReq={unseenReq} Notifications={Notifications} />
         <View style={{ minHeight: height - 80, justifyContent: "center" }}>
           <MemoizedFeed
             navigation={navigation}
@@ -81,16 +82,11 @@ const FeedComponent = ({ navigation }) => {
             callGetFeed={callGetFeed}
             callGetPendingRequests={callGetPendingRequests}
             callGetProfileData={callGetProfileData}
+            editProfile={editProfile}
           />
           {!Feed &&
-            <View style={{ position: "absolute", flex: 1, height: '50%', justifyContent: "center", alignItems: "center", width: width }}>
-              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>
-                There is nothing to show, add friends{'\n'}to your bubble to fill up this space.
-              </Text>
-              <Pressable onPress={() => navigation.navigate('Search', { editProfile })}
-                style={{ marginTop: 20, backgroundColor: theme.colors.secondary, padding: 10, borderRadius: 10, borderWidth: 2 }}>
-                <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Find friends</Text>
-              </Pressable>
+            <View style={{ height: Dimensions.get('window').height / 2, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>No posts to show.</Text>
             </View>
           }
         </View>
