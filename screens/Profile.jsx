@@ -15,6 +15,9 @@ import { TextInput } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import BlockedUsers from '../components/BlockedUsers';
 import { BlurView } from 'expo-blur';
+import { getCalendars } from 'expo-localization';
+import moment from 'moment-timezone';
+
 
 
 
@@ -23,7 +26,7 @@ const Profile = ({ navigation, route }) => {
   const { userId } = route.params;
   const [FetchedMood, setFetchedMood] = useState('');
   const isFocused = useIsFocused();
-
+  const { timeZone } = getCalendars()[0];
   let userInfo = useSelector(state => state.userInfo);
   let editProfile = useSelector(state => state.editProfile);
 
@@ -140,17 +143,17 @@ const Profile = ({ navigation, route }) => {
 
   const [AllMemos, setAllMemos] = useState();
   const [AllMoments, setAllMoments] = useState();
+  const [momentsGroup, setmomentsGroup] = useState();
   callGetPosts = async (userId) => {
     setAllMemos(null);
     setAllMoments(null);
-    const response = await getProfilePosts(userId);
+    const response = await getProfilePosts(userId, timeZone);
     if (response?.status === 200) {
       setAllMemos(response?.data?.data?.memos);
       setAllMoments(response?.data?.data?.moments);
+      setmomentsGroup(response?.data?.data?.momentsGroup);
     }
   }
-
-
 
   useEffect(() => {
     if (!userId) {
@@ -258,6 +261,7 @@ const Profile = ({ navigation, route }) => {
       </SafeAreaView>
     )
   }
+
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
@@ -419,8 +423,8 @@ const Profile = ({ navigation, route }) => {
                   style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={<View style={{ height: 300 }}></View>}
-                  renderItem={({ item }) => (
-                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...userInfo } })} style={{
+                  renderItem={({ item, index }) => (
+                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...userInfo }, MomentbyId: momentsGroup[index] })} style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
                       marginBottom: 5, position: "relative"
                     }}>
@@ -438,7 +442,7 @@ const Profile = ({ navigation, route }) => {
                             fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
                             shadowOffset: { width: 0, height: 0 }, elevation: 1
                           }}>
-                            {convertTimestampMoment(item.created_at)}
+                            {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
                           </Text>
                         </BlurView>
                       </View>
@@ -480,7 +484,7 @@ const Profile = ({ navigation, route }) => {
                         marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
                         textAlign: 'left', color: theme.colors.backdrop
                       }}>
-                        posted on {convertTimestamp2(item.created_at)}
+                        posted on {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY, h:mm a')}
                       </Text>
                     </Pressable>
                   )}
@@ -524,7 +528,7 @@ const Profile = ({ navigation, route }) => {
                             fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
                             shadowOffset: { width: 0, height: 0 }, elevation: 1
                           }}>
-                            {convertTimestampMoment(item.created_at)}
+                            {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
                           </Text>
                         </BlurView>
                         <View style={{
@@ -564,7 +568,7 @@ const Profile = ({ navigation, route }) => {
                         marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
                         textAlign: 'left', color: theme.colors.backdrop
                       }}>
-                        posted on {convertTimestamp2(item.created_at)}
+                        posted on {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY, h:mm a')}
                       </Text>
                     </Pressable>
                   )}

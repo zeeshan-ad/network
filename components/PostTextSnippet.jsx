@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
+import moment from 'moment-timezone';
 
 const PostTextSnippet = ({ navigation, memo }) => {
   const userInfo = useSelector(state => state.userInfo);
@@ -68,7 +69,13 @@ const PostTextSnippet = ({ navigation, memo }) => {
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{memo?.name}</Text>
         </Pressable>
-        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertTimeStamp(memo?.created_at)}</Text>
+        <Text numberOfLines={2} style={{
+          color: theme.colors.dark, fontWeight: fontWeights.light,
+          fontSize: fontSizes.smallMedium, width: 100, textAlign: 'right'
+        }}>
+          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
+          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
+        </Text>
       </View>
       <View>
         <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>

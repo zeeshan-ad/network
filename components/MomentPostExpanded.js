@@ -301,7 +301,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10,
           }}>
-            {date ? convertDatetimeFormat2(item?.date) : convertTimeStamp(item?.created_at)}</Text>
+            {convertTimeStamp(item?.created_at)}</Text>
         </View>
 
         {item.caption && !CommentsVisible &&

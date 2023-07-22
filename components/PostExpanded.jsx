@@ -9,31 +9,29 @@ import { getMomentIdDate } from '../APIs';
 import MomentPostExpanded from './MomentPostExpanded';
 
 
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const PostExpanded = ({ navigation, route }) => {
   const userInfo = route?.params?.user ? route.params.user : useSelector(state => state.userInfo);
   const moment = route?.params?.moment;
-
-  console.log('moment', moment);
+  const MomentbyId = route?.params?.MomentbyId;
 
   const { date, user, jumpToIndex } = route.params;
+  // const [MomentbyId, setMomentbyId] = useState();
 
-  const [MomentbyId, setMomentbyId] = useState();
-
-  const callGetMomentsIdDate = async () => {
-    const response = await getMomentIdDate(date, user?.id);
-    if (response?.status === 200) {
-      setMomentbyId(response?.data?.data);
-    }
-  }
+  // const callGetMomentsIdDate = async () => {
+  //   const response = await getMomentIdDate(date, user?.id, timeZone);
+  //   if (response?.status === 200) {
+  //     setMomentbyId(response?.data?.data);
+  //   }
+  // }
 
 
-  useEffect(() => {
-    callGetMomentsIdDate();
-  }, [date, user])
-
+  // useEffect(() => {
+  //   callGetMomentsIdDate();
+  // }, [date, user])
 
 
   const [CarouselMoment, setCarouselMoment] = useState();
@@ -44,7 +42,6 @@ const PostExpanded = ({ navigation, route }) => {
       setCarouselMoment(MomentbyId);
     }
   }, [moment, MomentbyId])
-
 
 
   return (
@@ -64,13 +61,13 @@ const PostExpanded = ({ navigation, route }) => {
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Profile', { userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-              <Image source={CarouselMoment?.[0]?.profile_pic ? BASE_URL + CarouselMoment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
+              <Image source={user?.image ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <Text style={{
                 fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
                 shadowRadius: 1, elevation: 10,
               }}>
-                {CarouselMoment?.[0]?.name}
+                {user?.name}
               </Text>
             </Pressable>
           </View>
@@ -84,7 +81,6 @@ const PostExpanded = ({ navigation, route }) => {
             width={width}
             loop={false}
             data={CarouselMoment}
-            onSnapToItem={(index) => console.log('current index:', index)}
             modeConfig={{
               stackInterval: 18,
             }}

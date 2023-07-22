@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
 import { BottomSheet } from 'react-native-btr';
+import moment from 'moment-timezone';
 
 const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
   ShowLikedUsers }) => {
@@ -37,7 +38,13 @@ const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, ca
             </Text>
           </Pressable>
         </View>
-        <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.light, fontSize: fontSizes.smallMedium }}>{convertTimeStamp(memo?.created_at)}</Text>
+        <Text numberOfLines={2} style={{
+          color: theme.colors.dark, fontWeight: fontWeights.light,
+          fontSize: fontSizes.smallMedium, width: 100, textAlign: 'right'
+        }}>
+          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
+          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
+        </Text>
       </View>
       <View style={{ paddingVertical: 20 }}>
         <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>

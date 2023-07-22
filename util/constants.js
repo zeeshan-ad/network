@@ -90,19 +90,21 @@ export const APP_NAME = 'Yeet!';
 
 // a function to convert 2023-07-16T00:00:00.000Z time format to  16/07/2023 hh:mm a format
 export function convertDatetimeFormat(date) {
-  const formattedDate = moment.utc(date).local().format('DD/MM/YYYY, hh:mm a');
+  const formattedDate = moment.utc(date).local().format('DD/MM/YYYY, h:mm a');
   return formattedDate;
 }
+
+export function convertTimeStamp(Timestamp) {
+  const localTime = moment(Timestamp, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY, h:mm a');
+  return localTime;
+}
+
 
 export function convertDatetimeFormat2(date) {
   const formattedDate = moment.utc(date).local().format('MMM Do YY, h:mm a');
   return formattedDate;
 }
 
-export function convertTimeStamp(Timestamp) {
-  const localTime = moment.utc(Timestamp, 'MM/DD/YYYY, hh:mm a').local().format('MMM Do YY, h:mm a');
-  return localTime;
-}
 
 // convert to local time format
 export function convertTimestamp2(timestamp) {

@@ -10,6 +10,7 @@ import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import MemoizedFeed from '../components/MemoizedFeed';
 import { ActivityIndicator } from 'react-native-paper';
+import { getCalendars } from 'expo-localization';
 
 
 const { height, width } = Dimensions.get('window');
@@ -20,6 +21,7 @@ const FeedComponent = ({ navigation }) => {
   const editProfile = useSelector(state => state.editProfile);
 
   const [ProfileInfo, setProfileInfo] = useState();
+  const { timeZone } = getCalendars()[0];
 
 
   async function callGetProfileData() {
@@ -58,7 +60,7 @@ const FeedComponent = ({ navigation }) => {
   const [Feed, setFeed] = useState(null);
 
   async function callGetFeed() {
-    const response = await getFeed();
+    const response = await getFeed(timeZone);
     if (response?.status === 200) {
       setFeed(response?.data?.data);
     }
@@ -85,7 +87,7 @@ const FeedComponent = ({ navigation }) => {
             editProfile={editProfile}
           />
           {!Feed &&
-            <View style={{ height: Dimensions.get('window').height / 2, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ height: '50%', alignItems: 'center' }}>
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal }}>No posts to show.</Text>
             </View>
           }

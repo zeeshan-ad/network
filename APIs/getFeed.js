@@ -1,12 +1,12 @@
 import axiosInstanceAuth from "../util/api";
 import APIconfig from "../util/api.config.json";
 
-export const getFeed = async () => {
+export const getFeed = async (timezone) => {
   const { get_feed } = APIconfig;
   
   const config = {
     method: "get",
-    url: `${get_feed}`,
+    url: `${get_feed}?timezone=${timezone}`,
     headers: {
       "Content-Type": "application/json",
     },
