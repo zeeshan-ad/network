@@ -19,6 +19,9 @@ const PostExpanded = ({ navigation, route }) => {
   const MomentbyId = route?.params?.MomentbyId;
 
   const { date, user, jumpToIndex } = route.params;
+
+  console.log(user);
+
   // const [MomentbyId, setMomentbyId] = useState();
 
   // const callGetMomentsIdDate = async () => {
@@ -42,7 +45,6 @@ const PostExpanded = ({ navigation, route }) => {
       setCarouselMoment(MomentbyId);
     }
   }, [moment, MomentbyId])
-
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{

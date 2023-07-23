@@ -245,6 +245,7 @@ const Profile = ({ navigation, route }) => {
   const [RemoveFriend, setRemoveFriend] = useState(false);
 
 
+
   if (UserBlocked) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
@@ -509,8 +510,12 @@ const Profile = ({ navigation, route }) => {
                   data={AllMoments}
                   style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => (
-                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...ProfileInfo } })} style={{
+                  renderItem={({ item, index }) => (
+                    console.log('hey', momentsGroup),
+                    <Pressable onPress={() => navigation.navigate("PostExpanded", {
+                      date: item?.created_at,
+                      user: { ...ProfileInfo, image: BASE_URL + ProfileInfo?.profile_pic }, MomentbyId: momentsGroup[index]
+                    })} style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
                       marginBottom: 5, position: "relative"
                     }}>

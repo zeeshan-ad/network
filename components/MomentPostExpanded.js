@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { BottomSheet } from 'react-native-btr';
 import { ActivityIndicator } from 'react-native-paper';
 import { BlurView } from 'expo-blur';
+import moment from 'moment-timezone';
 
 
 const { width, height } = Dimensions.get("window");
@@ -299,9 +300,11 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
         }}>
           <Text style={{
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10,
+            shadowRadius: 1, elevation: 10, textAlign: "right"
           }}>
-            {convertTimeStamp(item?.created_at)}</Text>
+          {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
+          {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
+            </Text>
         </View>
 
         {item.caption && !CommentsVisible &&

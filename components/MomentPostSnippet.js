@@ -146,7 +146,10 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           </Text>
         </BlurView>}
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('PostExpanded', { moment, id: item.id, jumpToIndex: index })}>
+        onPress={() => navigation.navigate('PostExpanded', {
+          moment, id: item.id, jumpToIndex: index,
+          user: { name: moment[0]?.name, image: BASE_URL + moment[0]?.profile_pic }
+        })}>
         <Image style={{
           height: '100%',
           width: '100%',
