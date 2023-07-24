@@ -10,7 +10,7 @@ import { Pressable } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
-const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData, editProfile }) => {
+const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, callGetProfileData, editProfile, getNotifications }) => {
   const isFocused = useIsFocused();
 
   const [FriendsMood, setFriendsMood] = useState(null);
@@ -39,6 +39,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
     callGetFeed();
     callGetPendingRequests();
     callGetProfileData();
+    getNotifications();
   }
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
         showsVerticalScrollIndicator={false}
         data={Feed?.length === 0 ? noFeed : Feed}
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
-        ListFooterComponent={<View style={{ height: 150 }}></View>}
+        ListFooterComponent={<View style={{ height: 200 }}></View>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item, index }) => {
           if (Array.isArray(item)) {

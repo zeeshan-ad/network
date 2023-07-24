@@ -17,6 +17,8 @@ import BlockedUsers from '../components/BlockedUsers';
 import { BlurView } from 'expo-blur';
 import { getCalendars } from 'expo-localization';
 import moment from 'moment-timezone';
+import { RefreshControl } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 
@@ -36,7 +38,6 @@ const Profile = ({ navigation, route }) => {
       editProfile = null;
     }
   }, [userInfo, editProfile])
-
 
   const dispatch = useDispatch();
 
@@ -144,9 +145,7 @@ const Profile = ({ navigation, route }) => {
   const [AllMemos, setAllMemos] = useState();
   const [AllMoments, setAllMoments] = useState();
   const [momentsGroup, setmomentsGroup] = useState();
-  callGetPosts = async (userId) => {
-    setAllMemos(null);
-    setAllMoments(null);
+  const callGetPosts = async (userId) => {
     const response = await getProfilePosts(userId, timeZone);
     if (response?.status === 200) {
       setAllMemos(response?.data?.data?.memos);
@@ -155,7 +154,15 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+
+  const onRefresh = () => {
+    callGetPosts(userId);
+  }
+
+
   useEffect(() => {
+    setAllMoments(null);
+    setAllMemos(null);
     if (!userId) {
       callGetMood();
       callGetProfileData();
@@ -201,6 +208,7 @@ const Profile = ({ navigation, route }) => {
 
   const [BlockedListData, setBlockedListData] = useState(null);
   const [BlockedListData2, setBlockedListData2] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
 
   const callGetBlockedList = async (userId) => {
@@ -244,7 +252,21 @@ const Profile = ({ navigation, route }) => {
   const [ModalRequest, setModalRequest] = useState(false);
   const [RemoveFriend, setRemoveFriend] = useState(false);
 
-
+  if (!ProfileInfo || !userInfo) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', padding:10 }}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
+          </Pressable>
+          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark, fontStyle: 'italic' }}>
+            Go Back
+          </Text>
+        </View>
+        <ActivityIndicator size="large" color={theme.colors.secondary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
+      </SafeAreaView>
+    )
+  }
 
   if (UserBlocked) {
     return (
@@ -281,7 +303,7 @@ const Profile = ({ navigation, route }) => {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20, marginRight: 10 }}>
           {(ProfileInfo?.mood && userId) || (!userId) ? <View style={{
             borderWidth: 1, borderColor: theme.colors.dark, width: 95, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.secondary, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100,
+            backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 100,
             shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10
           }} >
@@ -424,6 +446,7 @@ const Profile = ({ navigation, route }) => {
                   style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={<View style={{ height: 300 }}></View>}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                   renderItem={({ item, index }) => (
                     <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...userInfo }, MomentbyId: momentsGroup[index] })} style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
@@ -470,6 +493,7 @@ const Profile = ({ navigation, route }) => {
                   style={{ height: height, paddingTop: 5 }}
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={<View style={{ height: 300 }}></View>}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                   renderItem={({ item }) => (
                     <Pressable onPress={() => navigation.navigate('PostTextExpanded', { memo: item })} style={{
                       marginHorizontal: 10,
@@ -510,8 +534,8 @@ const Profile = ({ navigation, route }) => {
                   data={AllMoments}
                   style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
                   showsVerticalScrollIndicator={false}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                   renderItem={({ item, index }) => (
-                    console.log('hey', momentsGroup),
                     <Pressable onPress={() => navigation.navigate("PostExpanded", {
                       date: item?.created_at,
                       user: { ...ProfileInfo, image: BASE_URL + ProfileInfo?.profile_pic }, MomentbyId: momentsGroup[index]
@@ -551,13 +575,14 @@ const Profile = ({ navigation, route }) => {
                 <Text style={{
                   fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
                   textAlign: 'center', marginTop: 50
-                }}>{ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '.indexOf(' '))}'s moment will show{'\n'}here once they post.</Text> :
+                }}>{ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '.indexOf(' '))}'s moments will show{'\n'}here once they post.</Text> :
               AllMemos?.length > 0 ?
                 <FlatList
                   key={'#'}
                   data={AllMemos}
                   style={{ height: height, paddingTop: 5 }}
                   showsVerticalScrollIndicator={false}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                   renderItem={({ item }) => (
                     <Pressable onPress={() => navigation.navigate('PostTextExpanded', { memo: item })} style={{
                       marginHorizontal: 10,

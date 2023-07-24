@@ -9,6 +9,7 @@ import { FlatList } from 'react-native';
 import { getMemoORMoment, updateIsView } from '../APIs';
 import moment from 'moment-timezone';
 import { getCalendars } from 'expo-localization';
+import { RefreshControl } from 'react-native';
 
 
 
@@ -16,7 +17,8 @@ import { getCalendars } from 'expo-localization';
 SplashScreen.preventAutoHideAsync();
 
 const { width, height } = Dimensions.get("window");
-const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notifications }) => {
+const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notifications, callGetPendingRequests, getNotifications }) => {
+
   const [fontsLoaded] = useFonts({
     'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
   });
@@ -29,6 +31,8 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
 
 
   const [showNotif, setshowNotif] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
 
   const { timeZone } = getCalendars()[0];
 
@@ -54,6 +58,10 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
     await updateIsView(post_id, post_type, interaction_type);
   }
 
+  const onRefresh = () => {
+    callGetPendingRequests();
+    getNotifications();
+  }
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -149,6 +157,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                 data={Notifications}
                 ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? 250 : 50 }} />}
                 keyExtractor={(item, index) => index.toString()}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 renderItem={({ item, index }) => {
                   return (
                     <Pressable key={index} onPress={() => {

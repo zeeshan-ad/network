@@ -7,11 +7,29 @@ import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileData } from '../store/editProfileSlice';
 import { compliments } from '../util/constants';
+import { PinchGestureHandler } from 'react-native-gesture-handler';
 
 const width = Dimensions.get("window").width;
 
 export default function AppCamera({ navigation }) {
   const editProfile = useSelector(state => state.editProfile);
+  const [zoom, setZoom] = useState(0);
+
+  const onPinchGestureEvent = (nativeEvent) => {
+    var scale = nativeEvent.nativeEvent.scale
+    var velocity = nativeEvent.nativeEvent.velocity / 20
+   
+     let newZoom =
+     velocity > 0
+     ? zoom + scale * velocity * (Platform.OS === "ios" ? 0.01 : 25)
+     : zoom -
+       scale * Math.abs(velocity) * (Platform.OS === "ios" ? 0.02 : 50);
+   
+    if (newZoom < 0) newZoom = 0;
+    else if (newZoom > 0.5) newZoom = 0.5;
+   
+    setZoom(newZoom)
+   };
 
   const dispatch = useDispatch();
 
@@ -134,8 +152,10 @@ export default function AppCamera({ navigation }) {
         <CameraPreview photo={capturedImage} retakePicture={retakePicture} />
       ) : (
         <SafeAreaView style={styles.container}>
-          <Camera style={styles.camera} type={type} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
-          </Camera>
+          <PinchGestureHandler onGestureEvent={onPinchGestureEvent}>
+            <Camera style={styles.camera} zoom={zoom} type={type} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
+            </Camera>
+          </PinchGestureHandler>
           <Pressable style={[styles.CameraButton]} onPress={takePicture}>
             <Ionicons name="ios-radio-button-off-sharp" size={100} color={theme.colors.dark} />
           </Pressable>

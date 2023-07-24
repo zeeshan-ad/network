@@ -109,10 +109,11 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
         flex: 1,
         backgroundColor: "transparent",
         zIndex: 9999,
-        position: 'absolute', right: 10, bottom: 10,
+        position: 'absolute', right: 10, bottom: 20,
       }}>
         <Text style={{
-          color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, 
+          shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 1,
           shadowRadius: 1, elevation: 10,
         }}>
           {`${index + 1}/${moment?.length}`}</Text>
@@ -126,7 +127,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
         position: 'absolute', left: 10, top: 10,
       }}>
         <Text style={{
-          color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+          color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 1,
           shadowRadius: 1, elevation: 10,
         }}>
           {convertTimeStamp(item?.created_at)}</Text>

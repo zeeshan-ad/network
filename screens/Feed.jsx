@@ -76,7 +76,8 @@ const FeedComponent = ({ navigation }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
-          unseenReq={unseenReq} Notifications={Notifications} />
+          unseenReq={unseenReq} Notifications={Notifications} callGetPendingRequests={callGetPendingRequests}
+          getNotifications={getNotifications} />
         <View style={{ minHeight: height - 80, justifyContent: "center" }}>
           <MemoizedFeed
             navigation={navigation}
@@ -85,6 +86,7 @@ const FeedComponent = ({ navigation }) => {
             callGetPendingRequests={callGetPendingRequests}
             callGetProfileData={callGetProfileData}
             editProfile={editProfile}
+            getNotifications={getNotifications}
           />
           {!Feed &&
             <View style={{ height: '50%', alignItems: 'center' }}>

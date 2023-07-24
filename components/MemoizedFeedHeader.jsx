@@ -18,7 +18,7 @@ const MemoizedFeedHeader = ({ navigation, FetchedMood, FriendsMood }) => {
               (<Image source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}
 
-            <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.secondary, }]}>
+            <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light, }]}>
               {FetchedMood?.mood ?
                 <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
                 <Feather name="plus" size={20} color={theme.colors.dark} />}
