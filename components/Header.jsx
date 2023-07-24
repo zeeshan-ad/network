@@ -8,6 +8,7 @@ import { Image } from 'expo-image';
 import { FlatList } from 'react-native';
 import { getMemoORMoment, updateIsView } from '../APIs';
 import moment from 'moment-timezone';
+import { getCalendars } from 'expo-localization';
 
 
 
@@ -29,15 +30,22 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
 
   const [showNotif, setshowNotif] = useState(false);
 
+  const { timeZone } = getCalendars()[0];
+
   const callGetMemoOrMoment = async (post_id, post_type) => {
-    const response = await getMemoORMoment(post_id, post_type);
+    const response = await getMemoORMoment(post_id, post_type, timeZone);
     if (response?.status === 200) {
       if (response?.data?.data?.post_type === 'moment') {
         setshowNotif(false);
-        navigation.navigate('PostExpanded', { moment: [{ ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).format('MM/DD/YYYY, hh:mm:ss a') }] });
+        navigation.navigate('PostExpanded', {
+          moment: [{ ...response?.data?.data }], user: {
+            name: response?.data?.data?.name,
+            image: BASE_URL + response?.data?.data?.profile_pic
+          }
+        });
       } else {
         setshowNotif(false);
-        navigation.push('PostTextExpanded', { memo: { ...response?.data?.data, created_at: moment.utc(response?.data?.data?.created_at).format('MM/DD/YYYY, hh:mm:ss a') } });
+        navigation.push('PostTextExpanded', { memo: { ...response?.data?.data } });
       }
     }
   }

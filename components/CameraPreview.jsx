@@ -3,6 +3,7 @@ import { ActivityIndicator, KeyboardAvoidingView, Dimensions, ImageBackground, K
 import { theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { postMoment } from '../APIs';
+import moment from 'moment-timezone';
 
 
 const { width } = Dimensions.get('window');
@@ -16,7 +17,7 @@ const CameraPreview = ({ navigation, route }) => {
 
   const callPostMoment = async () => {
     setPosting(true);
-    const response = await postMoment(Image?.uri, Caption);
+    const response = await postMoment(Image?.uri, Caption, moment().format('DDMMYYYY'));
     if (response?.status === 200) {
       setPosting(false);
       navigation.navigate('Feed');

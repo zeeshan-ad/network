@@ -25,7 +25,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
   const isFocused = useIsFocused();
   const [ReplyingTo, setReplyingTo] = useState(null)
 
-
+  console.log(CarouselMoment);
 
   const CallIsliked = async () => {
     const response = await isLiked(item.id, 'moment');
@@ -302,9 +302,9 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10, textAlign: "right"
           }}>
-          {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
-          {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
-            </Text>
+            {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
+            {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
+          </Text>
         </View>
 
         {item.caption && !CommentsVisible &&

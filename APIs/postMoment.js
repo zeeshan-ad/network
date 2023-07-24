@@ -1,7 +1,7 @@
 import axiosInstanceAuth from "../util/api";
 import APIconfig from "../util/api.config.json";
 
-export const postMoment = async (momentPath, Caption) => {
+export const postMoment = async (momentPath, Caption, GroupBy) => {
   const { post_moments } = APIconfig;
 
   const formData = new FormData();
@@ -16,7 +16,7 @@ export const postMoment = async (momentPath, Caption) => {
 
   const config = {
     method: "post",
-    url: `${post_moments}?caption=${Caption}`,
+    url: `${post_moments}?caption=${Caption}&group_by=${GroupBy}`,
     headers: {
       "Content-Type": "multipart/form-data",
     },

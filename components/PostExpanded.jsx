@@ -20,7 +20,6 @@ const PostExpanded = ({ navigation, route }) => {
 
   const { date, user, jumpToIndex } = route.params;
 
-  console.log(user);
 
   // const [MomentbyId, setMomentbyId] = useState();
 
@@ -46,6 +45,7 @@ const PostExpanded = ({ navigation, route }) => {
     }
   }, [moment, MomentbyId])
 
+
   return (
     <KeyboardAvoidingView behavior='padding' style={{
       backgroundColor: theme.colors.light,
@@ -63,7 +63,7 @@ const PostExpanded = ({ navigation, route }) => {
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Profile', { userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-              <Image source={user?.image ? user?.image : require('../assets/images/placeholder_profile.png')}
+              <Image source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <Text style={{
                 fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,

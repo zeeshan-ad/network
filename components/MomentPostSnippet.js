@@ -90,15 +90,20 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
         zIndex: 9999,
         position: 'absolute', right: 10, top: 90,
       }}>
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate('PostExpanded', {
+            moment, id: item.id, jumpToIndex: index,
+            user: { name: moment[0]?.name, image: BASE_URL + moment[0]?.profile_pic }
+          })}>
+          <View style={{
+            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
+          }}>
+            <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
 
-        <View style={{
-          shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
-          shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
-        }}>
-          <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
-
-          <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}</Text>
-        </View>
+            <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       <View style={{
         flex: 1,
