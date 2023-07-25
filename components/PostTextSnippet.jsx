@@ -83,9 +83,11 @@ const PostTextSnippet = ({ navigation, memo }) => {
         </Pressable>
       </View>
       <View>
-        <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>
-          {memo?.memo}
-        </Text>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo })}>
+          <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>
+            {memo?.memo}
+          </Text>
+        </TouchableWithoutFeedback>
       </View>
       <View style={{ flexDirection: 'row', borderTopWidth: 2, paddingTop: 10 }}>
         <View style={{
