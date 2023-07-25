@@ -41,9 +41,13 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.187:8080'; //Home`
+
+export const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+// export const BASE_URL = 'http://192.168.0.187:8080'; //Home`
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
-// export const BASE_URL = 'https://yeet-app.azurewebsites.net'
+export const BASE_URL = 'https://yeet-app.azurewebsites.net'
 
 // export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [

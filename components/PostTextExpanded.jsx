@@ -1,7 +1,7 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { AntDesign, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { AddRepliedComment, addComment, isLiked, postLike, removeLike } from '../APIs';
@@ -133,7 +133,7 @@ const PostTextExpanded = ({ navigation, route }) => {
                 userId: item?.user_id !== userInfo?.id ? item?.user_id : null,
                 themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
               })}>
-                <Image source={item.profile_pic ? BASE_URL + item.profile_pic : require('../assets/images/placeholder_profile.png')}
+                <Image placeholder={blurhash} source={item.profile_pic ? BASE_URL + item.profile_pic : require('../assets/images/placeholder_profile.png')}
                   style={{
                     height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
                     borderColor: theme.colors.dark, overflow: 'hidden'
@@ -182,7 +182,7 @@ const PostTextExpanded = ({ navigation, route }) => {
         flexDirection: 'row', alignItems: 'center',
         paddingTop: 10, paddingLeft: 20, paddingBottom: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost
       }}>
-        <Image source={editProfile?.image ? editProfile?.image : require('../assets/images/placeholder_profile.png')}
+        <Image placeholder={blurhash} source={editProfile?.image ? editProfile?.image : require('../assets/images/placeholder_profile.png')}
           style={{
             height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
             borderColor: theme.colors.dark, overflow: 'hidden'
@@ -233,7 +233,7 @@ const PostTextExpanded = ({ navigation, route }) => {
                   flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
                   borderBottomWidth: 1, borderBottomColor: theme.colors.divider
                 }}>
-                  <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                  <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
                     style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
                   <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
                 </Pressable>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from 'react';
 import { View, Text, Dimensions, Pressable, StyleSheet, KeyboardAvoidingView, } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
 import { Ionicons } from '@expo/vector-icons';
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { getMomentIdDate } from '../APIs';
@@ -71,7 +71,7 @@ const PostExpanded = ({ navigation, route }) => {
                 themeColor: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.theme : editProfile?.theme
               })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
                 
-              <Image source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
+              <Image placeholder={blurhash} source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <View>
                 <Text style={{

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { View, Text, ScrollView, TouchableWithoutFeedback, StyleSheet, } from 'react-native';
-import { theme, fontSizes, fontWeights } from '../util/constants';
+import { theme, fontSizes, fontWeights, blurhash } from '../util/constants';
 import { Feather } from '@expo/vector-icons';
 import Mood from '../components/Mood';
 import { Image } from 'expo-image';
@@ -13,7 +13,7 @@ const MemoizedFeedHeader = ({ navigation, FetchedMood, FriendsMood }) => {
       <View style={styles.moodsContainer}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
           <View style={styles.profileMood}>
-            {editProfile?.image ? (<Image source={editProfile?.image}
+            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
               (<Image source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}

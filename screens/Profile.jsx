@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
-import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
+import { fontSizes, fontWeights, theme, BASE_URL, blurhash } from '../util/constants';
 import { Pressable } from 'react-native';
 import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons, AntDesign, Entypo } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
@@ -405,13 +405,13 @@ const Profile = ({ navigation, route }) => {
           </View>
 
           <View>
-            {!userId ? editProfile?.image ? (<Image source={editProfile?.image}
+            {!userId ? editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
-              (<Image source={require('../assets/images/placeholder_profile.png')}
+              (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)
-              : ProfileInfo?.profile_pic ? (<Image source={BASE_URL + ProfileInfo?.profile_pic}
+              : ProfileInfo?.profile_pic ? (<Image placeholder={blurhash} source={BASE_URL + ProfileInfo?.profile_pic}
                 style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
-                (<Image source={require('../assets/images/placeholder_profile.png')}
+                (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                   style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)}
           </View>
 
@@ -453,7 +453,7 @@ const Profile = ({ navigation, route }) => {
                       marginBottom: 5, position: "relative"
                     }}>
                       <View style={{ width: '100%', height: 200, marginTop: 5 }}>
-                        <Image source={{ uri: BASE_URL + item?.moment }} style={{
+                        <Image placeholder={blurhash} source={{ uri: BASE_URL + item?.moment }} style={{
                           width: '100%', height: '100%',
                           borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
                         }} />
@@ -544,7 +544,7 @@ const Profile = ({ navigation, route }) => {
                       marginBottom: 5, position: "relative"
                     }}>
                       <View style={{ width: '100%', height: 200, marginTop: 5 }}>
-                        <Image source={{ uri: BASE_URL + item?.moment }} style={{
+                        <Image placeholder={blurhash} source={{ uri: BASE_URL + item?.moment }} style={{
                           width: '100%', height: '100%',
                           borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
                         }} />
@@ -917,7 +917,7 @@ const Profile = ({ navigation, route }) => {
                   flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
                   borderBottomWidth: 1, borderBottomColor: theme.colors.divider
                 }}>
-                  <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                  <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
                     style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
                   <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
                 </Pressable>

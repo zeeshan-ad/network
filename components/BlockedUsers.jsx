@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import { BottomSheet } from "react-native-btr";
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { getBlockedList, unblockUser } from '../APIs';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -101,7 +101,7 @@ const BlockedUsers = (props) => {
                     borderBottomWidth: 1, borderBottomColor: theme.colors.divider
                   }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
-                      <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                      <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
                         style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
                       <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>{item.name}</Text>
                     </View>

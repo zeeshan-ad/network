@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, TextInput, StyleSheet, KeyboardAvoidingView, Pressable, Dimensions, FlatList, Text, ActivityIndicator } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { theme, fontSizes, BASE_URL, fontWeights } from '../util/constants';
+import { theme, fontSizes, BASE_URL, fontWeights, blurhash } from '../util/constants';
 import { search } from '../APIs';
 import _, { set } from 'lodash';
 import { Image } from 'expo-image';
@@ -94,9 +94,9 @@ const Search = ({ navigation, route }) => {
                   return (
                     <Pressable onPress={() => navigation.navigate('Profile', { userId: item.id, themeColor: item.theme })}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginVertical: 10 }}>
-                        {item.profile_pic ? <Image source={BASE_URL + item.profile_pic}
+                        {item.profile_pic ? <Image placeholder={blurhash} source={BASE_URL + item.profile_pic}
                           style={{ height: 50, width: 50, borderRadius: 100, borderWidth: 2 }} />
-                          : <Image source={require('../assets/images/placeholder_profile.png')}
+                          : <Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                             style={{ height: 50, width: 50, borderRadius: 100, borderWidth: 2 }} />}
                         <View style={{ marginLeft: 10 }}>
                           <Text style={{ fontSize: fontSizes.medium, fontWeight: 'bold', color: theme.colors.dark }}>{item.name}</Text>

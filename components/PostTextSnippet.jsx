@@ -1,7 +1,7 @@
 import React, { useState, memo, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
@@ -69,7 +69,7 @@ const PostTextSnippet = ({ navigation, memo }) => {
             userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null,
             themeColor: memo?.user_id !== userInfo?.id ? memo?.theme : editProfile?.theme
           })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
+          <Image placeholder={blurhash} source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <View>
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{memo?.name}</Text>

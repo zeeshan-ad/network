@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Modal, SafeAreaView, Dimensions, ScrollView } from 'react-native';
 import { Feather, Octicons, Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
-import { APP_NAME, BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { APP_NAME, BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { FlatList } from 'react-native';
@@ -93,7 +93,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
               </View> : null}
           </Pressable>
           <Pressable onPress={() => { navigation.navigate('Profile', { userId: null, themeColor: editProfile.theme }); }}>
-            {editProfile?.image ? (<Image source={editProfile?.image}
+            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image} placeholder={blurhash}
               style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
               (<Image source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
@@ -133,7 +133,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                         borderBottomWidth: 1, borderColor: theme.colors.divider, height: 65, flexDirection: 'row', width: width,
                         alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10, gap: 10, height: 70
                       }}>
-                        <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
+                        <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
                           style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
                         <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light }}>
                           <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>

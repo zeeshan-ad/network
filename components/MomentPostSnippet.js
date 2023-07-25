@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableWithoutFeedback, Pressable } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import { getComments, isLiked, postLike, removeLike } from '../APIs';
@@ -137,6 +137,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           width: '100%',
           borderRadius: 20
         }}
+          placeholder={blurhash}
           source={BASE_URL + item.moment} />
       </TouchableWithoutFeedback>
     </View>

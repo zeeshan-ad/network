@@ -19,6 +19,7 @@ import CameraPreview from './components/CameraPreview';
 import FeedComponent from './screens/Feed';
 import Document from './screens/Document';
 
+
 export default function Navigator() {
   const UserInfo = useSelector((state) => state.userInfo);
   const [User, setUser] = useState();

@@ -1,7 +1,7 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Dimensions, Pressable } from 'react-native';
 import Carousel from "react-native-reanimated-carousel";
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { Image } from 'expo-image';
 import MomentPostSnippet from './MomentPostSnippet';
 import { useSelector } from 'react-redux';
@@ -25,7 +25,7 @@ const PostSnippet = ({ navigation, moment }) => {
           themeColor: moment?.[0]?.user_id !== userInfo?.id ? moment?.[0]?.theme : editProfile?.theme
         })}
           style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
+          <Image placeholder={blurhash} source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <View>
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{moment?.[0]?.name}</Text>

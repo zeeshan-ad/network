@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ProfileTheme, fontSizes, fontWeights, theme } from '../util/constants';
+import { ProfileTheme, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native';
@@ -49,10 +49,10 @@ const EditProfile = ({ navigation }) => {
         <CloseOrSave navigation={navigation} LoadSubmission={LoadSubmission} Save={callupdateProfileData} />
         <ScrollView contentContainerStyle={styles.bodyContainer} showsVerticalScrollIndicator={false} >
           <View style={styles.dpContainer}>
-            {editProfile?.image ? (<Image source={editProfile?.image}
+            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               resizeMethod='resize'
               style={styles.ImgStyle} />) :
-              (<Image source={require('../assets/images/placeholder_profile.png')}
+              (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                 style={styles.ImgStyle} contentFit="cover"
               />)}
 

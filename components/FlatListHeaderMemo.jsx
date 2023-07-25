@@ -1,7 +1,7 @@
 import React, { useState, memo, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { FontAwesome, Ionicons, Feather } from '@expo/vector-icons';
-import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
@@ -36,7 +36,7 @@ const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, ca
             userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null,
             themeColor: memo?.user_id !== userInfo?.id ? memo?.theme : editProfile?.theme
           })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-            <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
+            <Image placeholder={blurhash} source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
             <View>
               <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, color: theme.colors.dark }}>
