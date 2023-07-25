@@ -1,7 +1,7 @@
 import React, { useState, useRef, memo, useEffect } from 'react';
 import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { AntDesign, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
-import { BASE_URL, convertDatetimeFormat, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { AddRepliedComment, addComment, isLiked, postLike, removeLike } from '../APIs';
@@ -11,6 +11,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import FlatListHeaderMemo from './FlatListHeaderMemo';
 import { BottomSheet } from 'react-native-btr';
 import { ActivityIndicator } from 'react-native-paper';
+import { formatTime } from '../util/functions';
 
 
 const width = Dimensions.get("window").width;
@@ -150,7 +151,8 @@ const PostTextExpanded = ({ navigation, route }) => {
                         }}>{item.name}</Text>
                       </Pressable>
                       <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>
-                        {convertDatetimeFormat(item.date)}</Text>
+                        {formatTime(item?.date)}
+                      </Text>
                     </View>
                     <Text style={{ fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                       {item.comment}
@@ -198,7 +200,7 @@ const PostTextExpanded = ({ navigation, route }) => {
         visible={ShowLikedUsers}
         onBackdropPress={() => setShowLikedUsers(false)}>
         <View style={[styles.card, { backgroundColor: theme.colors.light }]}>
-        <Pressable onPress={() => setShowLikedUsers(false)} style={{
+          <Pressable onPress={() => setShowLikedUsers(false)} style={{
             flexDirection: 'row', alignItems: 'center', gap: 5,
             paddingTop: 20, paddingBottom: 5,
           }}>

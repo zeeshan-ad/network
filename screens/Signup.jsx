@@ -136,10 +136,10 @@ const Signup = ({ route, navigation }) => {
               <View style={styles.form}>
                 {Step === 1 ?
                   <>
-                    <TextInput style={styles.input} placeholder='Name' value={UserDetails.name} onChangeText={handleNameChange} />
-                    <TextInput keyboardType="numeric" style={styles.input}
+                    <TextInput selectionColor={theme.colors.dark} style={styles.input} placeholder='Name' value={UserDetails.name} onChangeText={handleNameChange} />
+                    <TextInput selectionColor={theme.colors.dark} keyboardType="numeric" style={styles.input}
                       value={UserDetails.dob} placeholder='Birthday (dd/mm/yyyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
-                      <TextInput secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
+                      <TextInput selectionColor={theme.colors.dark} secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
                         style={styles.input} placeholder='Password' value={UserDetails.password} onFocus={() => {
                           if (UserDetails?.password?.length < 8) {
                             setUserDetails((prevDetails) => ({
@@ -158,7 +158,7 @@ const Signup = ({ route, navigation }) => {
                   </>
                   :
                   <View style={{ justifyContent: 'center' }}>
-                    <TextInput onChangeText={handleUserNamechange} style={styles.input} placeholder='Username' onFocus={() => {
+                    <TextInput selectionColor={theme.colors.dark} onChangeText={handleUserNamechange} style={styles.input} placeholder='Username' onFocus={() => {
                       setUserDetails((prevDetails) => ({
                         ...prevDetails,
                         usernameWarning: true,

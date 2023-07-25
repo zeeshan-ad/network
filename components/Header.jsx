@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Modal, SafeAreaView, Dimensions, ScrollView } from 'react-native';
 import { Feather, Octicons, Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
-import { APP_NAME, BASE_URL, convertDatetimeFormat, convertDatetimeFormat2, fontSizes, fontWeights, theme } from '../util/constants';
+import { APP_NAME, BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { FlatList } from 'react-native';
 import { getMemoORMoment, updateIsView } from '../APIs';
-import moment from 'moment-timezone';
 import { getCalendars } from 'expo-localization';
 import { RefreshControl } from 'react-native';
 

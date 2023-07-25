@@ -1,14 +1,14 @@
-import React, { useState, useRef, memo, useEffect } from 'react';
-import { View, Text, Dimensions, ImageBackground, Pressable } from 'react-native';
+import React, { useState, memo, useEffect } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
-import moment from 'moment-timezone';
+import { formatTime } from '../util/functions';
 
 const PostTextSnippet = ({ navigation, memo }) => {
   const userInfo = useSelector(state => state.userInfo);
@@ -67,15 +67,16 @@ const PostTextSnippet = ({ navigation, memo }) => {
         <Pressable onPress={() => navigation.navigate('Profile', { userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
           <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
-          <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{memo?.name}</Text>
+          <View>
+            <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 5 }}>{memo?.name}</Text>
+            <Text numberOfLines={2} style={{
+              color: theme.colors.dark, fontWeight: fontWeights.light,
+              fontSize: fontSizes.smallMedium, width: 100
+            }}>
+              {formatTime(memo?.created_at)}
+            </Text>
+          </View>
         </Pressable>
-        <Text numberOfLines={2} style={{
-          color: theme.colors.dark, fontWeight: fontWeights.light,
-          fontSize: fontSizes.smallMedium, width: 100, textAlign: 'right'
-        }}>
-          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
-          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
-        </Text>
       </View>
       <View>
         <Text style={{ marginHorizontal: 10, marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>

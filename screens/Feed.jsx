@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, ScrollView, TouchableWithoutFeedback, Pressable, SafeAreaView, FlatList } from 'react-native';
+import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, Pressable, SafeAreaView, FlatList } from 'react-native';
 import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
-import Mood from '../components/Mood';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfileData, getMood, getPendingRequests, getFriendsMoods, getFeed, getNotifications } from '../APIs';
+import { getProfileData, getPendingRequests, getFeed, getNotifications } from '../APIs';
 import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import MemoizedFeed from '../components/MemoizedFeed';
-import { ActivityIndicator } from 'react-native-paper';
 import { getCalendars } from 'expo-localization';
 
 

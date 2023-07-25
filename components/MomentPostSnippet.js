@@ -1,12 +1,15 @@
-import React, { useState, useRef, memo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableWithoutFeedback, Pressable } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import { getComments, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
+import { Dimensions } from 'react-native';
 
+
+const { width, height } = Dimensions.get('window');
 const MomentPostSnippet = ({ navigation, item, index, moment }) => {
 
   const [liked, setLiked] = useState();
@@ -63,11 +66,11 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
         flex: 1,
         backgroundColor: "transparent",
         zIndex: 9999,
-        position: 'absolute', right: 10, top: 30,
+        position: 'absolute', right: 10, top: 20,
       }}>
         <View style={{
 
-          shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+          shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
           shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
         }}>
           {liked?.isLiked ?
@@ -88,7 +91,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
         flex: 1,
         backgroundColor: "transparent",
         zIndex: 9999,
-        position: 'absolute', right: 10, top: 90,
+        position: 'absolute', right: 10, top: 80,
       }}>
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate('PostExpanded', {
@@ -96,7 +99,7 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
             user: { name: moment[0]?.name, image: BASE_URL + moment[0]?.profile_pic }
           })}>
           <View style={{
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
             shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
             <Ionicons name="chatbubble-outline" size={25} color={theme.colors.light} />
@@ -105,39 +108,12 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <View style={{
-        flex: 1,
-        backgroundColor: "transparent",
-        zIndex: 9999,
-        position: 'absolute', right: 10, bottom: 20,
-      }}>
-        <Text style={{
-          color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, 
-          shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 1,
-          shadowRadius: 1, elevation: 10,
-        }}>
-          {`${index + 1}/${moment?.length}`}</Text>
-      </View>
-
-      <View style={{
-        overflow: "hidden",
-        flex: 1,
-        backgroundColor: "transparent",
-        zIndex: 9999,
-        position: 'absolute', left: 10, top: 10,
-      }}>
-        <Text style={{
-          color: theme.colors.light, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 1,
-          shadowRadius: 1, elevation: 10,
-        }}>
-          {convertTimeStamp(item?.created_at)}</Text>
-      </View>
 
       {item.caption &&
         <BlurView style={{
           overflow: "hidden",
           flex: 1,
-          width: '80%',
+          width: width - 45,
           backgroundColor: "transparent",
           zIndex: 9999,
           position: 'absolute', left: 10, bottom: 10,

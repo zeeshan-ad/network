@@ -7,6 +7,7 @@ import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { getMomentIdDate } from '../APIs';
 import MomentPostExpanded from './MomentPostExpanded';
+import { formatTime } from '../util/functions';
 
 
 
@@ -45,6 +46,8 @@ const PostExpanded = ({ navigation, route }) => {
     }
   }, [moment, MomentbyId])
 
+  const [CurrentIndex, setCurrentIndex] = useState(0)
+
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{
@@ -65,12 +68,18 @@ const PostExpanded = ({ navigation, route }) => {
             <Pressable onPress={() => navigation.navigate('Profile', { userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
               <Image source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
-              <Text style={{
-                fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-                shadowRadius: 1, elevation: 10,
-              }}>
-                {user?.name}
-              </Text>
+              <View>
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                  shadowRadius: 1, elevation: 10,
+                }}>
+                  {user?.name}
+                </Text>
+                <Text style={{
+                  color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                  shadowRadius: 1, elevation: 10
+                }}>{formatTime(CarouselMoment?.[CurrentIndex]?.created_at)}</Text>
+              </View>
             </Pressable>
           </View>
         </View>
@@ -81,6 +90,7 @@ const PostExpanded = ({ navigation, route }) => {
             }}
             defaultIndex={jumpToIndex}
             width={width}
+            onSnapToItem={(index) => setCurrentIndex(index)}
             loop={false}
             data={CarouselMoment}
             modeConfig={{

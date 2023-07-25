@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
@@ -42,9 +41,9 @@ export const fontSizes = {
   BigHightlight: 42,
   Logo: 70,
 }
-export const BASE_URL = 'http://192.168.0.187:8080'; //Home
+// export const BASE_URL = 'http://192.168.0.187:8080'; //Home`
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
-// export const BASE_URL = 'https://yeet-app.azurewebsites.net'
+export const BASE_URL = 'https://yeet-app.azurewebsites.net'
 
 // export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [
@@ -87,32 +86,3 @@ export const compliments = [
 ];
 
 export const APP_NAME = 'Yeet!';
-
-// a function to convert 2023-07-16T00:00:00.000Z time format to  16/07/2023 hh:mm a format
-export function convertDatetimeFormat(date) {
-  const formattedDate = moment.utc(date).local().format('DD/MM/YYYY, h:mm a');
-  return formattedDate;
-}
-
-export function convertTimeStamp(Timestamp) {
-  const localTime = moment(Timestamp, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY, h:mm a');
-  return localTime;
-}
-
-
-export function convertDatetimeFormat2(date) {
-  const formattedDate = moment.utc(date).local().format('MMM Do YY, h:mm a');
-  return formattedDate;
-}
-
-
-// convert to local time format
-export function convertTimestamp2(timestamp) {
-  const localTime = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('MMM Do YY, h:mm a');
-  return localTime;
-}
-
-export function convertTimestampMoment(timestamp) {
-  const formattedTimestamp = moment.utc(timestamp, 'MM/DD/YYYY, HH:mm:ss a').local().format('D MMM YYYY');
-  return formattedTimestamp;
-}

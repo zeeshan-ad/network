@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Modal, Dimensions, FlatList, SafeAreaView } from 'react-native';
-import { fontSizes, fontWeights, theme, BASE_URL, convertTimestamp2, convertTimestampMoment } from '../util/constants';
+import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
 import { Pressable } from 'react-native';
 import { Feather, Ionicons, FontAwesome, MaterialCommunityIcons, Octicons, AntDesign, Entypo } from '@expo/vector-icons';
 import { resetUserInfo } from '../store/userInfoSlice';
@@ -16,9 +16,9 @@ import { KeyboardAvoidingView } from 'react-native';
 import BlockedUsers from '../components/BlockedUsers';
 import { BlurView } from 'expo-blur';
 import { getCalendars } from 'expo-localization';
-import moment from 'moment-timezone';
 import { RefreshControl } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { formatTime } from '../util/functions';
 
 
 
@@ -254,8 +254,8 @@ const Profile = ({ navigation, route }) => {
 
   if (!ProfileInfo || !userInfo) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', padding:10 }}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
           <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
           </Pressable>
@@ -466,7 +466,7 @@ const Profile = ({ navigation, route }) => {
                             fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
                             shadowOffset: { width: 0, height: 0 }, elevation: 1
                           }}>
-                            {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
+                            {formatTime(item?.created_at, 'profile')}
                           </Text>
                         </BlurView>
                       </View>
@@ -509,7 +509,7 @@ const Profile = ({ navigation, route }) => {
                         marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
                         textAlign: 'left', color: theme.colors.backdrop
                       }}>
-                        posted on {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY, h:mm a')}
+                        {formatTime(item?.created_at)}
                       </Text>
                     </Pressable>
                   )}
@@ -557,7 +557,7 @@ const Profile = ({ navigation, route }) => {
                             fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
                             shadowOffset: { width: 0, height: 0 }, elevation: 1
                           }}>
-                            {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
+                            {formatTime(item?.created_at, 'profile')}
                           </Text>
                         </BlurView>
                         <View style={{
@@ -598,7 +598,7 @@ const Profile = ({ navigation, route }) => {
                         marginTop: 15, fontStyle: "italic", fontSize: fontSizes.smallMedium, fontWeight: fontWeights.light,
                         textAlign: 'left', color: theme.colors.backdrop
                       }}>
-                        posted on {moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY, h:mm a')}
+                        {formatTime(item?.created_at)}
                       </Text>
                     </Pressable>
                   )}

@@ -1,3 +1,6 @@
+import moment from 'moment-timezone';
+
+// used in sign up dob
 export function convertDateFormat(dateString) {
   const parts = dateString.split('/');
   const day = parts[0];
@@ -16,4 +19,31 @@ export function convertDateFormat(dateString) {
   const newDateString = `${newYear}-${newMonth}-${newDay}`;
 
   return newDateString;
+}
+
+
+// for date conversion
+
+export function formatTime(timestamp, type) {
+  const localTime = moment.utc(timestamp, 'YYYY-MM-DD HH:mm:ss').local();
+
+  const now = moment();
+  const diffInSeconds = now.diff(localTime, 'seconds');
+  const diffInMinutes = now.diff(localTime, 'minutes');
+  const diffInHours = now.diff(localTime, 'hours');
+  const diffInDays = now.diff(localTime, 'days');
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds}s`;
+  } else if (diffInMinutes < 60) {
+    return `${diffInMinutes}m`;
+  } else if (diffInHours < 24) {
+    return `${diffInHours}h`;
+  } else if (diffInDays === 1) {
+    return 'A day ago';
+  } else {
+    if (type === 'profile')
+      return localTime.format('Do MMM YYYY');
+    return localTime.format('DD/MM/YYYY h:mm a');
+  }
 }

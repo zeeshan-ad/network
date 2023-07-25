@@ -33,7 +33,7 @@
       "infoPlist": {
         "NSAllowsArbitraryLoads": true
       },
-      "buildNumber": "13",
+      "buildNumber": "17",
       "bundleIdentifier": "com.yeet.network"
     },
     "android": {

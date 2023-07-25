@@ -96,12 +96,13 @@ const Landing = ({ navigation }) => {
             <View style={styles.form}>
               {DisplayPasswordInput ?
                 <View style={{ justifyContent: 'center' }}>
-                  <TextInput secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
+                  <TextInput selectionColor={theme.colors.dark} secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
                     style={styles.input} placeholder='Password' />
                   <Ionicons name={`${UserCred.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
                     size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                 </View> :
                 <TextInput
+                selectionColor={theme.colors.dark}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
                   style={styles.input} placeholder="Enter your email to continue" />

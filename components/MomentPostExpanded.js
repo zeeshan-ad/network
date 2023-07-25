@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
 import { FontAwesome, AntDesign, Ionicons, MaterialCommunityIcons, Feather, Octicons } from '@expo/vector-icons';
-import { BASE_URL, convertDatetimeFormat, convertDatetimeFormat2, convertDatetimeFormat3, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { AddRepliedComment, addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
@@ -12,6 +12,7 @@ import { BottomSheet } from 'react-native-btr';
 import { ActivityIndicator } from 'react-native-paper';
 import { BlurView } from 'expo-blur';
 import moment from 'moment-timezone';
+import { formatTime } from '../util/functions';
 
 
 const { width, height } = Dimensions.get("window");
@@ -25,7 +26,6 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
   const isFocused = useIsFocused();
   const [ReplyingTo, setReplyingTo] = useState(null)
 
-  console.log(CarouselMoment);
 
   const CallIsliked = async () => {
     const response = await isLiked(item.id, 'moment');
@@ -141,31 +141,30 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                       }} />
                   </Pressable>
                   <View key={index} style={{
-                    backgroundColor: theme.colors.light, borderColor: theme.colors.dark, borderWidth: 2, borderRadius: 10, marginBottom: 10, maxWidth: width - 140
+                    backgroundColor: theme.colors.light, borderColor: theme.colors.dark, borderWidth: 2, borderRadius: 10, marginBottom: 10, maxWidth: width - 155,
                   }}>
                     <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 10 }}>
-                      <View>
+                      <View style={{ }}>
                         <View style={{
-                          flexDirection: 'row', justifyContent: 'space-between', gap: 20, alignItems: "center"
+                          flexDirection: 'row', justifyContent: 'space-between', gap: 20, alignItems: "center", paddingTop: 5
                         }}>
                           <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
                             <Text ellipsizeMode='tail' numberOfLines={1} style={{
-                              fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark,
+                              fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, color: theme.colors.dark,
                               maxWidth: width - 300
                             }}>{item.name}</Text>
                           </Pressable>
                           <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>
-                            {convertDatetimeFormat(item.date)}</Text>
+                            {formatTime(item.date)}</Text>
                         </View>
                         <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, paddingTop: 5, color: theme.colors.dark }}>
                           {item.comment}
                         </Text>
                         {item?.user_id !== userInfo?.id &&
-                          <Pressable onPress={() => CatchUserToReply(item)}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 3, alignItems: "center", marginTop: 5 }}>
-                              <Octicons name="reply" size={10} color={theme.colors.backdrop} />
-                              <Text style={{ fontStyle: 'italic', color: theme.colors.backdrop }}>reply</Text>
-                            </View>
+                          <Pressable onPress={() => CatchUserToReply(item)}
+                            style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 3, alignItems: "center", marginTop: 5 }}>
+                            <Octicons name="reply" size={10} color={theme.colors.backdrop} />
+                            <Text style={{ fontStyle: 'italic', color: theme.colors.backdrop }}>reply</Text>
                           </Pressable>
                         }
                       </View>
@@ -280,32 +279,16 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
           flex: 1,
           backgroundColor: "transparent",
           zIndex: 9,
-          position: 'absolute', right: 20, bottom: 30,
+          position: 'absolute', right: 20, bottom: 40,
         }}>
           <Text style={{
             color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+            shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: 1,
             shadowRadius: 1, elevation: 10,
           }}>
             {`${index + 1}/${CarouselMoment?.length}`}</Text>
         </View>
         }
-
-        <View style={{
-          overflow: "hidden",
-          flex: 1,
-          backgroundColor: "transparent",
-          zIndex: 9,
-          position: 'absolute', right: 20, top: 75
-        }}>
-          <Text style={{
-            color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10, textAlign: "right"
-          }}>
-            {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
-            {moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
-          </Text>
-        </View>
 
         {item.caption && !CommentsVisible &&
           <BlurView style={{

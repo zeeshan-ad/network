@@ -1,12 +1,12 @@
-import React, { useState, useRef, memo, useEffect } from 'react';
-import { View, Text, Pressable, Dimensions, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import React, { useState, memo, useEffect } from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { FontAwesome, Ionicons, Feather } from '@expo/vector-icons';
-import { BASE_URL, convertTimeStamp, fontSizes, fontWeights, theme } from '../util/constants';
+import { BASE_URL, fontSizes, fontWeights, theme } from '../util/constants';
 import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
 import { BottomSheet } from 'react-native-btr';
-import moment from 'moment-timezone';
+import { formatTime } from '../util/functions';
 
 const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
   ShowLikedUsers }) => {
@@ -33,18 +33,19 @@ const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, ca
           <Pressable onPress={() => navigation.navigate('Profile', { userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
             <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
-            <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, color: theme.colors.dark }}>
-              {memo?.name}
-            </Text>
+            <View>
+              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, color: theme.colors.dark }}>
+                {memo?.name}
+              </Text>
+              <Text numberOfLines={2} style={{
+                color: theme.colors.dark, fontWeight: fontWeights.light,
+                fontSize: fontSizes.smallMedium, width: 100
+              }}>
+                {formatTime(memo?.created_at)}
+              </Text>
+            </View>
           </Pressable>
         </View>
-        <Text numberOfLines={2} style={{
-          color: theme.colors.dark, fontWeight: fontWeights.light,
-          fontSize: fontSizes.smallMedium, width: 100, textAlign: 'right'
-        }}>
-          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('h:mm a')}{'\n'}
-          {moment(memo?.created_at, 'YYYY-MM-DD HH:mm:ss').format('Do MMM YYYY')}
-        </Text>
       </View>
       <View style={{ paddingVertical: 20 }}>
         <Text style={{ marginVertical: 10, fontSize: fontSizes.yeetPosts, lineHeight: 30 }}>
