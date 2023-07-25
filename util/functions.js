@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { BASE_URL } from './constants';
 
 // used in sign up dob
 export function convertDateFormat(dateString) {
@@ -46,4 +47,23 @@ export function formatTime(timestamp, type) {
       return localTime.format('Do MMM YYYY');
     return localTime.format('DD/MM/YYYY h:mm a');
   }
+}
+
+export function extractMomentsForPrefetch(data) {
+  const moments = [];
+
+  const extractFromObject = (obj) => {
+    if (Array.isArray(obj)) {
+      obj.forEach((item) => extractFromObject(item));
+    } else if (typeof obj === "object" && obj !== null) {
+      if (obj.hasOwnProperty("moment")) {
+        moments.push(BASE_URL + obj.moment);
+      }
+      Object.values(obj).forEach((value) => extractFromObject(value));
+    }
+  };
+
+  extractFromObject(data);
+
+  return moments;
 }

@@ -9,6 +9,8 @@ import { setProfileData } from '../store/editProfileSlice';
 import { useIsFocused } from '@react-navigation/native';
 import MemoizedFeed from '../components/MemoizedFeed';
 import { getCalendars } from 'expo-localization';
+import { extractMomentsForPrefetch } from '../util/functions';
+import { Image } from 'expo-image/build';
 
 
 const { height, width } = Dimensions.get('window');
@@ -63,6 +65,15 @@ const FeedComponent = ({ navigation }) => {
       setFeed(response?.data?.data);
     }
   }
+
+  useEffect(() => {
+    if (Feed) {
+      const arrayPrefetch = extractMomentsForPrefetch(Feed);
+      Image.prefetch(arrayPrefetch);
+    }
+  }, [Feed])
+
+
 
   useEffect(() => {
     callGetProfileData();
