@@ -25,7 +25,7 @@ import { formatTime } from '../util/functions';
 
 const { width, height } = Dimensions.get('window');
 const Profile = ({ navigation, route }) => {
-  const { userId } = route.params;
+  const { userId, themeColor } = route.params;
   const [FetchedMood, setFetchedMood] = useState('');
   const isFocused = useIsFocused();
   const { timeZone } = getCalendars()[0];
@@ -254,7 +254,7 @@ const Profile = ({ navigation, route }) => {
 
   if (!ProfileInfo || !userInfo) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: themeColor ? themeColor : theme.colors.light }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
           <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
@@ -908,7 +908,11 @@ const Profile = ({ navigation, route }) => {
               return (
                 <Pressable onPress={() => {
                   setShowFriendList(false);
-                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                  navigation.navigate('Profile',
+                    {
+                      userId: item?.id !== userInfo?.id ? item?.id : null,
+                      themeColor: item?.id !== userInfo?.id ? item?.theme : editProfile?.theme
+                    })
                 }} style={{
                   flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
                   borderBottomWidth: 1, borderBottomColor: theme.colors.divider

@@ -18,6 +18,7 @@ const PostExpanded = ({ navigation, route }) => {
   const userInfo = route?.params?.user ? route.params.user : useSelector(state => state.userInfo);
   const moment = route?.params?.moment;
   const MomentbyId = route?.params?.MomentbyId;
+  const editProfile = useSelector(state => state.editProfile);
 
   const { date, user, jumpToIndex } = route.params;
 
@@ -35,7 +36,6 @@ const PostExpanded = ({ navigation, route }) => {
   // useEffect(() => {
   //   callGetMomentsIdDate();
   // }, [date, user])
-
 
   const [CarouselMoment, setCarouselMoment] = useState();
   useEffect(() => {
@@ -65,7 +65,12 @@ const PostExpanded = ({ navigation, route }) => {
             }}>
               <Ionicons name="chevron-back" size={30} color={theme.colors.light} />
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Profile', { userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Pressable onPress={() => navigation.navigate('Profile',
+              {
+                userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null,
+                themeColor: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.theme : editProfile?.theme
+              })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                
               <Image source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <View>

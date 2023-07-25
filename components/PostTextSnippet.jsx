@@ -64,7 +64,11 @@ const PostTextSnippet = ({ navigation, memo }) => {
       borderWidth: 2, borderColor: theme.colors.dark, marginHorizontal: 10, borderRadius: 20, justifyContent: 'space-between'
     }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Pressable onPress={() => navigation.navigate('Profile', { userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+        <Pressable onPress={() => navigation.navigate('Profile',
+          {
+            userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null,
+            themeColor: memo?.user_id !== userInfo?.id ? memo?.theme : editProfile?.theme
+          })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
           <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
           <View>

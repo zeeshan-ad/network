@@ -129,7 +129,10 @@ const PostTextExpanded = ({ navigation, route }) => {
         renderItem={({ item, index }) => {
           return (
             <View style={{ flexDirection: 'row' }}>
-              <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+              <Pressable onPress={() => navigation.navigate('Profile', {
+                userId: item?.user_id !== userInfo?.id ? item?.user_id : null,
+                themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+              })}>
                 <Image source={item.profile_pic ? BASE_URL + item.profile_pic : require('../assets/images/placeholder_profile.png')}
                   style={{
                     height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
@@ -144,7 +147,11 @@ const PostTextExpanded = ({ navigation, route }) => {
                     <View style={{
                       flexDirection: 'row', justifyContent: 'space-between', gap: 20, alignItems: "center"
                     }}>
-                      <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+                      <Pressable onPress={() => navigation.navigate('Profile',
+                        {
+                          userId: item?.user_id !== userInfo?.id ? item?.user_id : null,
+                          themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+                        })}>
                         <Text ellipsizeMode='tail' numberOfLines={1} style={{
                           fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.dark,
                           maxWidth: width - 300
@@ -218,7 +225,10 @@ const PostTextExpanded = ({ navigation, route }) => {
               return (
                 <Pressable onPress={() => {
                   setShowLikedUsers(false);
-                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                  navigation.navigate('Profile', {
+                    userId: item?.id !== userInfo?.id ? item?.id : null,
+                    themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+                  })
                 }} style={{
                   flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
                   borderBottomWidth: 1, borderBottomColor: theme.colors.divider

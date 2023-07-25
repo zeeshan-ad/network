@@ -133,7 +133,11 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             renderItem={({ item, index }) => {
               return (
                 <View key={index} style={{ flexDirection: 'row' }}>
-                  <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+                  <Pressable onPress={() => navigation.navigate('Profile',
+                    {
+                      userId: item?.user_id !== userInfo?.id ? item?.user_id : null,
+                      themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+                    })}>
                     <Image source={item?.profile_pic ? { uri: `${BASE_URL}${item?.profile_pic}` } : require('../assets/images/placeholder_profile.png')}
                       style={{
                         height: 40, width: 40, marginRight: 10, borderRadius: 100, borderWidth: 2,
@@ -144,11 +148,15 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                     backgroundColor: theme.colors.light, borderColor: theme.colors.dark, borderWidth: 2, borderRadius: 10, marginBottom: 10, maxWidth: width - 155,
                   }}>
                     <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 10 }}>
-                      <View style={{ }}>
+                      <View style={{}}>
                         <View style={{
                           flexDirection: 'row', justifyContent: 'space-between', gap: 20, alignItems: "center", paddingTop: 5
                         }}>
-                          <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.user_id !== userInfo?.id ? item?.user_id : null })}>
+                          <Pressable onPress={() => navigation.navigate('Profile',
+                            {
+                              userId: item?.user_id !== userInfo?.id ? item?.user_id : null,
+                              themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+                            })}>
                             <Text ellipsizeMode='tail' numberOfLines={1} style={{
                               fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, color: theme.colors.dark,
                               maxWidth: width - 300
@@ -348,7 +356,10 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               return (
                 <Pressable onPress={() => {
                   setShowLikedUsers(false);
-                  navigation.navigate('Profile', { userId: item?.id !== userInfo?.id ? item?.id : null })
+                  navigation.navigate('Profile', {
+                    userId: item?.id !== userInfo?.id ? item?.id : null,
+                    themeColor: item?.user_id !== userInfo?.id ? item?.theme : editProfile?.theme
+                  })
                 }} style={{
                   flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 20,
                   borderBottomWidth: 1, borderBottomColor: theme.colors.divider

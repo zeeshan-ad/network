@@ -92,7 +92,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                 <Text style={{ color: theme.colors.dark, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal }}>{unseenReq + NotifCount}</Text>
               </View> : null}
           </Pressable>
-          <Pressable onPress={() => { navigation.navigate('Profile', { userId: null }); }}>
+          <Pressable onPress={() => { navigation.navigate('Profile', { userId: null, themeColor: editProfile.theme }); }}>
             {editProfile?.image ? (<Image source={editProfile?.image}
               style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
               (<Image source={require('../assets/images/placeholder_profile.png')}
@@ -126,7 +126,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                 {PendingRequests?.map((item, index) => {
                   return (
                     <Pressable key={index} onPress={() => {
-                      navigation.navigate('Profile', { userId: item?.req_by_id });
+                      navigation.navigate('Profile', { userId: item?.req_by_id, themeColor: item?.theme });
                       setshowNotif(false);
                     }}>
                       <View key={index} style={{

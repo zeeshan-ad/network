@@ -7,7 +7,7 @@ const Mood = ({ navigation, FriendsMood }) => {
   return (
     FriendsMood?.map((item, index) => {
       return (
-        <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.userID })} key={index} style={{ position: 'relative', alignItems: 'center', zIndex: 9 }}>
+        <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.userID, themeColor: item?.theme })} key={index} style={{ position: 'relative', alignItems: 'center', zIndex: 9 }}>
           {!item?.profile_pic ? <Image source={require('../assets/images/placeholder_profile.png')}
             style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />
             : <Image source={BASE_URL + item?.profile_pic}
@@ -21,7 +21,7 @@ const Mood = ({ navigation, FriendsMood }) => {
               shadowRadius: 1, elevation: 10,
             }}>{item?.mood}</Text>
           </View>
-          <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal, paddingTop: 5, width: 80, textAlign:"center" }}>
+          <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal, paddingTop: 5, width: 80, textAlign: "center" }}>
             {item?.name + ' '.substring(0, item.name + ' '.indexOf(' '))}</Text>
         </Pressable>
       )

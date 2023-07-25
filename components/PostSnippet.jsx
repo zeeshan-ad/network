@@ -13,13 +13,17 @@ const PostSnippet = ({ navigation, moment }) => {
   const { width, height } = Dimensions.get("window");
 
   const userInfo = useSelector(state => state.userInfo);
+  const editProfile = useSelector(state => state.editProfile);
   const [CurrentIndex, setCurrentIndex] = useState(0)
 
 
   return (
     <View style={{ paddingVertical: 10, position: 'relative' }}>
       <View style={{ marginHorizontal: 10, flexDirection: 'row', marginBottom: 10, justifyContent: 'space-between', alignItems: 'center' }}>
-        <Pressable onPress={() => navigation.navigate('Profile', { userId: moment?.[0]?.user_id !== userInfo?.id ? moment?.[0]?.user_id : null })}
+        <Pressable onPress={() => navigation.navigate('Profile', {
+          userId: moment?.[0]?.user_id !== userInfo?.id ? moment?.[0]?.user_id : null,
+          themeColor: moment?.[0]?.user_id !== userInfo?.id ? moment?.[0]?.theme : editProfile?.theme
+        })}
           style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
           <Image source={moment?.[0]?.profile_pic ? BASE_URL + moment?.[0]?.profile_pic : require('../assets/images/placeholder_profile.png')}
             style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />

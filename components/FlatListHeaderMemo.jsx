@@ -7,10 +7,12 @@ import { Image } from 'expo-image';
 import { deleteMemo } from '../APIs';
 import { BottomSheet } from 'react-native-btr';
 import { formatTime } from '../util/functions';
+import { useSelector } from 'react-redux';
 
 const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
   ShowLikedUsers }) => {
   const [ShowOption, setShowOption] = useState(false);
+  const editProfile = useSelector(state => state.editProfile);
 
   const callDeleteMemo = async () => {
     const response = await deleteMemo(memo.id);
@@ -30,7 +32,10 @@ const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, ca
           <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
           </Pressable>
-          <Pressable onPress={() => navigation.navigate('Profile', { userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+          <Pressable onPress={() => navigation.navigate('Profile', {
+            userId: memo?.user_id !== userInfo?.id ? memo?.user_id : null,
+            themeColor: memo?.user_id !== userInfo?.id ? memo?.theme : editProfile?.theme
+          })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
             <Image source={memo?.profile_pic ? BASE_URL + memo?.profile_pic : require('../assets/images/placeholder_profile.png')}
               style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.dark, overflow: 'hidden' }} />
             <View>

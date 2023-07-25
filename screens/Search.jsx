@@ -92,7 +92,7 @@ const Search = ({ navigation, route }) => {
               renderItem={({ item }) => {
                 if (item.id) {
                   return (
-                    <Pressable onPress={() => navigation.navigate('Profile', { userId: item.id })}>
+                    <Pressable onPress={() => navigation.navigate('Profile', { userId: item.id, themeColor: item.theme })}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginVertical: 10 }}>
                         {item.profile_pic ? <Image source={BASE_URL + item.profile_pic}
                           style={{ height: 50, width: 50, borderRadius: 100, borderWidth: 2 }} />
