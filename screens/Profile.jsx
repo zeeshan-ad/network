@@ -19,6 +19,8 @@ import { getCalendars } from 'expo-localization';
 import { RefreshControl } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { formatTime } from '../util/functions';
+import ProfileMomentsTab from '../components/ProfileMomentsTab';
+import { useFonts } from 'expo-font';
 
 
 
@@ -31,6 +33,11 @@ const Profile = ({ navigation, route }) => {
   const { timeZone } = getCalendars()[0];
   let userInfo = useSelector(state => state.userInfo);
   let editProfile = useSelector(state => state.editProfile);
+
+  const [fontsLoaded] = useFonts({
+    'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
+  });
+
 
   useEffect(() => {
     if (userId) {
@@ -145,12 +152,15 @@ const Profile = ({ navigation, route }) => {
   const [AllMemos, setAllMemos] = useState();
   const [AllMoments, setAllMoments] = useState();
   const [momentsGroup, setmomentsGroup] = useState();
+  const [Score, setScore] = useState();
   const callGetPosts = async (userId) => {
+    setScore(0);
     const response = await getProfilePosts(userId, timeZone);
     if (response?.status === 200) {
       setAllMemos(response?.data?.data?.memos);
       setAllMoments(response?.data?.data?.moments);
       setmomentsGroup(response?.data?.data?.momentsGroup);
+      setScore(response?.data?.data?.score);
     }
   }
 
@@ -240,7 +250,7 @@ const Profile = ({ navigation, route }) => {
 
 
   const [BlockedShow, setBlockedShow] = useState();
-
+  const [ShowScore, setShowScore] = useState(false);
   const [ModalBlock, setModalBlock] = useState(false);
   const [ModalDelete, setModalDelete] = useState(false)
   const [ReportReason, setReportReason] = useState('');
@@ -251,6 +261,10 @@ const Profile = ({ navigation, route }) => {
   const [ModalLogout, setModalLogout] = useState(false);
   const [ModalRequest, setModalRequest] = useState(false);
   const [RemoveFriend, setRemoveFriend] = useState(false);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   if (!ProfileInfo || !userInfo) {
     return (
@@ -292,6 +306,7 @@ const Profile = ({ navigation, route }) => {
         paddingTop: 10, paddingHorizontal: 10, paddingBottom: 10,
         flexDirection: 'row', justifyContent: 'space-between', gap: 10, alignItems: 'center', zIndex: 999,
       }}>
+
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
@@ -340,9 +355,11 @@ const Profile = ({ navigation, route }) => {
           paddingVertical: 15, gap: 10, paddingHorizontal: 20
         }}>
           <View style={{ height: '100%', width: width - 165 }}>
-            <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold, paddingBottom: 2.5 }}>
-              {userId ? ProfileInfo?.name : userInfo?.name}
-            </Text>
+            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', paddingBottom: 2.5 }}>
+              <Text numberOfLines={2} ellipsizeMode='tail' style={{ fontSize: fontSizes.large, fontWeight: fontWeights.semibold }}>
+                {userId ? ProfileInfo?.name : userInfo?.name}
+              </Text>
+            </View>
             {ProfileInfo?.bio &&
               <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, paddingVertical: 5 }}>{ProfileInfo?.bio}</Text>}
             <Pressable onPress={RequestStatus?.status === 'accepted' || !userId ? () => setShowFriendList(true) : null} style={{ flexDirection: 'row', alignItems: "ceneter", paddingVertical: 5 }} >
@@ -404,7 +421,7 @@ const Profile = ({ navigation, route }) => {
             </View>
           </View>
 
-          <View>
+          <View style={{ alignItems: 'center', gap: 5 }}>
             {!userId ? editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
               (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
@@ -413,6 +430,19 @@ const Profile = ({ navigation, route }) => {
                 style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
                 (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                   style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)}
+            <Pressable onPress={() => setShowScore(true)} style={{
+              position: 'absolute', top: -8,
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 1, elevation: 10,
+              minWidth: 40, maxWidth: 100,
+            }}>
+              <Text numberOfLines={3} style={{
+                paddingHorizontal: 5, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.bold,
+                backgroundColor: theme.colors.textPost, borderRadius: 10, overflow: 'hidden', paddingHorizontal: 5, paddingVertical: 2,
+                color: theme.colors.grey, textAlign: 'center'
+              }}>
+                💎 {Score}
+              </Text>
+            </Pressable>
           </View>
 
         </View>
@@ -423,12 +453,12 @@ const Profile = ({ navigation, route }) => {
           <Pressable onPress={() => setCurrentTab(0)} style={{
             borderBottomColor: theme.colors.dark, width: '50%',
             borderBottomWidth: CurrentTab === 0 ? 2 : 0, alignItems: 'center'
-          }}><Text style={styles.tabTitle}>Moments</Text>
+          }}><Text style={styles.tabTitle}>Moments ({AllMoments?.length ? AllMoments.length : 0})</Text>
           </Pressable>
           <Pressable onPress={() => setCurrentTab(1)} style={{
             borderBottomColor: theme.colors.dark, width: '50%',
             borderBottomWidth: CurrentTab === 1 ? 2 : 0, alignItems: 'center'
-          }}><Text style={styles.tabTitle}>Memos</Text>
+          }}><Text style={styles.tabTitle}>Memos ({AllMemos?.length ? AllMemos?.length : 0})</Text>
           </Pressable>
         </View>
       </View>
@@ -440,46 +470,9 @@ const Profile = ({ navigation, route }) => {
             {CurrentTab === 0 ?
               AllMoments?.length > 0 ?
                 // flatlists to show images in grid
-                <FlatList
-                  key={'_'}
-                  data={AllMoments}
-                  style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
-                  showsVerticalScrollIndicator={false}
-                  ListFooterComponent={<View style={{ height: 300 }}></View>}
-                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                  renderItem={({ item, index }) => (
-                    <Pressable onPress={() => navigation.navigate("PostExpanded", { date: item?.created_at, user: { ...editProfile, ...userInfo }, MomentbyId: momentsGroup[index] })} style={{
-                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
-                      marginBottom: 5, position: "relative"
-                    }}>
-                      <View style={{ width: '100%', height: 200, marginTop: 5 }}>
-                        <Image placeholder={blurhash} source={{ uri: BASE_URL + item?.moment }} style={{
-                          width: '100%', height: '100%',
-                          borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
-                        }} />
-                        <BlurView intensity={100} style={{
-                          position: "absolute", bottom: 10, left: 0, width: '100%', height: 30,
-                          borderLeftColor: theme.colors.backdrop, borderLeftWidth: 2, borderRightWidth: 2, borderRightColor: theme.colors.backdrop
-                        }} >
-                          <Text style={{
-                            position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
-                            fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
-                            shadowOffset: { width: 0, height: 0 }, elevation: 1
-                          }}>
-                            {formatTime(item?.created_at, 'profile')}
-                          </Text>
-                        </BlurView>
-                      </View>
-                      <View style={{
-                        position: 'absolute', top: 10, right: 5, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
-                        shadowOffset: { width: 0, height: 0 }, elevation: 1
-                      }}>
-                        <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
-                      </View>
-                    </Pressable>
-                  )}
-                  numColumns={2}
-                />
+                <ProfileMomentsTab AllMoments={AllMoments} navigation={navigation}
+                  refreshing={refreshing} onRefresh={onRefresh} editProfile={editProfile} userInfo={userInfo}
+                  momentsGroup={momentsGroup} userId={userId} ProfileInfo={ProfileInfo} />
                 :
                 <Text style={{
                   fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
@@ -528,49 +521,10 @@ const Profile = ({ navigation, route }) => {
           RequestStatus?.status === "accepted" ?
             CurrentTab === 0 ?
               AllMoments?.length > 0 ?
-                // flatlists to show images in grid
-                <FlatList
-                  key={'_'}
-                  data={AllMoments}
-                  style={{ height: height, paddingTop: 5, paddingHorizontal: 5 }}
-                  showsVerticalScrollIndicator={false}
-                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                  renderItem={({ item, index }) => (
-                    <Pressable onPress={() => navigation.navigate("PostExpanded", {
-                      date: item?.created_at,
-                      user: { ...ProfileInfo, image: BASE_URL + ProfileInfo?.profile_pic }, MomentbyId: momentsGroup[index]
-                    })} style={{
-                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: width / 2 - 15, marginHorizontal: 5,
-                      marginBottom: 5, position: "relative"
-                    }}>
-                      <View style={{ width: '100%', height: 200, marginTop: 5 }}>
-                        <Image placeholder={blurhash} source={{ uri: BASE_URL + item?.moment }} style={{
-                          width: '100%', height: '100%',
-                          borderColor: theme.colors.backdrop, borderWidth: 2, borderRadius: 10
-                        }} />
-                        <BlurView intensity={100} style={{
-                          position: "absolute", bottom: 10, left: 0, width: '100%', height: 30,
-                          borderLeftColor: theme.colors.backdrop, borderLeftWidth: 2, borderRightWidth: 2, borderRightColor: theme.colors.backdrop
-                        }} >
-                          <Text style={{
-                            position: "absolute", bottom: 5, left: 5, color: theme.colors.light, fontSize: fontSizes.large,
-                            fontWeight: fontWeights.light, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
-                            shadowOffset: { width: 0, height: 0 }, elevation: 1
-                          }}>
-                            {formatTime(item?.created_at, 'profile')}
-                          </Text>
-                        </BlurView>
-                        <View style={{
-                          position: 'absolute', top: 5, right: 5, shadowColor: theme.colors.dark, shadowOpacity: 1, shadowRadius: 1,
-                          shadowOffset: { width: 0, height: 0 }, elevation: 1
-                        }}>
-                          <MaterialCommunityIcons name="view-carousel" size={20} color={theme.colors.light} />
-                        </View>
-                      </View>
-                    </Pressable>
-                  )}
-                  numColumns={2}
-                />
+                <ProfileMomentsTab AllMoments={AllMoments} navigation={navigation}
+                  refreshing={refreshing} onRefresh={onRefresh} editProfile={editProfile} userInfo={userInfo}
+                  ProfileInfo={ProfileInfo}
+                  momentsGroup={momentsGroup} userId={userId} />
                 :
                 <Text style={{
                   fontSize: fontSizes.medium, fontWeight: fontWeights.light, lineHeight: 30,
@@ -617,6 +571,59 @@ const Profile = ({ navigation, route }) => {
             }}>
               Join {ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '.indexOf(' '))}'s bubble to see their posts.</Text>
       }
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ShowScore}>
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 30, paddingHorizontal: 20,
+              color: theme.colors.dark
+            }}>
+              Yeet Score Calculation
+            </Text>
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 5, paddingHorizontal: 20,
+              color: theme.colors.backdrop, textAlign: 'center'
+            }}>
+              Yeet Score is determined by counting the number of days the user has posted a moment or a memo or updated their mood.
+            </Text>
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 20, paddingHorizontal: 20,
+              color: theme.colors.dark
+            }}>
+              Score Reset
+            </Text>
+            <Text style={{
+              fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingVertical: 5, paddingHorizontal: 20,
+              color: theme.colors.backdrop, textAlign: 'center'
+            }}>
+              If the user does not post or update, their Yeet Score will be reset to 0.
+            </Text>
+            <View style={{
+              position: 'absolute', top: -20,
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 1, elevation: 10,
+            }}>
+              <Text numberOfLines={3} style={{
+                paddingHorizontal: 5, fontSize: fontSizes.BigHightlight, fontWeight: fontWeights.bold,
+                backgroundColor: theme.colors.textPost, borderRadius: 10, overflow: 'hidden', paddingHorizontal: 5, paddingVertical: 2,
+                color: theme.colors.grey, textAlign: 'center'
+              }}>
+                💎 {Score}
+              </Text>
+            </View>
+            <Pressable
+              onPress={() => setShowScore(false)} style={{
+                borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
+                backgroundColor: theme.colors.secondary, marginTop: 20, marginBottom: 10
+              }}>
+              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}

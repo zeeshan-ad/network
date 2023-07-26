@@ -34,9 +34,9 @@ export const fontSizes = {
   medium: 16,
   large: 18,
   yeetPosts: 22,
+  heading: 24,
   ice: 26,
   xlarge: 28,
-  heading: 24,
   smallHightlight: 35,
   BigHightlight: 42,
   Logo: 70,
@@ -44,9 +44,10 @@ export const fontSizes = {
 
 export const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-export const BASE_URL = 'http://192.168.0.187:8080'; //Home`
+
+// export const BASE_URL = 'http://192.168.0.187:8080'; //Home`
 // export const BASE_URL = 'http://192.168.0.181:8080'; // FD Home
-// export const BASE_URL = 'https://yeet-app.azurewebsites.net';
+export const BASE_URL = 'https://yeet-app.azurewebsites.net';
 
 // export const BASE_URL = "http://192.168.29.86:8080"; //BS
 export const ProfileTheme = [

@@ -62,7 +62,12 @@ const FeedComponent = ({ navigation }) => {
   async function callGetFeed() {
     const response = await getFeed(timeZone);
     if (response?.status === 200) {
-      setFeed(response?.data?.data);
+      // check if feed and response.data.data are same
+      if (JSON.stringify(Feed) === JSON.stringify(response?.data?.data)) return;
+      else {
+        setFeed(null);
+        setFeed(response?.data?.data);
+      }
     }
   }
 

@@ -27,12 +27,24 @@ export function convertDateFormat(dateString) {
 
 export function formatTime(timestamp, type) {
   const localTime = moment.utc(timestamp, 'YYYY-MM-DD HH:mm:ss').local();
+  const localTimeProfile = moment.utc(timestamp, 'YYYY-MM-DD').local();
 
   const now = moment();
   const diffInSeconds = now.diff(localTime, 'seconds');
   const diffInMinutes = now.diff(localTime, 'minutes');
   const diffInHours = now.diff(localTime, 'hours');
   const diffInDays = now.diff(localTime, 'days');
+
+  const diffInDaysProfile = now.diff(localTimeProfile, 'days');
+
+  if (type === 'profile') {
+    if (diffInDaysProfile === 0) {
+      return 'Today';
+    } else if (diffInDaysProfile === 1) {
+      return 'A day Ago';
+    } else
+      return localTimeProfile.format('Do MMM YYYY');
+  }
 
   if (diffInSeconds < 60) {
     return `${diffInSeconds}s`;
@@ -47,6 +59,7 @@ export function formatTime(timestamp, type) {
       return localTime.format('Do MMM YYYY');
     return localTime.format('DD/MM/YYYY h:mm a');
   }
+
 }
 
 export function extractMomentsForPrefetch(data) {
