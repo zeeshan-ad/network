@@ -141,6 +141,15 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
+  const [FriendsAccess, setFriendsAccess] = useState(false)
+  useEffect(() => {
+    if (!userId)
+      setFriendsAccess(true)
+    else if (RequestStatus?.status)
+      setFriendsAccess(true)
+    else
+      setFriendsAccess(false)
+  }, [RequestStatus?.status, userId])
 
   const callCancelRequest = async () => {
     const response = await cancelRequest(userId);
@@ -299,7 +308,6 @@ const Profile = ({ navigation, route }) => {
     )
   }
 
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: userId ? ProfileInfo?.theme : editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
       <View style={{
@@ -420,7 +428,6 @@ const Profile = ({ navigation, route }) => {
               }
             </View>
           </View>
-
           <View style={{ alignItems: 'center', gap: 5 }}>
             {!userId ? editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
@@ -430,19 +437,20 @@ const Profile = ({ navigation, route }) => {
                 style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />) :
                 (<Image placeholder={blurhash} source={require('../assets/images/placeholder_profile.png')}
                   style={{ height: 90, width: 90, borderRadius: 100, borderWidth: 2 }} />)}
-            <Pressable onPress={() => setShowScore(true)} style={{
-              position: 'absolute', top: -8,
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 1, elevation: 10,
-              minWidth: 40, maxWidth: 100,
-            }}>
-              <Text numberOfLines={3} style={{
-                paddingHorizontal: 5, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.bold,
-                backgroundColor: theme.colors.textPost, borderRadius: 10, overflow: 'hidden', paddingHorizontal: 5, paddingVertical: 2,
-                color: theme.colors.grey, textAlign: 'center'
+            {FriendsAccess &&
+              <Pressable onPress={() => setShowScore(true)} style={{
+                position: 'absolute', top: -8,
+                shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 1, elevation: 10,
+                minWidth: 40, maxWidth: 100,
               }}>
-                💎 {Score}
-              </Text>
-            </Pressable>
+                <Text numberOfLines={3} style={{
+                  paddingHorizontal: 5, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.bold,
+                  backgroundColor: theme.colors.textPost, borderRadius: 10, overflow: 'hidden', paddingHorizontal: 5, paddingVertical: 2,
+                  color: theme.colors.grey, textAlign: 'center'
+                }}>
+                  💎 {Score}
+                </Text>
+              </Pressable>}
           </View>
 
         </View>
