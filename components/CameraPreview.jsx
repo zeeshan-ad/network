@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Dimensions, ImageBackground, Keyboard, Pressable, TextInput, View } from 'react-native';
-import { theme } from '../util/constants';
+import { ActivityIndicator, KeyboardAvoidingView, Text, Dimensions, ImageBackground, Keyboard, Pressable, TextInput, View } from 'react-native';
+import { fontSizes, fontWeights, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { postMoment } from '../APIs';
 import moment from 'moment-timezone';
@@ -14,6 +14,14 @@ const CameraPreview = ({ navigation, route }) => {
 
   const [Posting, setPosting] = useState(false);
   const [Caption, setCaption] = useState('');
+
+  // handleCaption function to set text as caption if length is less than 400
+  const handleCaption = (text) => {
+    console.log(text.length)
+    if (text.length <= 400) {
+      setCaption(text);
+    } 
+  }
 
   const callPostMoment = async () => {
     setPosting(true);
@@ -71,19 +79,30 @@ const CameraPreview = ({ navigation, route }) => {
             </Pressable>
           }
         </View>
-        <ImageBackground
-          source={{ uri: Image?.uri }}
-          style={{
-            width: width, flex: 1,
-          }}
-        />
-        <TextInput selectionColor={theme.colors.dark} placeholder="Add a caption"
-          onChangeText={setCaption} style={{
-            position: 'absolute', bottom: 20,
-            width: width - 40, height: 50, backgroundColor: theme.colors.light, borderRadius: 100, paddingHorizontal: 20,
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
-            shadowRadius: 1, elevation: 10, borderWidth: 2, borderColor: theme.colors.dark
-          }} />
+        <Pressable onPress={() => Keyboard.dismiss()} >
+          <ImageBackground
+            source={{ uri: Image?.uri }}
+            style={{
+              width: width, flex: 1,
+            }}
+          />
+        </Pressable>
+        <View style={{ position: 'absolute', bottom: 20 }}>
+          <TextInput multiline={true} selectionColor={theme.colors.dark} placeholder="Add a caption"
+            value={Caption}
+            onChangeText={handleCaption} style={{
+              paddingTop: 10, paddingBottom: 10,
+              width: width - 40, height: 80, backgroundColor: theme.colors.light, borderRadius: 10, paddingHorizontal: 10,
+              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+              shadowRadius: 1, elevation: 10, borderWidth: 2, borderColor: theme.colors.dark
+            }} />
+          <Text style={{
+            position: 'absolute', bottom: 85, fontWeight: fontWeights.semibold, fontSize: fontSizes.smallMedium,
+            color: Caption?.length > 400 ? theme.colors.danger : theme.colors.light, shadowColor: theme.colors.dark,
+            shadowOffset: { width: 1, height: 1 }, shadowOpacity: 1,
+            shadowRadius: 1, elevation: 10, right: 5
+          }}>{Caption?.length}/400</Text>
+        </View>
       </View>
     </KeyboardAvoidingView>
   )

@@ -54,7 +54,12 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
         showsVerticalScrollIndicator={false}
         data={Feed?.length === 0 ? noFeed : Feed}
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
-        ListFooterComponent={<View style={{ height: 200 }}></View>}
+        ListFooterComponent={!Feed?.length && <View style={{ height: 150 }}>
+          <Text style={{
+            textAlign: "center", marginTop: 20, fontSize: fontSizes.medium, fontWeight: fontWeights.normal,
+            color: theme.colors.grey, fontStyle: "italic"
+          }}>You have scrolled to the bottom</Text>
+        </View>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item, index }) => {
           if (Array.isArray(item)) {
@@ -63,7 +68,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
             )
           } else if (item?.text === "No posts to show.") {
             return (
-              <View style={{ position: "absolute", flex: 1, height: height/2, justifyContent: "center", alignItems: "center", width: width }}>
+              <View style={{ position: "absolute", flex: 1, height: height / 2, justifyContent: "center", alignItems: "center", width: width }}>
                 <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center' }}>
                   There is nothing to show, add friends{'\n'}to your bubble to fill up this space.
                 </Text>

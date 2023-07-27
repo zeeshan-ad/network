@@ -2,7 +2,7 @@
   "expo": {
     "name": "Yeet",
     "slug": "network",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": [
@@ -33,7 +33,7 @@
       "infoPlist": {
         "NSAllowsArbitraryLoads": true
       },
-      "buildNumber": "24",
+      "buildNumber": "25",
       "bundleIdentifier": "com.yeet.network"
     },
     "android": {

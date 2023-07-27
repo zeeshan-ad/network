@@ -191,8 +191,9 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               }} />
             <TextInput
               selectionColor={theme.colors.darkgrey}
-              onChangeText={(text) => setcomment(text)}
+              onChangeText={(text) => setcomment(text.trim())}
               value={comment}
+              multiline={true}
               style={styles.input} placeholder="Add a comment" />
             {comment?.length > 0 && !isPostingComment && <Pressable
               onPress={callAddComment}
@@ -200,7 +201,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
             </Pressable>}
             {isPostingComment &&
-              <View style={{ position: "absolute", top: 13, right: -50 }}>
+              <View style={{ position: "absolute", top: 18, right: -50 }}>
                 <ActivityIndicator size="small" color={theme.colors.secondary} />
               </View>
             }
@@ -314,11 +315,13 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               {item.caption}
             </Text>
           </BlurView>}
-        <Image placeholder={blurhash} style={{
-          height: '100%',
-          width: '100%',
-        }}
-          source={BASE_URL + item.moment} />
+        <Pressable onPress={() => Keyboard.dismiss()}>
+          <Image placeholder={blurhash} style={{
+            height: '100%',
+            width: '100%',
+          }}
+            source={BASE_URL + item.moment} />
+        </Pressable>
       </View>
       <BottomSheet
         visible={ShowOption}
@@ -379,13 +382,15 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
 const styles = StyleSheet.create({
   input: {
     borderWidth: 2,
-    borderRadius: 100,
+    borderRadius: 10,
     borderColor: theme.colors.dark,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingRight: 50,
     backgroundColor: theme.colors.light,
     width: width - 90,
-    height: 50,
+    height: 60,
     color: theme.colors.dark,
     fontSize: fontSizes.smallMedium,
     fontWeight: 'medium'
@@ -405,7 +410,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 10,
+    top: 15,
     right: -50,
     width: 30,
     height: 30,

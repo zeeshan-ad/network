@@ -14,13 +14,13 @@ import { Image } from 'expo-image';
 import { TextInput } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import BlockedUsers from '../components/BlockedUsers';
-import { BlurView } from 'expo-blur';
 import { getCalendars } from 'expo-localization';
 import { RefreshControl } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { formatTime } from '../util/functions';
 import ProfileMomentsTab from '../components/ProfileMomentsTab';
 import { useFonts } from 'expo-font';
+import moment from 'moment-timezone';
 
 
 
@@ -274,7 +274,6 @@ const Profile = ({ navigation, route }) => {
   const [ModalLogout, setModalLogout] = useState(false);
   const [ModalRequest, setModalRequest] = useState(false);
   const [RemoveFriend, setRemoveFriend] = useState(false);
-
   if (!fontsLoaded) {
     return null;
   }
@@ -382,10 +381,7 @@ const Profile = ({ navigation, route }) => {
               <View style={{ flexDirection: 'row', gap: 5, alignItems: 'flex-end', marginVertical: 10 }}>
                 <FontAwesome name="birthday-cake" size={13} color={theme.colors.backdrop} />
                 <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.ligh, marginBottom: -4 }}>
-                  {(new Date(userId ? ProfileInfo?.dob : userInfo?.dob).toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'short'
-                  }))}
+                  {moment(userId ? ProfileInfo?.dob : userInfo?.dob).format("MMM D")}
                 </Text>
               </View>
               {userId && (
@@ -422,15 +418,15 @@ const Profile = ({ navigation, route }) => {
                         </View>
                       </Pressable> :
                       sendingReq ? <ActivityIndicator size="small" color={theme.colors.backdrop} /> :
-                      <Pressable onPress={callSendRequest}>
-                        <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
-                          <Ionicons name="md-person-add" size={16} color={theme.colors.backdrop} />
-                          <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: -.5 }}>
-                            Join bubble
-                          </Text>
-                        </View>
-                      </Pressable>
-                      )
+                        <Pressable onPress={callSendRequest}>
+                          <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
+                            <Ionicons name="md-person-add" size={16} color={theme.colors.backdrop} />
+                            <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.light, textDecorationLine: 'underline', marginBottom: -.5 }}>
+                              Join bubble
+                            </Text>
+                          </View>
+                        </Pressable>
+              )
               }
             </View>
           </View>

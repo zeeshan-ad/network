@@ -12,12 +12,15 @@ import FlatListHeaderMemo from './FlatListHeaderMemo';
 import { BottomSheet } from 'react-native-btr';
 import { ActivityIndicator } from 'react-native-paper';
 import { formatTime } from '../util/functions';
+import { Keyboard } from 'react-native';
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const PostTextExpanded = ({ navigation, route }) => {
+  
+
   const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
   const isFocused = useIsFocused();
@@ -189,8 +192,9 @@ const PostTextExpanded = ({ navigation, route }) => {
           }} />
         <TextInput
           selectionColor={theme.colors.darkgrey}
-          onChangeText={(text) => setcomment(text)}
+          onChangeText={(text) => setcomment(text.trim())}
           value={comment}
+          multiline={true}
           style={styles.input} placeholder="Add a comment" />
         {comment?.length > 0 && !isPostingComment && <Pressable
           onPress={callAddComment}
@@ -198,7 +202,7 @@ const PostTextExpanded = ({ navigation, route }) => {
           <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
         </Pressable>}
         {isPostingComment &&
-          <View style={{ position: "absolute", top: 23, right: 35, zIndex: 9999 }}>
+          <View style={{ position: "absolute", top: 28, right: 35, zIndex: 9999 }}>
             <ActivityIndicator size="small" color={theme.colors.secondary} />
           </View>
         }
@@ -248,13 +252,15 @@ const PostTextExpanded = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   input: {
     borderWidth: 2,
-    borderRadius: 100,
+    borderRadius: 10,
     borderColor: theme.colors.dark,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingRight: 50,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: theme.colors.light,
     width: width - 90,
-    height: 50,
+    height: 60,
     color: theme.colors.dark,
     fontSize: fontSizes.smallMedium,
     fontWeight: 'medium',
@@ -268,7 +274,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 20,
+    top: 25,
     right: 30,
     width: 30,
     height: 30,
