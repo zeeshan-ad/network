@@ -145,7 +145,7 @@ const Profile = ({ navigation, route }) => {
   useEffect(() => {
     if (!userId)
       setFriendsAccess(true)
-    else if (RequestStatus?.status)
+    else if (RequestStatus?.status === 'accepted')
       setFriendsAccess(true)
     else
       setFriendsAccess(false)
@@ -196,11 +196,15 @@ const Profile = ({ navigation, route }) => {
     }
   }, [isFocused, userId, userInfo?.id])
 
+  const [sendingReq, setsendingReq] = useState(false);
   const callSendRequest = async () => {
+    setsendingReq(true);
     const response = await sendRequest(userId);
     if (response?.data?.status === 200) {
+      setsendingReq(false);
       callGetRequestStatus();
     } else {
+      setsendingReq(false);
       alert('Something went wrong. Please try again later.');
     }
   }
@@ -417,6 +421,7 @@ const Profile = ({ navigation, route }) => {
                           </Text>
                         </View>
                       </Pressable> :
+                      sendingReq ? <ActivityIndicator size="small" color={theme.colors.backdrop} /> :
                       <Pressable onPress={callSendRequest}>
                         <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'flex-end' }}>
                           <Ionicons name="md-person-add" size={16} color={theme.colors.backdrop} />
@@ -424,7 +429,8 @@ const Profile = ({ navigation, route }) => {
                             Join bubble
                           </Text>
                         </View>
-                      </Pressable>)
+                      </Pressable>
+                      )
               }
             </View>
           </View>
