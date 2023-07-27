@@ -27,7 +27,10 @@ export function convertDateFormat(dateString) {
 
 export function formatTime(timestamp, type) {
   const localTime = moment.utc(timestamp, 'YYYY-MM-DD HH:mm:ss').local();
-  const localTimeProfile = moment.utc(timestamp, 'YYYY-MM-DD').local();
+  const localTimeProfile = moment.utc(timestamp, 'YYYY-MM-DD HH:mm:ss').local();
+  const localTimeProfileDate = localTimeProfile.format('YYYY-MM-DD');
+
+  const nowProfile = moment().format('YYYY-MM-DD');
 
   const now = moment();
   const diffInSeconds = now.diff(localTime, 'seconds');
@@ -35,7 +38,7 @@ export function formatTime(timestamp, type) {
   const diffInHours = now.diff(localTime, 'hours');
   const diffInDays = now.diff(localTime, 'days');
 
-  const diffInDaysProfile = now.diff(localTimeProfile, 'days');
+  const diffInDaysProfile = moment(nowProfile).diff(localTimeProfileDate, 'days');
 
   if (type === 'profile') {
     if (diffInDaysProfile === 0) {
