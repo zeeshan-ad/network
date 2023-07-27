@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfoSlice';
 import _ from 'lodash';
 import Checkbox from 'expo-checkbox';
+import { ActivityIndicator } from 'react-native';
 
 
 const Signup = ({ route, navigation }) => {
@@ -109,14 +110,17 @@ const Signup = ({ route, navigation }) => {
     }));
   };
 
+  const [Loading, setLoading] = useState(false);
   const callCreateAccount = async () => {
     if (Step === 2) {
       if (LoginStatus === false) return;
+      setLoading(true);
       const response = await createAccount(UserDetails);
-      console.log(response)
       if (response?.status === 200) {
+        setLoading(false);
         dispatch(setUserInfo(response.data.data));
       } else {
+        setLoading(false);
         alert('Something went wrong. Please try again later.');
       }
     } else {
@@ -180,21 +184,22 @@ const Signup = ({ route, navigation }) => {
                 </Pressable>
               }
 
-              {Step === 2 &&
-                <>
-                  <Pressable
-                    onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
-                    style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
-                    <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={() => {
-                      setStep(1);
-                    }}
-                    style={{ position: 'absolute', bottom: 10 }}>
-                    <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
-                  </Pressable>
-                </>}
+              {Step === 2 && (
+                Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} style={{ position: 'absolute', bottom: 50 }} /> :
+                  <>
+                    <Pressable
+                      onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
+                      style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
+                      <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        setStep(1);
+                      }}
+                      style={{ position: 'absolute', bottom: 10 }}>
+                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
+                    </Pressable>
+                  </>)}
 
               <Text style={styles.text}>
                 {`${Email}\n`}

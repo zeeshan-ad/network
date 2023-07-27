@@ -9,6 +9,7 @@ import { FlatList } from 'react-native';
 import { getMemoORMoment, updateIsView } from '../APIs';
 import { getCalendars } from 'expo-localization';
 import { RefreshControl } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 
 
@@ -34,10 +35,12 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
 
 
   const { timeZone } = getCalendars()[0];
-
+  const [FetchNotifData, setFetchNotifData] = useState(false);
   const callGetMemoOrMoment = async (post_id, post_type) => {
+    setFetchNotifData(true);
     const response = await getMemoORMoment(post_id, post_type, timeZone);
     if (response?.status === 200) {
+      setFetchNotifData(false);
       if (response?.data?.data?.post_type === 'moment') {
         setshowNotif(false);
         navigation.navigate('PostExpanded', {
@@ -47,6 +50,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
           }
         });
       } else {
+        setFetchNotifData(true);
         setshowNotif(false);
         navigation.push('PostTextExpanded', { memo: { ...response?.data?.data } });
       }
@@ -93,7 +97,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
               </View> : null}
           </Pressable>
           <Pressable onPress={() => { navigation.navigate('Profile', { userId: null, themeColor: editProfile.theme }); }}>
-            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image} placeholder={blurhash}
+            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
               style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
               (<Image source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
@@ -148,10 +152,13 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
           }
           {Notifications?.length > 0 &&
             <View>
-              <Text style={{
-                paddingHorizontal: 10, fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
-                textDecorationLine: 'underline', paddingBottom: 10
-              }}>Alerts</Text>
+              <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
+                <Text style={{
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
+                  textDecorationLine: 'underline', paddingBottom: 10
+                }}>Alerts</Text>
+                {FetchNotifData && <Text><ActivityIndicator size="small" color={theme.colors.backdrop} /></Text>}
+              </View>
               <FlatList
                 data={Notifications}
                 ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? 250 : 50 }} />}

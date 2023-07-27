@@ -55,7 +55,7 @@ export const ProfileTheme = [
   "#FFA5A5",
   "#FFC1A5",
   "#FFD8A5",
-  "#D2FFA5",
+  // "#D2FFA5",
   "#A5FFA5",
   "#A5FFFB",
   "#A5D9FF",

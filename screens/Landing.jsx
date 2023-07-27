@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, Pressable, TextInput } fr
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { APP_NAME, emailRegex, fontSizes, fontWeights, theme } from '../util/constants';
-import { StatusBar } from 'expo-status-bar';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { Link } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,6 +10,7 @@ import { loginUser, verifyEmail } from '../APIs';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfoSlice';
+import { ActivityIndicator } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,7 +22,7 @@ const Landing = ({ navigation }) => {
     passwordHidden: true,
   });
 
-
+  const [Loading, setLoading] = useState(false);
   const [fontsLoaded] = useFonts({
     'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf'),
   });
@@ -57,22 +57,32 @@ const Landing = ({ navigation }) => {
   }
 
   const callVerifyEmail = async () => {
+    setLoading(true);
     const response = await verifyEmail(UserCred?.email);
     if (response?.status === 200) {
+      setLoading(false);
       navigation.navigate('Signup', { Email: UserCred?.email });
     } else if (response?.status === 409) {
+      setLoading(false);
       setDisplayPasswordInput(true);
     } else {
+      setLoading(false);
       alert('Something went wrong. Please try again later.');
     }
   }
 
   const callLogin = async () => {
+    setLoading(true);
     const response = await loginUser(UserCred);
-    if (response?.status === 200) {
+    if (response?.status === 200 && response?.data?.message === 'Login Successful') {
+      setLoading(false);
       dispatch(setUserInfo(response?.data?.data));
+    } else if (response?.status === 200 && response?.data?.status === 401) {
+      setLoading(false);
+      alert('Incorrect Password. Please try again with the correct password.');
     } else {
-      alert('Invalid Credentials');
+      setLoading(false);
+      alert('Something went wrong. Please try again later.');
     }
   }
 
@@ -102,24 +112,26 @@ const Landing = ({ navigation }) => {
                     size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                 </View> :
                 <TextInput
-                selectionColor={theme.colors.dark}
+                  selectionColor={theme.colors.dark}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
                   style={styles.input} placeholder="Enter your email to continue" />
               }
-              <Pressable
-                onPress={() => {
-                  if (UserCred.email.match(emailRegex)) {
-                    if (DisplayPasswordInput) {
-                      callLogin();
-                    } else {
-                      callVerifyEmail();
+              {Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} /> :
+                <Pressable
+                  onPress={() => {
+                    if (UserCred.email.match(emailRegex)) {
+                      if (DisplayPasswordInput) {
+                        callLogin();
+                      } else {
+                        callVerifyEmail();
+                      }
                     }
-                  }
-                }}
-                style={[styles.button, { backgroundColor: UserCred.email.match(emailRegex) ? theme.colors.secondary : theme.colors.disabled }]}>
-                <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
-              </Pressable>
+                  }}
+                  style={[styles.button, { backgroundColor: UserCred.email.match(emailRegex) ? theme.colors.secondary : theme.colors.disabled }]}>
+                  <MaterialCommunityIcons name="arrow-top-right" size={30} color="black" />
+                </Pressable>
+              }
             </View>
             <View>
               {DisplayPasswordInput &&
@@ -145,8 +157,8 @@ const Landing = ({ navigation }) => {
         <View>
           <Text style={styles.text}>
             By continuing, you accept our{'\n'}
-            <Link style={styles.link} to={{ screen: 'Document', params: {DocType: 'Policy'} }}>Privacy Policy</Link>&nbsp;and
-            &nbsp;<Link style={styles.link} to={{ screen: 'Document', params: {DocType: 'Terms'} }}>Terms of Service</Link>
+            <Link style={styles.link} to={{ screen: 'Document', params: { DocType: 'Policy' } }}>Privacy Policy</Link>&nbsp;and
+            &nbsp;<Link style={styles.link} to={{ screen: 'Document', params: { DocType: 'Terms' } }}>Terms of Service</Link>
           </Text>
         </View>
       }
@@ -155,12 +167,12 @@ const Landing = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
- container: {
+  container: {
     paddingTop: 70,
     height: '100%',
     justifyContent: 'space-between',
     backgroundColor: theme.colors.light,
-  }, 
+  },
   title: { textAlign: 'center', marginTop: -20, fontSize: fontSizes.large, fontWeight: fontWeights.normal },
   form: { flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center' },
   link: { textDecorationLine: 'underline' },
