@@ -192,7 +192,7 @@ const PostTextExpanded = ({ navigation, route }) => {
           }} />
         <TextInput
           selectionColor={theme.colors.darkgrey}
-          onChangeText={(text) => setcomment(text.trim())}
+          onChangeText={(text) => setcomment(text)}
           value={comment}
           multiline={true}
           style={styles.input} placeholder="Add a comment" />

@@ -191,7 +191,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               }} />
             <TextInput
               selectionColor={theme.colors.darkgrey}
-              onChangeText={(text) => setcomment(text.trim())}
+              onChangeText={(text) => setcomment(text)}
               value={comment}
               multiline={true}
               style={styles.input} placeholder="Add a comment" />
@@ -214,10 +214,10 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
         <View style={{
           flex: 1,
           backgroundColor: "transparent",
-          position: 'absolute', right: 20, bottom: 220, zIndex: 9
+          position: 'absolute', right: 20, bottom: 170, zIndex: 9
         }}>
           <View style={{
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
             shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
             {liked?.isLiked ?
@@ -242,10 +242,10 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             overflow: "hidden",
             flex: 1,
             backgroundColor: "transparent",
-            position: 'absolute', right: 20, bottom: 105, zIndex: 9
+            position: 'absolute', right: 20, bottom: 230, zIndex: 9
           }}>
             <View style={{
-              shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+              shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
               shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
             }}>
               <Pressable onPress={() => setShowOption(true)}>
@@ -270,10 +270,10 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
           overflow: "hidden",
           flex: 1,
           backgroundColor: "transparent",
-          position: 'absolute', right: 20, bottom: 150, zIndex: 9
+          position: 'absolute', right: 20, bottom: 110, zIndex: 9
         }}>
           <View style={{
-            shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: .5,
+            shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
             shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
             <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>

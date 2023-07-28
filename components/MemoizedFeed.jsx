@@ -54,11 +54,12 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
         showsVerticalScrollIndicator={false}
         data={Feed?.length === 0 ? noFeed : Feed}
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
-        ListFooterComponent={!Feed?.length && <View style={{ height: 150 }}>
-          <Text style={{
+        ListFooterComponent={<View style={{ height: 200 }}>
+          {Feed?.length && <Text style={{
             textAlign: "center", marginTop: 20, fontSize: fontSizes.medium, fontWeight: fontWeights.normal,
             color: theme.colors.grey, fontStyle: "italic"
           }}>You have scrolled to the bottom</Text>
+          }
         </View>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item, index }) => {
