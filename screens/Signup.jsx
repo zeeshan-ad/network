@@ -10,6 +10,7 @@ import { setUserInfo } from '../store/userInfoSlice';
 import _ from 'lodash';
 import Checkbox from 'expo-checkbox';
 import { ActivityIndicator } from 'react-native';
+import { Platform } from 'react-native';
 
 
 const Signup = ({ route, navigation }) => {
@@ -129,8 +130,8 @@ const Signup = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+    <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 0 : 40 }]}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"}>
         <DismissKeyboard>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.container}>

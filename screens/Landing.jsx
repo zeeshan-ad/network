@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../store/userInfoSlice';
 import { ActivityIndicator } from 'react-native';
+import { Platform } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -91,7 +92,7 @@ const Landing = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" onLayout={onLayoutRootView}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} onLayout={onLayoutRootView}>
       <DismissKeyboard>
         <View style={styles.container}>
           <View style={styles.centerContainer}>
@@ -112,7 +113,7 @@ const Landing = ({ navigation }) => {
                     size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                 </View> :
                 <TextInput
-                  selectionColor={theme.colors.dark}
+                  selectionColor={theme.colors.backdrop}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
                   style={styles.input} placeholder="Enter your email to continue" />
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   centerContainer: { height: '80%', justifyContent: 'center', alignItems: 'center', gap: 20 },
   logo: {
     fontFamily: 'Pacifico',
-    fontSize: fontSizes.Logo,
+    fontSize: Platform.OS === 'ios' ? fontSizes.Logo : fontSizes.Logo - 15,
     color: theme.colors.dark,
     textAlign: 'center',
     paddingHorizontal: 10,
@@ -202,15 +203,15 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.dark,
     paddingHorizontal: 20,
     backgroundColor: theme.colors.light,
-    width: 300,
-    maxWidth: 300,
+    width: Platform.OS === 'ios' ? 300 : 280,
     height: 50,
     color: theme.colors.dark,
-    fontSize: fontSizes.large,
+    fontSize: Platform.OS === 'ios' ? fontSizes.large : fontSizes.large - 4,
     fontWeight: 'medium'
   },
   text: {
-    position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal, fontSize: fontSizes.medium,
+    position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal,
+    fontSize: Platform.OS === 'ios' ? fontSizes.medium : fontSizes.medium - 2,
     textAlign: 'center', color: theme.colors.dark
   }
 });
