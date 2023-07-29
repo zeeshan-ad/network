@@ -83,3 +83,16 @@ export function extractMomentsForPrefetch(data) {
 
   return moments;
 }
+
+export const formatDOB = (inputDate) => {
+  if(inputDate === null || inputDate === undefined) return null;
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+
+  const [year, month, day] = inputDate?.split('-');
+  const formattedDate = `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]}`;
+
+  return formattedDate;
+};

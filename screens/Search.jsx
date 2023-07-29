@@ -108,7 +108,7 @@ const Search = ({ navigation, route }) => {
                 }
                 else if (item.loadmore) {
                   return (
-                    loading ? <ActivityIndicator size='small' color={theme.colors.dark} style={{ marginTop: 20 }} /> :
+                    loading ? <ActivityIndicator size='small' color={theme.colors.backdrop} style={{ marginTop: 20 }} /> :
                       <Pressable onPress={LoadMore} style={{ marginTop: 20 }}>
                         <Text style={{
                           fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center',

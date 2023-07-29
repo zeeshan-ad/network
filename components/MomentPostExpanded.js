@@ -9,9 +9,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { getComments } from '../APIs/getComments';
 import { useSelector } from 'react-redux';
 import { BottomSheet } from 'react-native-btr';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native';
 import { BlurView } from 'expo-blur';
-import moment from 'moment-timezone';
 import { formatTime } from '../util/functions';
 
 
@@ -101,7 +100,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
 
   useEffect(() => {
     if (ReplyingTo !== null) {
-      if (!comment.includes(ReplyingTo?.name)) {
+      if (!comment?.includes(ReplyingTo?.name)) {
         setReplyingTo(null);
         setcomment('');
       }
@@ -201,8 +200,8 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
               <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
             </Pressable>}
             {isPostingComment &&
-              <View style={{ position: "absolute", top: 18, right: -50 }}>
-                <ActivityIndicator size="small" color={theme.colors.secondary} />
+              <View style={{ position: "absolute", top: 20, right: -50 }}>
+                <ActivityIndicator size="small" color={theme.colors.backdrop} />
               </View>
             }
           </View>

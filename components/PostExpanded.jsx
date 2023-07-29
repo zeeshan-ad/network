@@ -47,7 +47,16 @@ const PostExpanded = ({ navigation, route }) => {
   }, [moment, MomentbyId])
 
   const [CurrentIndex, setCurrentIndex] = useState(0)
+  const [ShowImage, setShowImage] = useState(true);
 
+  useEffect(() => {
+    if (user?.image?.includes('null'))
+      setShowImage(false);
+    else if (!user?.image)
+      setShowImage(false);
+    else
+      setShowImage(true);
+  }, [user?.image])
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{
@@ -70,8 +79,8 @@ const PostExpanded = ({ navigation, route }) => {
                 userId: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.user_id : null,
                 themeColor: CarouselMoment?.[0]?.user_id !== userInfo?.id ? CarouselMoment?.[0]?.theme : editProfile?.theme
               })} style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-                
-              <Image placeholder={blurhash} source={!user?.image.includes('null') ? user?.image : require('../assets/images/placeholder_profile.png')}
+
+              <Image placeholder={blurhash} source={ShowImage ? user?.image : require('../assets/images/placeholder_profile.png')}
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <View>
                 <Text style={{

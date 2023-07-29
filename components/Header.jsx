@@ -93,7 +93,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                 borderWidth: 1, borderColor: theme.colors.dark, padding: 2, backgroundColor: theme.colors.secondary, borderRadius: 100,
                 justifyContent: "center", alignItems: 'center', flexDirection: 'column',
               }}>
-                <Text style={{ color: theme.colors.dark, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal }}>{unseenReq + NotifCount}</Text>
+                <Text style={{ color: theme.colors.dark, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal }}>{!isNaN(unseenReq + NotifCount) && unseenReq + NotifCount}</Text>
               </View> : null}
           </Pressable>
           <Pressable onPress={() => { navigation.navigate('Profile', { userId: null, themeColor: editProfile.theme }); }}>

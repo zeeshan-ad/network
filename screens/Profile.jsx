@@ -16,8 +16,8 @@ import { KeyboardAvoidingView } from 'react-native';
 import BlockedUsers from '../components/BlockedUsers';
 import { getCalendars } from 'expo-localization';
 import { RefreshControl } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
-import { formatTime } from '../util/functions';
+import { ActivityIndicator } from 'react-native';
+import { formatDOB, formatTime } from '../util/functions';
 import ProfileMomentsTab from '../components/ProfileMomentsTab';
 import { useFonts } from 'expo-font';
 import moment from 'moment-timezone';
@@ -55,14 +55,18 @@ const Profile = ({ navigation, route }) => {
     setFriendsList(response?.data?.data);
   }
 
+  const [Loggingout, setLoggingout] = useState(false);
   const callLogout = async () => {
+    setLoggingout(true);
     const response = await logoutUser();
 
     if (response?.status === 200) {
+      setLoggingout(false);
       dispatch(resetUserInfo());
       dispatch(resetProfileData());
     }
     else {
+      setLoggingout(false);
       alert('Something went wrong. Please try again later.');
     }
   }
@@ -131,12 +135,16 @@ const Profile = ({ navigation, route }) => {
   }
 
 
+  const [DeletingUser, setDeletingUser] = useState(false);
   const callDeleteUser = async () => {
+    setDeletingUser(true);
     const response = await deleteUser();
     if (response?.data?.status === 200) {
+      setDeletingUser(false);
       dispatch(resetUserInfo());
       dispatch(resetProfileData());
     } else {
+      setDeletingUser(false);
       alert('Something went wrong. Please try again later.');
     }
   }
@@ -245,7 +253,6 @@ const Profile = ({ navigation, route }) => {
     }
   }
 
-
   // if BlockedListData has user_id || blocked_user_id == userId then show user can't be  viewed [{"blocked_user_id": 22, "created_at": "2023-07-20T20:17:06.876Z", "id": 7, "name": "Tzara Ali", "profile_pic": "/uploads/profile_pic-1689233273285.png", "user_id": 21}]
 
   const [UserBlocked, setUserBlocked] = useState(false);
@@ -260,7 +267,6 @@ const Profile = ({ navigation, route }) => {
       }
     }
   }, [BlockedListData, BlockedListData2])
-
 
   const [BlockedShow, setBlockedShow] = useState();
   const [ShowScore, setShowScore] = useState(false);
@@ -289,7 +295,7 @@ const Profile = ({ navigation, route }) => {
             Go Back
           </Text>
         </View>
-        <ActivityIndicator size="large" color={theme.colors.secondary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
+        <ActivityIndicator size="large" color={theme.colors.backdrop} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
       </SafeAreaView>
     )
   }
@@ -381,7 +387,7 @@ const Profile = ({ navigation, route }) => {
               <View style={{ flexDirection: 'row', gap: 5, alignItems: 'flex-end', marginVertical: 10 }}>
                 <FontAwesome name="birthday-cake" size={13} color={theme.colors.backdrop} />
                 <Text style={{ color: theme.colors.backdrop, fontSize: fontSizes.medium, fontWeight: fontWeights.ligh, marginBottom: -4 }}>
-                  {moment(userId ? ProfileInfo?.dob : userInfo?.dob).format("MMM D")}
+                  {formatDOB(userId ? ProfileInfo?.dob : userInfo?.dob)}
                 </Text>
               </View>
               {userId && (
@@ -643,23 +649,28 @@ const Profile = ({ navigation, route }) => {
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
               Are you sure you want to log out?
             </Text>
-            <Pressable
-              style={{
-                borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
-                backgroundColor: theme.colors.danger
-              }}
-              onPress={() => {
-                setModalLogout(!ModalLogout);
-                setTimeout(() => {
-                  callLogout();
-                }, 400)
-              }}>
-              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Log Out</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setModalLogout(!ModalLogout)}>
-              <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
-            </Pressable>
+            {Loggingout ? <ActivityIndicator size="small" color={theme.colors.backdrop} /> :
+
+              <>
+                <Pressable
+                  style={{
+                    borderWidth: 2, borderColor: theme.colors.dark, paddingVertical: 10, paddingHorizontal: 30, borderRadius: 100,
+                    backgroundColor: theme.colors.danger
+                  }}
+                  onPress={() => {
+                    setModalLogout(!ModalLogout);
+                    setTimeout(() => {
+                      callLogout();
+                    }, 500);
+                  }}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Log Out</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setModalLogout(!ModalLogout)}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
+                </Pressable>
+              </>
+            }
           </View>
         </View>
       </Modal>
@@ -673,21 +684,23 @@ const Profile = ({ navigation, route }) => {
             <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
               Are you sure you delete your account?{'\n'}{'\n'}Once the account is deleted all your data will be lost and cannot be recovered.
             </Text>
-            <View style={{ flexDirection: 'row', width: '100%', gap: 50, justifyContent: 'space-evenly', alignItems: 'center' }}>
-              <Pressable
-                onPress={() => {
-                  setModalDelete(!ModalDelete);
-                  setTimeout(() => {
-                    callDeleteUser();
-                  }, 400)
-                }}>
-                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.light }}>Delete Account</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => setModalDelete(!ModalDelete)}>
-                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
-              </Pressable>
-            </View>
+            {DeletingUser ? <ActivityIndicator size="small" color={theme.colors.light} /> :
+              <View style={{ flexDirection: 'row', width: '100%', gap: 50, justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <Pressable
+                  onPress={() => {
+                    setModalDelete(!ModalDelete);
+                    setTimeout(() => {
+                      callDeleteUser();
+                    }, 500)
+                  }}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.light }}>Delete Account</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setModalDelete(!ModalDelete)}>
+                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal, marginVertical: 20 }}>Cancel</Text>
+                </Pressable>
+              </View>
+            }
           </View>
         </View>
       </Modal>
@@ -699,7 +712,7 @@ const Profile = ({ navigation, route }) => {
           <View style={styles.centeredView}>
             <View style={[styles.modalView, { backgroundColor: theme.colors.light }]}>
               <Text style={{ fontSize: fontSizes.large, textAlign: 'center', fontWeight: fontWeights.normal, paddingVertical: 20, paddingHorizontal: 20 }}>
-                {!RemoveFriend ? ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
+                {!RemoveFriend ? ProfileInfo?.name + ' '?.substring(0, ProfileInfo?.name + ' '.indexOf(' ')) + ' has requested to\njoin your bubble.' : 'Are you sure you want to remove ' + ProfileInfo?.name?.substring(0, ProfileInfo?.name.indexOf(' ')) + ' from your bubble?'}
               </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 50 }}>
                 <Pressable

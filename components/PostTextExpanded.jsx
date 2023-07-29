@@ -10,7 +10,7 @@ import { getComments } from '../APIs/getComments';
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListHeaderMemo from './FlatListHeaderMemo';
 import { BottomSheet } from 'react-native-btr';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native';
 import { formatTime } from '../util/functions';
 import { Keyboard } from 'react-native';
 
@@ -97,7 +97,7 @@ const PostTextExpanded = ({ navigation, route }) => {
 
   useEffect(() => {
     if (ReplyingTo !== null) {
-      if (!comment.includes(ReplyingTo?.name)) {
+      if (!comment?.includes(ReplyingTo?.name)) {
         setReplyingTo(null);
         setcomment('');
       }
@@ -202,8 +202,8 @@ const PostTextExpanded = ({ navigation, route }) => {
           <MaterialCommunityIcons name="arrow-top-right" size={20} color="black" />
         </Pressable>}
         {isPostingComment &&
-          <View style={{ position: "absolute", top: 28, right: 35, zIndex: 9999 }}>
-            <ActivityIndicator size="small" color={theme.colors.secondary} />
+          <View style={{ position: "absolute", top: 30, right: 35, zIndex: 9999 }}>
+            <ActivityIndicator size="small" color={theme.colors.backdrop} />
           </View>
         }
       </View>
