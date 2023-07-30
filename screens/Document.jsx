@@ -3,7 +3,6 @@ import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Platform } from 'react-native';
 
 
 const Document = ({ navigation, route }) => {
@@ -295,28 +294,28 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   title: {
-    fontSize: Platform.OS === 'ios' ? fontSizes.large : fontSizes.large - 4,
+    fontSize: fontSizes.large,
     fontWeight: fontWeights.normal,
     textDecorationLine: 'underline'
   },
   contentContainer: {
   },
   heading: {
-    fontSize: Platform.OS === 'ios' ? fontSizes.heading : fontSizes.heading - 4,
+    fontSize: fontSizes.heading,
     fontWeight: 'bold',
   },
   sectionHeading: {
-    fontSize: Platform.OS === 'ios' ? fontSizes.large : fontSizes.large - 4,
+    fontSize: fontSizes.large,
     fontWeight: 'bold',
     marginTop: 20,
   },
   sectionSubHeading: {
-    fontSize: Platform.OS === 'ios' ? fontSizes.medium : fontSizes.medium - 2,
+    fontSize: fontSizes.medium,
     fontWeight: 'bold',
     marginTop: 15,
   },
   sectionText: {
-    fontSize: Platform.OS === 'ios' ? fontSizes.medium : fontSizes.medium - 2,
+    fontSize: fontSizes.medium,
     marginTop: 5,
     marginBottom: 10,
   },

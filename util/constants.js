@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
@@ -17,7 +19,8 @@ export const theme = {
     disabled: '#4c9648',
     divider: '#DEDEDE',
     textPost: '#F9F9F3',
-    backdrop: 'rgba(0,0,0,0.6)'
+    backdrop: 'rgba(0,0,0,0.6)',
+    selectionColor: Platform.OS === 'ios' ? '#0A0A0A' : 'rgba(0,0,0,0.4)'
   }
 }
 
@@ -29,17 +32,17 @@ export const fontWeights = {
 }
 
 export const fontSizes = {
-  small: 12,
-  smallMedium: 14,
-  medium: 16,
-  large: 18,
-  yeetPosts: 22,
-  heading: 24,
-  ice: 26,
-  xlarge: 28,
-  smallHightlight: 35,
-  BigHightlight: 42,
-  Logo: 70,
+  small: Platform.OS === 'ios' ? 12 : 10,
+  smallMedium: Platform.OS === 'ios' ? 14 : 12,
+  medium: Platform.OS === 'ios' ? 16 : 14,
+  large: Platform.OS === 'ios' ? 18 : 14,
+  yeetPosts: Platform.OS === 'ios' ? 22 : 18,
+  heading: Platform.OS === 'ios' ? 24 : 20,
+  ice: Platform.OS === 'ios' ? 26 : 22,
+  xlarge: Platform.OS === 'ios' ? 28 : 24,
+  smallHightlight: Platform.OS === 'ios' ? 35 : 30,
+  BigHightlight: Platform.OS === 'ios' ? 42 : 35,
+  Logo: Platform.OS === 'ios' ? 70 : 55,
 }
 
 export const blurhash =

@@ -73,7 +73,8 @@ const ResetPassword = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -300}
+       behavior="padding" style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={{ flex: 1, alignItems: "center" }}>
           <Text style={styles.title}>
             Reset Password
@@ -86,7 +87,7 @@ const ResetPassword = ({ navigation, route }) => {
                 </Text>
               </View>
               <TextInput
-                selectionColor={theme.colors.dark}
+                selectionColor={theme.colors.selectionColor}
                 placeholder="Enter OTP"
                 keyboardType='numeric'
                 value={OTP}

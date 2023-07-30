@@ -88,7 +88,7 @@ const CameraPreview = ({ navigation, route }) => {
           />
         </Pressable>
         <View style={{ position: 'absolute', bottom: 20 }}>
-          <TextInput multiline={true} selectionColor={theme.colors.dark} placeholder="Add a caption"
+          <TextInput multiline={true} selectionColor={theme.colors.selectionColor} placeholder="Add a caption"
             value={Caption}
             onChangeText={handleCaption} style={{
               paddingTop: 10, paddingBottom: 10,

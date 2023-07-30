@@ -107,13 +107,13 @@ const Landing = ({ navigation }) => {
             <View style={styles.form}>
               {DisplayPasswordInput ?
                 <View style={{ justifyContent: 'center' }}>
-                  <TextInput selectionColor={theme.colors.dark} secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
+                  <TextInput selectionColor={theme.colors.selectionColor} secureTextEntry={UserCred.passwordHidden} onChangeText={handlePasswordChange}
                     style={styles.input} placeholder='Password' />
                   <Ionicons name={`${UserCred.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
                     size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                 </View> :
                 <TextInput
-                  selectionColor={theme.colors.backdrop}
+                  selectionColor={theme.colors.selectionColor}
                   onChangeText={handleEmailInput}
                   value={UserCred?.email}
                   style={styles.input} placeholder="Enter your email to continue" />
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   centerContainer: { height: '80%', justifyContent: 'center', alignItems: 'center', gap: 20 },
   logo: {
     fontFamily: 'Pacifico',
-    fontSize: Platform.OS === 'ios' ? fontSizes.Logo : fontSizes.Logo - 15,
+    fontSize: fontSizes.Logo,
     color: theme.colors.dark,
     textAlign: 'center',
     paddingHorizontal: 10,
@@ -203,15 +203,15 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.dark,
     paddingHorizontal: 20,
     backgroundColor: theme.colors.light,
-    width: Platform.OS === 'ios' ? 300 : 280,
-    height: 50,
+    width: Platform.OS === 'ios' ? 300 : 270,
+    height: Platform.OS === 'ios' ? 50 : 45,
     color: theme.colors.dark,
-    fontSize: Platform.OS === 'ios' ? fontSizes.large : fontSizes.large - 4,
+    fontSize: fontSizes.large,
     fontWeight: 'medium'
   },
   text: {
     position: 'absolute', bottom: 20, right: 0, left: 0, fontWeight: fontWeights.normal,
-    fontSize: Platform.OS === 'ios' ? fontSizes.medium : fontSizes.medium - 2,
+    fontSize: fontSizes.medium,
     textAlign: 'center', color: theme.colors.dark
   }
 });

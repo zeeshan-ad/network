@@ -130,96 +130,97 @@ const Signup = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 0 : 40 }]}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"}>
+    <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 0 : 30 }]}>
+      <KeyboardAvoidingView keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -300}
+        behavior={Platform.OS === 'ios' ? "padding" : "height"}>
         <DismissKeyboard>
-          <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.container}>
-              <Text style={styles.title}>
-                {Step === 1 ? "Let's get you ready!" : "Choose a username"}
-              </Text>
-              <View style={styles.form}>
-                {Step === 1 ?
-                  <>
-                    <TextInput selectionColor={theme.colors.dark} style={styles.input} placeholder='Name' value={UserDetails.name} onChangeText={handleNameChange} />
-                    <TextInput selectionColor={theme.colors.dark} keyboardType="numeric" style={styles.input}
-                      value={UserDetails.dob} placeholder='Birthday (dd/mm/yyyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
-                      <TextInput selectionColor={theme.colors.dark} secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
-                        style={styles.input} placeholder='Password' value={UserDetails.password} onFocus={() => {
-                          if (UserDetails?.password?.length < 8) {
-                            setUserDetails((prevDetails) => ({
-                              ...prevDetails,
-                              passwordWarning: true,
-                            }));
-                          }
-                        }} />
-                      <Ionicons name={`${UserDetails.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
-                        size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
-                    </View>
-                    {UserDetails.passwordWarning &&
-                      <Text style={styles.infoText}>
-                        Password must be at least 8 characters long.
-                      </Text>}
-                  </>
-                  :
-                  <View style={{ justifyContent: 'center' }}>
-                    <TextInput selectionColor={theme.colors.dark} onChangeText={handleUserNamechange} style={styles.input} placeholder='Username' onFocus={() => {
-                      setUserDetails((prevDetails) => ({
-                        ...prevDetails,
-                        usernameWarning: true,
-                      }));
-                    }} value={UserDetails?.username} />
-                    {UserDetails.usernameWarning ?
-                      <MaterialCommunityIcons name={`${UserDetails.usernameVerified ? 'check-decagram-outline' : 'close-circle-outline'}`}
-                        size={24} color={UserDetails.usernameVerified ? theme.colors.secondary : theme.colors.danger} style={{ position: 'absolute', right: 15 }} />
-                      : null
-                    }
+          {/* <ScrollView contentContainerStyle={styles.container}> */}
+          <View style={styles.container}>
+            <Text style={styles.title}>
+              {Step === 1 ? "Let's get you ready!" : "Choose a username"}
+            </Text>
+            <View style={styles.form}>
+              {Step === 1 ?
+                <>
+                  <TextInput selectionColor={theme.colors.selectionColor} style={styles.input} placeholder='Name' value={UserDetails.name} onChangeText={handleNameChange} />
+                  <TextInput selectionColor={theme.colors.selectionColor} keyboardType="numeric" style={styles.input}
+                    value={UserDetails.dob} placeholder='Birthday (dd/mm/yyyy)' onChangeText={(text) => handleDateChange(UserDetails.dob, text)} /><View style={{ justifyContent: 'center' }}>
+                    <TextInput selectionColor={theme.colors.selectionColor} secureTextEntry={UserDetails.passwordHidden} onChangeText={handlePasswordChange}
+                      style={styles.input} placeholder='Password' value={UserDetails.password} onFocus={() => {
+                        if (UserDetails?.password?.length < 8) {
+                          setUserDetails((prevDetails) => ({
+                            ...prevDetails,
+                            passwordWarning: true,
+                          }));
+                        }
+                      }} />
+                    <Ionicons name={`${UserDetails.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
+                      size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
                   </View>
-                }
-              </View>
-              {Step === 1 &&
-                <Pressable
-                  onPress={LoginStatus && isChecked ? callCreateAccount : null}
-                  style={[styles.button, { bottom: 20, backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
-                  <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
-                </Pressable>
-              }
-
-              {Step === 2 && (
-                Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} style={{ position: 'absolute', bottom: 50 }} /> :
-                  <>
-                    <Pressable
-                      onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
-                      style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
-                      <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
-                    </Pressable>
-                    <Pressable
-                      onPress={() => {
-                        setStep(1);
-                      }}
-                      style={{ position: 'absolute', bottom: 10 }}>
-                      <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
-                    </Pressable>
-                  </>)}
-
-              <Text style={styles.text}>
-                {`${Email}\n`}
-                <Link to={{ screen: 'Landing' }} style={styles.link}>
-                  Use a different email
-                </Link>
-              </Text>
-              {Step === 1 &&
-                <View style={styles.section}>
-                  <Checkbox
-                    color={isChecked ? theme.colors.secondary : undefined}
-                    style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-                  <Text style={styles.text}>You agree to&nbsp;
-                    <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
-                    &nbsp;on signing up</Text>
+                  {UserDetails.passwordWarning &&
+                    <Text style={styles.infoText}>
+                      Password must be at least 8 characters long.
+                    </Text>}
+                </>
+                :
+                <View style={{ justifyContent: 'center' }}>
+                  <TextInput selectionColor={theme.colors.selectionColor} onChangeText={handleUserNamechange} style={styles.input} placeholder='Username' onFocus={() => {
+                    setUserDetails((prevDetails) => ({
+                      ...prevDetails,
+                      usernameWarning: true,
+                    }));
+                  }} value={UserDetails?.username} />
+                  {UserDetails.usernameWarning ?
+                    <MaterialCommunityIcons name={`${UserDetails.usernameVerified ? 'check-decagram-outline' : 'close-circle-outline'}`}
+                      size={24} color={UserDetails.usernameVerified ? theme.colors.secondary : theme.colors.danger} style={{ position: 'absolute', right: 15 }} />
+                    : null
+                  }
                 </View>
               }
             </View>
-          </ScrollView>
+            {Step === 1 &&
+              <Pressable
+                onPress={LoginStatus && isChecked ? callCreateAccount : null}
+                style={[styles.button, { bottom: 20, backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
+                <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
+              </Pressable>
+            }
+
+            {Step === 2 && (
+              Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} style={{ position: 'absolute', bottom: 50 }} /> :
+                <>
+                  <Pressable
+                    onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
+                    style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
+                    <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setStep(1);
+                    }}
+                    style={{ position: 'absolute', bottom: 10 }}>
+                    <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
+                  </Pressable>
+                </>)}
+
+            <Text style={styles.text}>
+              {`${Email}\n`}
+              <Link to={{ screen: 'Landing' }} style={styles.link}>
+                Use a different email
+              </Link>
+            </Text>
+            {Step === 1 &&
+              <View style={styles.section}>
+                <Checkbox
+                  color={isChecked ? theme.colors.secondary : undefined}
+                  style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+                <Text style={styles.text}>You agree to&nbsp;
+                  <Text onPress={() => navigation.navigate('Document', { DocType: 'EULA' })} style={styles.link}>EULA</Text>
+                  &nbsp;on signing up</Text>
+              </View>
+            }
+          </View>
+          {/* </ScrollView> */}
 
         </DismissKeyboard>
       </KeyboardAvoidingView>
@@ -230,7 +231,7 @@ const Signup = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    gap: 20,
+    gap: 10,
     paddingHorizontal: 20,
     paddingTop: 5,
     height: '100%',
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     color: theme.colors.grey, fontSize: fontSizes.smallMedium,
-    fontWeight: fontWeights.normal, marginTop: -15, textAlign: 'center'
+    fontWeight: fontWeights.normal, marginVertical: 5, textAlign: 'center'
   },
   underlineStyleBase: {
     borderRadius: 100,
@@ -263,16 +264,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: 52,
-    alignSelf: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2, borderRadius: 100
+    borderWidth: 2,
+    borderRadius: 100
   },
-  form: { flexDirection: 'column', justifyContent: 'center', gap: 20 },
+  form: { flexDirection: 'column', justifyContent: 'center', gap: 10 },
   input: {
     borderWidth: 2, borderRadius: 100, borderColor: theme.colors.dark,
-    paddingHorizontal: 20, backgroundColor: theme.colors.light, width: 300, height: 50,
+    paddingHorizontal: 20, backgroundColor: theme.colors.light, width: 300, height: Platform.OS ==='ios' ? 50 : 45,
     color: theme.colors.dark, fontSize: fontSizes.large, fontWeight: 'medium'
   },
   title: { color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', marginBottom: 10 },

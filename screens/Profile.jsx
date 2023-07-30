@@ -802,7 +802,7 @@ const Profile = ({ navigation, route }) => {
               {RequestStatus?.status === 'accepted' && '\nAs a precautionary measure we will also remove them from your bubble.'}
             </Text>
             <TextInput
-              selectionColor={theme.colors.dark}
+              selectionColor={theme.colors.selectionColor}
               style={[{ backgroundColor: theme.colors.light, color: theme.colors.dark, padding: 10, margin: 10, borderRadius: 10, borderWidth: 1, borderColor: theme.colors.dark, width: '100%', height: 150 }]}
               placeholder="Add reason"
               placeholderTextColor={theme.colors.backdrop}
