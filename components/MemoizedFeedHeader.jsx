@@ -9,26 +9,33 @@ import { useSelector } from 'react-redux';
 const MemoizedFeedHeader = ({ navigation, FetchedMood, FriendsMood }) => {
   const editProfile = useSelector(state => state.editProfile);
   return (
-    <><Text style={styles.titleText}>Moods</Text><ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <View style={styles.moodsContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
-          <View style={styles.profileMood}>
-            {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
-              style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
-              (<Image source={require('../assets/images/placeholder_profile.png')}
-                style={{ height: 80, width: 80, borderRadius: 100, borderWidth: 2 }} />)}
+    <>
+      <Text style={styles.titleText}>Moods</Text><ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={[styles.moodsContainer]}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
+            <View style={[styles.profileMood, { marginRight: FetchedMood?.mood ? 15 : 0 }]}>
+              <View style={{
+                flexDirection: 'row',
+                gap: 3, alignItems: 'center'
+              }}>
+                {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
+                  style={{ height: 25, width: 25, borderRadius: 100, borderWidth: 1, overflow: 'hidden' }} />) :
+                  (<Image source={require('../assets/images/placeholder_profile.png')}
+                    style={{ height: 25, width: 25, borderRadius: 100, borderWidth: 2 }} />)}
 
-            <View style={[styles.moodTextContainer, { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light, }]}>
-              {FetchedMood?.mood ?
-                <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
-                <Feather name="plus" size={20} color={theme.colors.dark} />}
+                <View style={[styles.moodTextContainer,
+                { backgroundColor: editProfile?.theme ? editProfile?.theme : theme.colors.light }]}>
+                  {FetchedMood?.mood ?
+                    <Text numberOfLines={1} ellipsizeMode='clip' style={styles.moodText}>{FetchedMood?.mood}</Text> :
+                    <Feather name="plus" size={20} color={theme.colors.dark} />}
+                </View>
+              </View>
+              <Text style={styles.text}>You</Text>
             </View>
-            <Text style={styles.text}>You</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <Mood navigation={navigation} FriendsMood={FriendsMood} />
-      </View>
-    </ScrollView></>
+          </TouchableWithoutFeedback>
+          <Mood navigation={navigation} FriendsMood={FriendsMood} />
+        </View>
+      </ScrollView></>
   )
 }
 
@@ -40,7 +47,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSizes.smallMedium,
     fontWeight: fontWeights.normal,
-    paddingTop: 5
+    paddingTop: 5,
+    textAlign: "center"
   },
   titleText: {
     fontSize: fontSizes.large,
@@ -52,22 +60,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
     paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingTop: 15,
     paddingBottom: 10,
     zIndex: -999
   },
   profileMood: {
     position: 'relative',
-    alignItems: 'center'
+    maxWidth: 90,
   },
   moodTextContainer: {
-    position: 'absolute',
     borderWidth: 1,
     borderColor: theme.colors.dark,
     justifyContent: 'center',
     alignItems: 'center',
-    left: 0,
-    top: -15,
     padding: 3,
     borderRadius: 100
   },
