@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
     paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingTop: 15,
     paddingBottom: 10,
     zIndex: -999
   },
