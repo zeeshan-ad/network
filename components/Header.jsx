@@ -50,7 +50,7 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
           }
         });
       } else {
-        setFetchNotifData(true);
+        setFetchNotifData(false);
         setshowNotif(false);
         navigation.push('PostTextExpanded', { memo: { ...response?.data?.data } });
       }
