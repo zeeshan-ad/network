@@ -25,10 +25,10 @@ export const theme = {
 }
 
 export const fontWeights = {
-  light: 400,
-  normal: 500,
-  semibold: 600,
-  bold: 700,
+  light: '400',
+  normal: '500',
+  semibold: '600',
+  bold: '700',
 }
 
 export const fontSizes = {

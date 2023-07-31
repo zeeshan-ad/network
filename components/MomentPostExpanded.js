@@ -1,8 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
-import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Keyboard, Dimensions, Pressable, FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome, AntDesign, Ionicons, MaterialCommunityIcons, Feather, Octicons } from '@expo/vector-icons';
 import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { AddRepliedComment, addComment, deleteMoment, isLiked, postLike, removeLike } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
@@ -275,9 +274,9 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
             shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: .5,
             shadowRadius: 1, elevation: 100, backgroundColor: 'transparent', alignItems: "center"
           }}>
-            <TouchableWithoutFeedback onPress={() => setCommentsVisible(!CommentsVisible)}>
+            <Pressable onPress={() => setCommentsVisible(!CommentsVisible)}>
               <Ionicons name={`${CommentsVisible ? 'chatbubble' : 'chatbubble-outline'}`} size={25} color={theme.colors.light} />
-            </TouchableWithoutFeedback>
+            </Pressable>
             <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}</Text>
           </View>
         </View>

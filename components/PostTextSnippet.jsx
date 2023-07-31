@@ -1,8 +1,7 @@
 import React, { useState, memo, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 import { isLiked, postLike, removeLike } from '../APIs';
@@ -106,12 +105,14 @@ const PostTextSnippet = ({ navigation, memo }) => {
           <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
             <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
         </View>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo })} style={{
-          flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
-        }}>
-          <Ionicons name="chatbubble-outline" size={25} color={theme.colors.dark} />
-          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}
-            <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;comments</Text></Text>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo })} >
+          <View style={{
+            flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10
+          }}>
+            <Ionicons name="chatbubble-outline" size={25} color={theme.colors.dark} />
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium }}>{AllComments?.length}
+              <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;comments</Text></Text>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </View>

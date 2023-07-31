@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, FlatList } from 'react-native';
 import { BottomSheet } from "react-native-btr";
 import { BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { getBlockedList, unblockUser } from '../APIs';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -123,7 +122,8 @@ const BlockedUsers = (props) => {
                 )}
                 keyExtractor={item => item.id} />
               :
-              <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark, textAlign: 'center', paddingVertical: 50
+              <Text style={{
+                fontSize: fontSizes.medium, fontWeight: fontWeights.normal, color: theme.colors.dark, textAlign: 'center', paddingVertical: 50
               }}>No users on this list</Text>}
           </View>
         </View>

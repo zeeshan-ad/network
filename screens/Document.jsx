@@ -1,8 +1,7 @@
 import React from 'react'
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
 
 
 const Document = ({ navigation, route }) => {

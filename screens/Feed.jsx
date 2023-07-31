@@ -11,6 +11,7 @@ import MemoizedFeed from '../components/MemoizedFeed';
 import { getCalendars } from 'expo-localization';
 import { extractMomentsForPrefetch } from '../util/functions';
 import { Image } from 'expo-image/build';
+import { Platform } from 'react-native';
 
 
 const { height, width } = Dimensions.get('window');
@@ -87,7 +88,10 @@ const FeedComponent = ({ navigation }) => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.light }]}>
+    <SafeAreaView style={[styles.container, {
+      backgroundColor: theme.colors.light,
+      paddingTop: Platform.OS === 'ios' ? 0 : 30
+    }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
           unseenReq={unseenReq} Notifications={Notifications} callGetPendingRequests={callGetPendingRequests}

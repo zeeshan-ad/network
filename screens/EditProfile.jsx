@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ProfileTheme, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native';
 import { updateProfileData } from '../APIs/UpdateProfile';
 import { setProfileData } from '../store/editProfileSlice';

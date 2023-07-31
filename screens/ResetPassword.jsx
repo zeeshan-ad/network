@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, TextInput, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
 import { resetPassword, sendOTP, verifyOTP } from '../APIs';
 
 const ResetPassword = ({ navigation, route }) => {

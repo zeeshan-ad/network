@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { fontSizes, fontWeights, theme } from '../util/constants';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
-import { PinchGestureHandler } from 'react-native-gesture-handler';
+import { PinchGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 
@@ -86,10 +86,13 @@ export default function PostMoments({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <PinchGestureHandler onGestureEvent={onPinchGestureEvent}>
-        <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
-        </Camera>
-      </PinchGestureHandler>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <PinchGestureHandler onGestureEvent={onPinchGestureEvent}>
+          <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => setCamera(ref)} ratio={'1:1'}>
+          </Camera>
+        </PinchGestureHandler>
+      </GestureHandlerRootView>
+
       <Pressable style={styles.CameraButton} onPress={takePicture}>
         <Ionicons name="ios-radio-button-off-sharp" size={100} color={theme.colors.light} />
       </Pressable>
