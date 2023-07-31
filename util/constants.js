@@ -20,7 +20,8 @@ export const theme = {
     divider: '#DEDEDE',
     textPost: '#F9F9F3',
     backdrop: 'rgba(0,0,0,0.6)',
-    selectionColor: Platform.OS === 'ios' ? '#0A0A0A' : 'rgba(0,0,0,0.4)'
+    selectionColor: Platform.OS === 'ios' ? '#0A0A0A' : 'rgba(0,0,0,0.4)',
+    moodContainer: 'rgba(0,0,0,0.15)',
   }
 }
 

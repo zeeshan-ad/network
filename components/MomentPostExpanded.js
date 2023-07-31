@@ -29,17 +29,22 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
     const response = await isLiked(item.id, 'moment');
     if (response.status === 200) {
       setLiked(response.data.data);
+      setLikeAddOne(0);
+      setisPostingLike(false);
     }
   }
 
   const [isPostingLike, setisPostingLike] = useState(false)
+  const [LikeAddOne, setLikeAddOne] = useState(0);
   const callPostLike = async () => {
+    setLikeAddOne(1);
     setisPostingLike(true);
     const response = await postLike(item.id, 'moment');
     if (response.status === 200) {
-      setisPostingLike(false);
+      setisPostingLike(true);
       CallIsliked();
     } else {
+      setLikeAddOne(0);
       setisPostingLike(false);
     }
   }
@@ -157,7 +162,7 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                             })}>
                             <Text ellipsizeMode='tail' numberOfLines={1} style={{
                               fontSize: fontSizes.smallMedium, fontWeight: fontWeights.semibold, color: theme.colors.dark,
-                              maxWidth: width - 300
+                              maxWidth: width - 300,
                             }}>{item.name}</Text>
                           </Pressable>
                           <Text style={{ fontSize: fontSizes.small, fontWeight: fontWeights.light, color: theme.colors.backdrop, fontStyle: "italic" }}>
@@ -226,10 +231,11 @@ const MomentPostExpanded = ({ navigation, item, index, CarouselMoment, date }) =
                 <Pressable onPress={callPostLike}>
                   <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
                 </Pressable> :
-                <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
+                <FontAwesome name="heart" size={25} color={theme.colors.danger} />
             }
             <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
-              <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
+              <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>
+                {liked?.totalLikes && Number(liked?.totalLikes) + Number(LikeAddOne)}</Text>
             </Pressable>
 
           </View>

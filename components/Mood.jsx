@@ -8,8 +8,11 @@ const Mood = ({ navigation, FriendsMood }) => {
     FriendsMood?.map((item, index) => {
       return (
         <Pressable onPress={() => navigation.navigate('Profile', { userId: item?.userID, themeColor: item?.theme })}
-          key={index} style={{ alignItems: 'center', zIndex: 9, borderRadius:10 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+          key={index} style={{ alignItems: 'center', zIndex: 9, borderRadius: 10 }}>
+          <View style={{
+            flexDirection: 'row', alignItems: 'center', gap: 2, backgroundColor: theme.colors.moodContainer,
+            padding: 5, borderRadius:100
+          }}>
             {!item?.profile_pic ?
               <Image source={require('../assets/images/placeholder_profile.png')}
                 style={{ height: 25, width: 25, borderRadius: 100, borderWidth: 1, overflow: 'hidden' }} />
