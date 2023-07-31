@@ -21,17 +21,22 @@ const PostTextSnippet = ({ navigation, memo }) => {
     const response = await isLiked(memo.id, 'memo');
     if (response.status === 200) {
       setLiked(response.data.data);
+      setLikeAddOne(0);
+      setisPostingLike(false);
     }
   }
 
   const [isPostingLike, setisPostingLike] = useState(false)
+  const [LikeAddOne, setLikeAddOne] = useState(0);
   const callPostLike = async () => {
+    setLikeAddOne(1);
     setisPostingLike(true);
     const response = await postLike(memo.id, 'memo');
     if (response.status === 200) {
-      setisPostingLike(false);
+      setisPostingLike(true);
       CallIsliked();
     } else {
+      setLikeAddOne(0);
       setisPostingLike(false);
     }
   }
@@ -101,10 +106,10 @@ const PostTextSnippet = ({ navigation, memo }) => {
               <Pressable onPress={callPostLike}>
                 <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
               </Pressable> :
-              <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
+              <FontAwesome name="heart" size={23} color={theme.colors.danger} />
           }
-          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
-            <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
+          <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes && Number(liked?.totalLikes) + Number(LikeAddOne)}
+            <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{Number(liked?.totalLikes) + Number(LikeAddOne) < 2 ? 'like' : 'likes'}</Text></Text>
         </View>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('PostTextExpanded', { memo })} style={{
           flexDirection: 'row', gap: 10, alignItems: 'center', marginHorizontal: 10

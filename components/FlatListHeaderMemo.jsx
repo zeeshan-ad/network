@@ -9,7 +9,7 @@ import { BottomSheet } from 'react-native-btr';
 import { formatTime } from '../util/functions';
 import { useSelector } from 'react-redux';
 
-const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers,
+const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, callRemoveLIke, memo, AllComments, userInfo, setShowLikedUsers, LikeAddOne,
   ShowLikedUsers }) => {
   const [ShowOption, setShowOption] = useState(false);
   const editProfile = useSelector(state => state.editProfile);
@@ -69,11 +69,11 @@ const FlatListHeaderMemo = ({ isPostingLike, liked, navigation, callPostLike, ca
               <Pressable onPress={callPostLike}>
                 <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
               </Pressable> :
-              <FontAwesome name="heart-o" size={23} color={theme.colors.dark} />
+              <FontAwesome name="heart" size={23} color={theme.colors.danger} />
           }
           <Pressable onPress={() => setShowLikedUsers(!ShowLikedUsers)}>
-            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}
-              <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{liked?.totalLikes < 2 ? 'like' : 'likes'}</Text></Text>
+            <Text style={{ color: theme.colors.dark, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes && Number(liked?.totalLikes) + Number(LikeAddOne)}
+              <Text style={{ fontWeight: fontWeights.normal }}>&nbsp;{Number(liked?.totalLikes) + Number(LikeAddOne) < 2 ? 'like' : 'likes'}</Text></Text>
           </Pressable>
         </View>
         <View style={{

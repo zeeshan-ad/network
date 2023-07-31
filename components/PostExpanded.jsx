@@ -84,13 +84,13 @@ const PostExpanded = ({ navigation, route }) => {
                 style={{ height: 40, width: 40, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.light, overflow: 'hidden' }} />
               <View>
                 <Text style={{
-                  fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.semibold, paddingTop: 5, color: theme.colors.light, shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: 1,
                   shadowRadius: 1, elevation: 10,
                 }}>
                   {user?.name}
                 </Text>
                 <Text style={{
-                  color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1,
+                  color: theme.colors.light, fontWeight: fontWeights.normal, fontSize: fontSizes.smallMedium, shadowColor: theme.colors.dark, shadowOffset: { width: 1, height: 1 }, shadowOpacity: 1,
                   shadowRadius: 1, elevation: 10
                 }}>{formatTime(CarouselMoment?.[CurrentIndex]?.created_at)}</Text>
               </View>

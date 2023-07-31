@@ -20,17 +20,22 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
     const response = await isLiked(item.id, 'moment');
     if (response.status === 200) {
       setLiked(response.data.data);
+      setLikeAddOne(0);
+      setisPostingLike(false);
     }
   }
 
   const [isPostingLike, setisPostingLike] = useState(false)
+  const [LikeAddOne, setLikeAddOne] = useState(0);
   const callPostLike = async () => {
+    setLikeAddOne(1);
     setisPostingLike(true);
     const response = await postLike(item.id, 'moment');
     if (response.status === 200) {
-      setisPostingLike(false);
+      setisPostingLike(true);
       CallIsliked();
     } else {
+      setLikeAddOne(0);
       setisPostingLike(false);
     }
   }
@@ -82,9 +87,10 @@ const MomentPostSnippet = ({ navigation, item, index, moment }) => {
                 <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
               </Pressable>
               :
-              <FontAwesome name="heart-o" size={25} color={theme.colors.light} />
+              <FontAwesome name="heart" size={25} color={theme.colors.danger} />
           }
-          <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>{liked?.totalLikes}</Text>
+          <Text style={{ color: theme.colors.light, fontWeight: fontWeights.bold, fontSize: fontSizes.medium, paddingTop: 2 }}>
+          {liked?.totalLikes && Number(liked?.totalLikes) + Number(LikeAddOne)}</Text>
         </View>
       </View>
       <View style={{

@@ -19,7 +19,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const PostTextExpanded = ({ navigation, route }) => {
-  
+
 
   const userInfo = useSelector(state => state.userInfo);
   const editProfile = useSelector(state => state.editProfile);
@@ -35,6 +35,8 @@ const PostTextExpanded = ({ navigation, route }) => {
     const response = await isLiked(memo.id, 'memo');
     if (response.status === 200) {
       setLiked(response.data.data);
+      setLikeAddOne(0);
+      setisPostingLike(false);
     }
   }
 
@@ -49,14 +51,17 @@ const PostTextExpanded = ({ navigation, route }) => {
     }
   }
 
-  const [isPostingLike, setisPostingLike] = useState(false)
+  const [isPostingLike, setisPostingLike] = useState(false);
+  const [LikeAddOne, setLikeAddOne] = useState(0);
   const callPostLike = async () => {
+    setLikeAddOne(1);
     setisPostingLike(true);
     const response = await postLike(memo.id, 'memo');
     if (response.status === 200) {
-      setisPostingLike(false);
+      setisPostingLike(true);
       CallIsliked();
     } else {
+      setLikeAddOne(0);
       setisPostingLike(false);
     }
   }
@@ -124,6 +129,7 @@ const PostTextExpanded = ({ navigation, route }) => {
         data={AllComments}
         style={{ paddingHorizontal: 20, backgroundColor: memo?.theme ? memo?.theme : theme.colors.textPost, }}
         ListHeaderComponent={<FlatListHeaderMemo
+          LikeAddOne={LikeAddOne}
           isPostingLike={isPostingLike}
           liked={liked} navigation={navigation} callPostLike={callPostLike} callRemoveLIke={callRemoveLIke}
           memo={memo} AllComments={AllComments} userInfo={userInfo} setShowLikedUsers={setShowLikedUsers}

@@ -17,7 +17,8 @@ export const theme = {
     disabled: '#4c9648',
     divider: '#DEDEDE',
     textPost: '#F9F9F3',
-    backdrop: 'rgba(0,0,0,0.6)'
+    backdrop: 'rgba(0,0,0,0.6)',
+    moodContainer: 'rgba(0,0,0,0.15)',
   }
 }
 

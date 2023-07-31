@@ -13,10 +13,12 @@ const MemoizedFeedHeader = ({ navigation, FetchedMood, FriendsMood }) => {
       <Text style={styles.titleText}>Moods</Text><ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={[styles.moodsContainer]}>
           <TouchableWithoutFeedback onPress={() => navigation.navigate('PostMood', { editProfile, FetchedMood })}>
-            <View style={[styles.profileMood, { marginRight: FetchedMood?.mood ? 15 : 0 }]}>
+            <View style={[styles.profileMood, { marginRight: FetchedMood?.mood ? 25 : 0 }]}>
               <View style={{
                 flexDirection: 'row',
-                gap: 3, alignItems: 'center'
+                gap: 3, alignItems: 'center',
+                backgroundColor: theme.colors.moodContainer,
+                padding: 5, borderRadius: 100, width: FetchedMood?.mood ? 116 : 66
               }}>
                 {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
                   style={{ height: 25, width: 25, borderRadius: 100, borderWidth: 1, overflow: 'hidden' }} />) :
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
   },
   moodsContainer: {
     flexDirection: 'row',
-    gap: 15,
+    gap: 10,
     paddingHorizontal: 10,
     paddingTop: 15,
     paddingBottom: 10,
