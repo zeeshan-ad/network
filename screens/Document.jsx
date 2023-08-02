@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { fontSizes, fontWeights, normalize, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -10,11 +10,11 @@ const Document = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={true}>
         {DocType === 'Policy' ?
-          <View style={{ paddingVertical: 20 }}>
-            <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
-              <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
+          <View style={{ padding: normalize(10) }}>
+            <View style={{ flexDirection: 'row', gap: normalize(5), alignItems: "center" }}>
+              <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: normalize(-5) }}>
                 <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
               </Pressable>
               <Text style={styles.heading}>Privacy Policy</Text>
@@ -107,9 +107,9 @@ const Document = ({ navigation, route }) => {
             </View>
           </View>
           : DocType === 'Terms' ?
-            <View style={{ paddingVertical: 20 }}>
-              <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
-                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
+            <View style={{ paddingVertical: normalize(10) }}>
+              <View style={{ flexDirection: 'row', gap: normalize(5), alignItems: "center" }}>
+                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: normalize(-5) }}>
                   <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
                 </Pressable>
                 <Text style={styles.heading}>Terms of Service</Text>
@@ -191,9 +191,9 @@ const Document = ({ navigation, route }) => {
               </View>
             </View>
             : DocType === 'EULA' &&
-            <View style={{ paddingVertical: 20 }}>
-              <View style={{ flexDirection: 'row', gap: 5, alignItems: "center" }}>
-                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: -10 }}>
+            <View style={{ paddingVertical: normalize(10) }}>
+              <View style={{ flexDirection: 'row', gap: normalize(5), alignItems: "center" }}>
+                <Pressable onPress={() => navigation.goBack()} style={{ marginLeft: normalize(-5) }}>
                   <Ionicons name="chevron-back" size={30} color={theme.colors.dark} />
                 </Pressable>
                 <Text style={styles.heading}>End User License Agreement (EULA)</Text>
@@ -289,8 +289,8 @@ const Document = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: normalize(20),
+    backgroundColor: theme.colors.light
   },
   title: {
     fontSize: fontSizes.large,
@@ -306,17 +306,17 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontSize: fontSizes.large,
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: normalize(20),
   },
   sectionSubHeading: {
     fontSize: fontSizes.medium,
     fontWeight: 'bold',
-    marginTop: 15,
+    marginTop: normalize(15),
   },
   sectionText: {
     fontSize: fontSizes.medium,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: normalize(5),
+    marginBottom: normalize(10),
   },
 })
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, KeyboardAvoidingView, SafeAreaView, ScrollView } from 'react-native';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { fontSizes, fontWeights, normalize, theme } from '../util/constants';
 import { Link } from '@react-navigation/native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createAccount, verifyUsername } from '../APIs';
@@ -155,7 +155,7 @@ const Signup = ({ route, navigation }) => {
                         }
                       }} />
                     <Ionicons name={`${UserDetails.passwordHidden ? 'md-eye-outline' : 'md-eye-off-outline'}`}
-                      size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={handlePasswordHide} />
+                      size={24} color={theme.colors.grey} style={{ position: 'absolute', right: normalize(15) }} onPress={handlePasswordHide} />
                   </View>
                   {UserDetails.passwordWarning &&
                     <Text style={styles.infoText}>
@@ -172,7 +172,7 @@ const Signup = ({ route, navigation }) => {
                   }} value={UserDetails?.username} />
                   {UserDetails.usernameWarning ?
                     <MaterialCommunityIcons name={`${UserDetails.usernameVerified ? 'check-decagram-outline' : 'close-circle-outline'}`}
-                      size={24} color={UserDetails.usernameVerified ? theme.colors.secondary : theme.colors.danger} style={{ position: 'absolute', right: 15 }} />
+                      size={24} color={UserDetails.usernameVerified ? theme.colors.secondary : theme.colors.danger} style={{ position: 'absolute', right: normalize(15) }} />
                     : null
                   }
                 </View>
@@ -181,24 +181,24 @@ const Signup = ({ route, navigation }) => {
             {Step === 1 &&
               <Pressable
                 onPress={LoginStatus && isChecked ? callCreateAccount : null}
-                style={[styles.button, { bottom: 20, backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
+                style={[styles.button, { bottom: normalize(20), backgroundColor: LoginStatus && isChecked ? theme.colors.secondary : theme.colors.disabled }]}>
                 <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Continue</Text>
               </Pressable>
             }
 
             {Step === 2 && (
-              Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} style={{ position: 'absolute', bottom: 50 }} /> :
+              Loading ? <ActivityIndicator size="small" color={theme.colors.backdrop} style={{ position: 'absolute', bottom: normalize(50) }} /> :
                 <>
                   <Pressable
                     onPress={UserDetails?.usernameVerified ? callCreateAccount : null}
-                    style={[styles.button, { bottom: 50, backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
+                    style={[styles.button, { bottom: normalize(50), backgroundColor: UserDetails?.usernameVerified ? theme.colors.secondary : theme.colors.disabled }]}>
                     <Text style={{ fontSize: fontSizes.large, fontWeight: fontWeights.normal }}>Let's Go!</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => {
                       setStep(1);
                     }}
-                    style={{ position: 'absolute', bottom: 10 }}>
+                    style={{ position: 'absolute', bottom: normalize(10) }}>
                     <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
                   </Pressable>
                 </>)}
@@ -231,29 +231,29 @@ const Signup = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 20,
-    paddingTop: 5,
+    gap: normalize(10),
+    paddingHorizontal: normalize(20),
+    paddingTop: normalize(5),
     height: '100%',
     backgroundColor: theme.colors.light,
   },
   section: {
-    marginTop: -10,
+    marginTop: normalize(-10),
     flexDirection: 'row',
     alignItems: 'center',
   },
   checkbox: {
-    margin: 8,
+    margin: normalize(8),
     borderColor: theme.colors.dark,
-    borderWidth: 2
+    borderWidth: normalize(2)
   },
   infoText: {
-    color: theme.colors.grey, fontSize: fontSizes.smallMedium,
-    fontWeight: fontWeights.normal, marginVertical: 5, textAlign: 'center'
+    color: theme.colors.info, fontSize: fontSizes.smallMedium,
+    fontWeight: fontWeights.normal, marginTop: normalize(-10), textAlign: 'center'
   },
   underlineStyleBase: {
-    borderRadius: 100,
-    borderWidth: 2,
+    borderRadius: normalize(100),
+    borderWidth: normalize(2),
     borderColor: theme.colors.dark,
     fontSize: fontSizes.large,
     fontWeight: 'bold',
@@ -263,20 +263,20 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     width: '100%',
-    height: 52,
+    height: normalize(45),
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderRadius: 100
+    borderWidth: normalize(2),
+    borderRadius: normalize(100)
   },
-  form: { flexDirection: 'column', justifyContent: 'center', gap: 10 },
+  form: { flexDirection: 'column', justifyContent: 'center', gap: normalize(15) },
   input: {
-    borderWidth: 2, borderRadius: 100, borderColor: theme.colors.dark,
-    paddingHorizontal: 20, backgroundColor: theme.colors.light, width: 300, height: Platform.OS ==='ios' ? 50 : 45,
+    borderWidth: normalize(2), borderRadius: normalize(100), borderColor: theme.colors.dark,
+    paddingHorizontal: normalize(20), backgroundColor: theme.colors.light, width: normalize(300), height: normalize(45),
     color: theme.colors.dark, fontSize: fontSizes.large, fontWeight: 'medium'
   },
-  title: { color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', marginBottom: 10 },
+  title: { color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', marginBottom: normalize(10) },
   text: { textAlign: 'center', fontWeight: fontWeights.normal, fontSize: fontSizes.medium }
 });
 

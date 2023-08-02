@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, TextInput, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { fontSizes, fontWeights, normalize, theme } from '../util/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { resetPassword, sendOTP, verifyOTP } from '../APIs';
 
@@ -14,10 +14,10 @@ const ResetPassword = ({ navigation, route }) => {
   const [ShowPass, setShowPass] = useState(false);
 
   const callSendOTP = async () => {
+    setcount(30);
     const response = await sendOTP(email);
     if (response.status === 200) {
       setSendOTP(true);
-      setcount(30);
     } else {
       alert('Something went wrong, please try again.');
     }
@@ -73,7 +73,7 @@ const ResetPassword = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -300}
-       behavior="padding" style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+        behavior="padding" style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={{ flex: 1, alignItems: "center" }}>
           <Text style={styles.title}>
             Reset Password
@@ -91,17 +91,20 @@ const ResetPassword = ({ navigation, route }) => {
                 keyboardType='numeric'
                 value={OTP}
                 onChangeText={setOTP}
-                style={[styles.input, { marginTop: 20 }]} />
+                style={[styles.input, { marginTop: normalize(20) }]} />
               {SendOTP ?
                 <Text style={{
-                  fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center', marginTop: 20,
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center', marginTop: normalize(20),
                   color: theme.colors.grey, fontStyle: 'italic'
                 }}>
                   OTP sent! Wait for {count} secs.
                 </Text>
                 :
-                <Pressable onPress={callSendOTP} style={{ marginTop: 20 }}>
-                  <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center', textDecorationLine: "underline" }}>
+                <Pressable onPress={callSendOTP} style={{ marginTop: normalize(20) }}>
+                  <Text style={{
+                    fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textAlign: 'center',
+                    textDecorationLine: "underline"
+                  }}>
                     Send OTP
                   </Text>
                 </Pressable>
@@ -118,7 +121,8 @@ const ResetPassword = ({ navigation, route }) => {
                 <TextInput secureTextEntry={ShowPass} onChangeText={handlePasswordChange}
                   style={styles.input} placeholder='Enter new password' />
                 <Ionicons name={`${true ? 'md-eye-outline' : 'md-eye-off-outline'}`}
-                  size={24} color={theme.colors.grey} style={{ position: 'absolute', right: 15 }} onPress={() => setShowPass(!ShowPass)} />
+                  size={24} color={theme.colors.grey} style={{ position: 'absolute', right: normalize(15) }} 
+                  onPress={() => setShowPass(!ShowPass)} />
               </View>
               <Text style={styles.infoText}>
                 Password must be at least 8 characters long.
@@ -131,7 +135,7 @@ const ResetPassword = ({ navigation, route }) => {
           }
           <Pressable
             onPress={() => navigation.navigate('Landing')}
-            style={{ position: 'absolute', bottom: 10 }}>
+            style={{ position: 'absolute', bottom: normalize(10) }}>
             <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.normal, textDecorationLine: 'underline' }}>Go back</Text>
           </Pressable>
         </View>
@@ -144,35 +148,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingHorizontal: normalize(20),
+    paddingTop: normalize(10),
     backgroundColor: theme.colors.light,
   },
   infoText: {
     color: theme.colors.grey, fontSize: fontSizes.smallMedium,
-    fontWeight: fontWeights.normal, marginTop: 15, textAlign: 'center'
+    fontWeight: fontWeights.normal, marginTop: normalize(15), textAlign: 'center'
   },
-  title: { color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', textAlign: "center", marginVertical: 30 },
+  title: { color: theme.colors.dark, fontSize: fontSizes.heading, fontWeight: 'bold', textAlign: "center", marginVertical: normalize(30) },
   button: {
     position: 'absolute',
-    bottom: 50,
+    bottom: normalize(50),
     width: '100%',
-    height: 52,
+    height: normalize(45),
     alignSelf: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2, borderRadius: 100
+    borderWidth: normalize(2), borderRadius: normalize(100)
   },
   input: {
-    borderWidth: 2,
-    borderRadius: 100,
+    borderWidth: normalize(2),
+    borderRadius: normalize(100),
     borderColor: theme.colors.dark,
-    paddingHorizontal: 20,
+    paddingHorizontal: normalize(20),
     backgroundColor: theme.colors.light,
-    width: 300,
-    maxWidth: 300,
-    height: 50,
+    width: normalize(250),
+    height: normalize(45),
     color: theme.colors.dark,
     fontSize: fontSizes.large,
     fontWeight: 'medium'

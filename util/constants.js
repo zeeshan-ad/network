@@ -53,14 +53,14 @@ export const fontSizes = {
   small: normalize(10),
   smallMedium: normalize(12),
   medium: normalize(14),
-  large: normalize(16),
+  large: normalize(14),
   yeetPosts: normalize(18),
   heading: normalize(20),
   ice: normalize(22),
   xlarge: normalize(24),
   smallHightlight: normalize(30),
   BigHightlight: normalize(38),
-  Logo: normalize(55),
+  Logo: normalize(45),
 }
 
 export const blurhash =
