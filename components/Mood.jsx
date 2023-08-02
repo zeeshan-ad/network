@@ -11,7 +11,7 @@ const Mood = ({ navigation, FriendsMood }) => {
           key={index} style={{ alignItems: 'center', zIndex: 9, borderRadius: 10 }}>
           <View style={{
             flexDirection: 'row', alignItems: 'center', gap: 2, backgroundColor: theme.colors.moodContainer,
-            padding: 5, borderRadius:100
+            padding: 5, borderRadius: 100
           }}>
             {!item?.profile_pic ?
               <Image source={require('../assets/images/placeholder_profile.png')}

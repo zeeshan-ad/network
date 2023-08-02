@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Modal, SafeAreaView, Dimensions, ScrollView } from 'react-native';
 import { Feather, Octicons, Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
-import { APP_NAME, BASE_URL, blurhash, fontSizes, fontWeights, theme } from '../util/constants';
+import { APP_NAME, BASE_URL, blurhash, fontSizes, fontWeights, normalize, theme } from '../util/constants';
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { FlatList } from 'react-native';
@@ -81,26 +81,32 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
     <>
       <View style={styles.header} onLayout={onLayoutRootView}>
         <Pressable onPress={() => { navigation.navigate('Search', { editProfile }); }}>
-          <Feather name="search" size={25} />
+          <Feather name="search" size={normalize(20)} />
         </Pressable>
         <Text style={styles.logo}>{APP_NAME}</Text>
-        <View style={{ flexDirection: 'row', gap: 20, alignItems: "center" }}>
+        <View style={{ flexDirection: 'row', gap: normalize(20), alignItems: "center" }}>
           <Pressable onPress={() => { setshowNotif(!showNotif) }}>
-            <Octicons name="bell" size={25} color={theme.colors.dark} />
+            <Octicons name="bell" size={normalize(20)} color={theme.colors.dark} />
             {unseenReq || NotifCount ?
               <View style={{
-                height: 25, width: 25, position: 'absolute', top: -10, right: -10,
-                borderWidth: 1, borderColor: theme.colors.dark, padding: 2, backgroundColor: theme.colors.secondary, borderRadius: 100,
+                height: normalize(20), width: normalize(20), position: 'absolute', top: normalize(-8), right: normalize(-8),
+                borderWidth: (1), borderColor: theme.colors.dark, padding: normalize(2),
+                backgroundColor: theme.colors.secondary, borderRadius: normalize(15),
                 justifyContent: "center", alignItems: 'center', flexDirection: 'column',
               }}>
-                <Text style={{ color: theme.colors.dark, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal }}>{!isNaN(unseenReq + NotifCount) && unseenReq + NotifCount}</Text>
+                <Text style={{ color: theme.colors.dark, fontSize: fontSizes.smallMedium, fontWeight: fontWeights.normal }}>
+                  {!isNaN(unseenReq + NotifCount) && unseenReq + NotifCount}
+                </Text>
               </View> : null}
           </Pressable>
           <Pressable onPress={() => { navigation.navigate('Profile', { userId: null, themeColor: editProfile.theme }); }}>
             {editProfile?.image ? (<Image placeholder={blurhash} source={editProfile?.image}
-              style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2, overflow: 'hidden' }} />) :
+              style={{
+                height: normalize(30), width: normalize(30), borderRadius: normalize(15), borderWidth: normalize(2),
+                overflow: 'hidden'
+              }} />) :
               (<Image source={require('../assets/images/placeholder_profile.png')}
-                style={{ height: 35, width: 35, borderRadius: 100, borderWidth: 2 }} />)}
+                style={{ height: normalize(35), width: normalize(35), borderRadius: normalize(15), borderWidth: normalize(2) }} />)}
           </Pressable>
         </View>
       </View>
@@ -108,23 +114,25 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
         animationType="slide"
         transparent={true}
         visible={showNotif}>
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.light, }}>
-          <View style={{ position: 'relative', paddingBottom: 10, backgroundColor: theme.colors.light }}>
-            <Pressable onPress={() => setshowNotif(false)} style={{ position: 'absolute', left: 10, zIndex: 999 }}>
-              <Ionicons name="close" size={30} color={theme.colors.dark} />
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.light, paddingBottom: normalize(30) }}>
+          <View style={{ position: 'relative', paddingBottom: normalize(10), backgroundColor: theme.colors.light }}>
+            <Pressable onPress={() => setshowNotif(false)} style={{ position: 'absolute', left: normalize(5), top:normalize(5), zIndex: 999 }}>
+              <Ionicons name="close" size={normalize(25)} color={theme.colors.dark} />
             </Pressable>
-            <View style={{ paddingTop: 10 }}>
-              <Text style={{ textAlign: 'center', fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>Notifs</Text>
+            <View style={{ paddingTop: normalize(10) }}>
+              <Text style={{ textAlign: 'center', fontSize: fontSizes.large, fontWeight: fontWeights.normal, color: theme.colors.dark }}>
+                Notifs
+              </Text>
             </View>
           </View>
           {PendingRequests?.length > 0 &&
-            <View style={{ height: 150 }}>
+            <View style={{ height: normalize(150) }}>
               <Text style={{
-                paddingHorizontal: 10, fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
-                textDecorationLine: 'underline', paddingBottom: 10
+                paddingHorizontal: normalize(10), fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: normalize(10),
+                textDecorationLine: 'underline', paddingBottom: normalize(10)
               }}>Pending Requests</Text>
               <ScrollView contentContainerStyle={{
-                flex: 1, alignItems: 'center', marginTop: 10,
+                flex: 1, alignItems: 'center', marginTop: normalize(10),
                 justifyContent: PendingRequests?.length ? 'flex-start' : 'center',
               }}>
                 {PendingRequests?.map((item, index) => {
@@ -134,13 +142,21 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                       setshowNotif(false);
                     }}>
                       <View key={index} style={{
-                        borderBottomWidth: 1, borderColor: theme.colors.divider, height: 65, flexDirection: 'row', width: width,
-                        alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10, gap: 10, height: 70
+                        borderBottomWidth: normalize(1), borderColor: theme.colors.divider, height: normalize(65), flexDirection: 'row',
+                        width: width,
+                        alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: normalize(10), gap: normalize(10),
+                        height: normalize(60)
                       }}>
-                        <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
-                          style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
+                        <Image placeholder={blurhash} source={item?.profile_pic ? BASE_URL + item?.profile_pic :
+                          require('../assets/images/placeholder_profile.png')}
+                          style={{
+                            height: normalize(35), width: normalize(35), borderRadius: normalize(18),
+                            borderColor: theme.colors.dark, borderWidth: normalize(2)
+                          }} />
                         <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light }}>
-                          <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>
+                          <Text style={{ fontWeight: fontWeights.semibold }}>
+                            {item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}
+                          </Text>
                           &nbsp;has requested to{'\n'}join your bubble.</Text>
                       </View>
                     </Pressable>
@@ -152,16 +168,16 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
           }
           {Notifications?.length > 0 &&
             <View>
-              <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
+              <View style={{ paddingHorizontal: normalize(10), flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
                 <Text style={{
-                  fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: 10,
-                  textDecorationLine: 'underline', paddingBottom: 10
+                  fontSize: fontSizes.medium, fontWeight: fontWeights.normal, paddingTop: normalize(10),
+                  textDecorationLine: 'underline', paddingBottom: normalize(10)
                 }}>Alerts</Text>
                 {FetchNotifData && <Text><ActivityIndicator size="small" color={theme.colors.backdrop} /></Text>}
               </View>
               <FlatList
                 data={Notifications}
-                ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? 250 : 50 }} />}
+                ListFooterComponent={() => <View style={{ height: PendingRequests?.length > 0 ? normalize(250) : normalize(50) }} />}
                 keyExtractor={(item, index) => index.toString()}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 renderItem={({ item, index }) => {
@@ -172,13 +188,20 @@ const Header = ({ navigation, editProfile, PendingRequests, unseenReq, Notificat
                     }}>
                       <View key={index} style={{
                         backgroundColor: item?.is_view ? theme.colors.lightDisabled : theme.colors.light,
-                        borderBottomWidth: 1, borderColor: theme.colors.divider, height: 65, flexDirection: 'row', width: width,
-                        alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 10, gap: 10, height: 70
+                        borderBottomWidth: normalize(1), borderColor: theme.colors.divider, height: normalize(65), flexDirection: 'row', width: width,
+                        alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: normalize(10), gap: normalize(10),
+                        height: normalize(60)
                       }}>
-                        <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic : require('../assets/images/placeholder_profile.png')}
-                          style={{ height: 50, width: 50, borderRadius: 100, borderColor: theme.colors.dark, borderWidth: 2 }} />
+                        <Image source={item?.profile_pic ? BASE_URL + item?.profile_pic :
+                          require('../assets/images/placeholder_profile.png')}
+                          style={{
+                            height: normalize(35), width: normalize(35), borderRadius: normalize(18),
+                            borderColor: theme.colors.dark, borderWidth: normalize(2)
+                          }} />
                         <Text style={{ fontSize: fontSizes.medium, fontWeight: fontWeights.light, }}>
-                          <Text style={{ fontWeight: fontWeights.semibold }}>{item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}</Text>
+                          <Text style={{ fontWeight: fontWeights.semibold }}>
+                            {item?.name + ' '?.substring(0, item?.name + ' '?.indexOf(' '))}
+                          </Text>
                           &nbsp;
                           has {item?.interaction_type}
                           {item?.interaction_type === 'commented' && ` on\nyour ${item?.post_type}`}
@@ -208,11 +231,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-    marginHorizontal: 10,
+    marginBottom: normalize(10),
+    marginHorizontal: normalize(10),
   },
   logo: {
-    marginRight: -55,
+    marginRight: normalize(-55),
     fontFamily: 'Pacifico',
     fontSize: fontSizes.smallHightlight,
     color: theme.colors.dark,

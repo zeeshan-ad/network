@@ -5,7 +5,7 @@ import PostTextSnippet from './PostTextSnippet';
 import MemoizedFeedHeader from './MemoizedFeedHeader';
 import { getFriendsMoods, getMood } from '../APIs';
 import { useIsFocused } from '@react-navigation/native';
-import { fontSizes, fontWeights, theme } from '../util/constants';
+import { fontSizes, fontWeights, normalize, theme } from '../util/constants';
 import { Pressable } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
@@ -54,7 +54,7 @@ const MemoizedFeed = ({ navigation, Feed, callGetFeed, callGetPendingRequests, c
         showsVerticalScrollIndicator={false}
         data={Feed?.length === 0 ? noFeed : Feed}
         ListHeaderComponent={<MemoizedFeedHeader navigation={navigation} FetchedMood={FetchedMood} FriendsMood={FriendsMood} />}
-        ListFooterComponent={<View style={{ height: 200 }}>
+        ListFooterComponent={<View style={{ height: normalize(200) }}>
           <Text style={{
             textAlign: "center", marginTop: 20, fontSize: fontSizes.medium, fontWeight: fontWeights.normal,
             color: theme.colors.grey, fontStyle: "italic"

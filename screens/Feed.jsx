@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Dimensions, KeyboardAvoidingView, Text, Pressable, SafeAreaView, FlatList } from 'react-native';
-import { fontSizes, fontWeights, theme, BASE_URL } from '../util/constants';
+import { fontSizes, fontWeights, theme, BASE_URL, normalize } from '../util/constants';
 import Header from '../components/Header';
 import { Feather } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -90,13 +90,13 @@ const FeedComponent = ({ navigation }) => {
   return (
     <SafeAreaView style={[styles.container, {
       backgroundColor: theme.colors.light,
-      paddingTop: Platform.OS === 'ios' ? 0 : 30
+      paddingTop: Platform.OS === 'android' && normalize(25)
     }]}>
       <KeyboardAvoidingView behavior="padding">
         <Header isFocused={isFocused} navigation={navigation} editProfile={editProfile} PendingRequests={PendingRequests}
           unseenReq={unseenReq} Notifications={Notifications} callGetPendingRequests={callGetPendingRequests}
           getNotifications={getNotifications} />
-        <View style={{ minHeight: height - 80, justifyContent: "center" }}>
+        <View style={{ minHeight: height - normalize(80), justifyContent: "center" }}>
           <MemoizedFeed
             navigation={navigation}
             Feed={Feed}
@@ -114,7 +114,7 @@ const FeedComponent = ({ navigation }) => {
         </View>
       </KeyboardAvoidingView>
       <Pressable onPress={() => { navigation.navigate('Post', { editProfile }) }} style={styles.postBtn}>
-        <Feather name="plus" size={30} color={theme.colors.dark} />
+        <Feather name="plus" size={normalize(25)} color={theme.colors.dark} />
       </Pressable>
     </SafeAreaView>
   )
@@ -128,20 +128,20 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSizes.medium,
     fontWeight: fontWeights.normal,
-    paddingTop: 5
+    paddingTop: normalize(5)
   },
   titleText: {
     fontSize: fontSizes.large,
     color: theme.colors.dark,
-    paddingLeft: 10,
+    paddingLeft: normalize(10),
     fontWeight: fontWeights.normal
   },
   moodsContainer: {
     flexDirection: 'row',
-    gap: 15,
-    paddingHorizontal: 10,
-    paddingTop: 20,
-    paddingBottom: 10,
+    gap: normalize(15),
+    paddingHorizontal: normalize(10),
+    paddingTop: normalize(20),
+    paddingBottom: normalize(10),
     zIndex: -999
   },
   profileMood: {
@@ -154,44 +154,44 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.dark,
     justifyContent: 'center',
     alignItems: 'center',
-    left: 0,
-    top: -15,
-    padding: 3,
-    borderRadius: 100
+    left: normalize(0),
+    top: normalize(-15),
+    padding: normalize(3),
+    borderRadius: normalize(100)
   },
   moodText: {
-    width: 70,
+    width: normalize(70),
     textAlign: 'center',
     fontSize: fontSizes.medium,
-    height: 22,
-    paddingVertical: 2,
+    height: normalize(22),
+    paddingVertical: normalize(2),
     shadowColor: theme.colors.dark,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowOffset: { width: normalize(0), height: normalize(0) },
+    shadowOpacity: normalize(1),
+    shadowRadius: normalize(1),
+    elevation: normalize(10),
   },
   postBtn: {
     position: 'absolute',
-    bottom: 15,
-    right: 15,
+    bottom: normalize(15),
+    right: normalize(15),
     zIndex: 999,
     backgroundColor: theme.colors.secondary,
-    padding: 10,
-    borderWidth: 2,
-    borderRadius: 100,
-    height: 60,
-    width: 60,
+    padding: normalize(10),
+    borderWidth: normalize(2),
+    borderRadius: normalize(100),
+    height: normalize(50),
+    width: normalize(50),
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: normalize(0),
+      height: normalize(2),
     },
-    shadowOpacity: .25,
-    shadowRadius: 5,
-    elevation: 10,
+    shadowOpacity: normalize(.25),
+    shadowRadius: normalize(5),
+    elevation: normalize(10),
   }
 })
 
