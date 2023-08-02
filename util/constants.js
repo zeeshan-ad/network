@@ -1,5 +1,4 @@
-import { Platform } from "react-native";
-
+import { Dimensions, Platform, PixelRatio } from 'react-native'
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
@@ -32,18 +31,36 @@ export const fontWeights = {
   bold: '700',
 }
 
+
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+// based on iphone 5s's scale
+const scale = SCREEN_WIDTH / 320;
+
+export function normalize(size) {
+  const newSize = size * scale 
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+  }
+}
+
 export const fontSizes = {
-  small: Platform.OS === 'ios' ? 12 : 10,
-  smallMedium: Platform.OS === 'ios' ? 14 : 12,
-  medium: Platform.OS === 'ios' ? 16 : 14,
-  large: Platform.OS === 'ios' ? 18 : 14,
-  yeetPosts: Platform.OS === 'ios' ? 22 : 18,
-  heading: Platform.OS === 'ios' ? 24 : 20,
-  ice: Platform.OS === 'ios' ? 26 : 22,
-  xlarge: Platform.OS === 'ios' ? 28 : 24,
-  smallHightlight: Platform.OS === 'ios' ? 35 : 30,
-  BigHightlight: Platform.OS === 'ios' ? 42 : 35,
-  Logo: Platform.OS === 'ios' ? 70 : 55,
+  small: normalize(10),
+  smallMedium: normalize(12),
+  medium: normalize(14),
+  large: normalize(16),
+  yeetPosts: normalize(18),
+  heading: normalize(20),
+  ice: normalize(22),
+  xlarge: normalize(24),
+  smallHightlight: normalize(30),
+  BigHightlight: normalize(38),
+  Logo: normalize(55),
 }
 
 export const blurhash =
