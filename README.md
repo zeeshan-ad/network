@@ -16,13 +16,15 @@ Create Your Diary: With Yeet, you'll create a unique diary of your life, filled 
 Join Yeet today, and immerse yourself in a world of genuine connections, authentic moments, and shared experiences. Capture the essence of your life, and embark on an exciting journey of self-expression and friendship. It's time to share everyday moments and Yeet it to the world!
 Download Yeet now and start sharing your daily life with those you trust.
 
-![Frame 1171274939](https://github.com/zeeshan-ad/network/assets/17006214/6c12a9d3-c703-4455-8e9d-6ddb43301706)
-![Frame 1171274952](https://github.com/zeeshan-ad/network/assets/17006214/4f071b4d-f195-42c5-9a91-fa9fe792c410)
-![Frame 1171274950](https://github.com/zeeshan-ad/network/assets/17006214/d3f62e14-0261-441b-8980-19519b009a5b)
-![Frame 1171274949](https://github.com/zeeshan-ad/network/assets/17006214/1c6cf40b-3a2a-4ae2-ad6d-5c32d5b2c7a5)
-![Frame 1171274943](https://github.com/zeeshan-ad/network/assets/17006214/c4dc20f5-647b-4250-9318-9418a059616d)
-![Frame 1171274942](https://github.com/zeeshan-ad/network/assets/17006214/b3418287-8bb4-46ab-abf1-ffeb9e73495a)
-![Frame 1171274941](https://github.com/zeeshan-ad/network/assets/17006214/929797a1-b223-438a-844f-811f992efff5)
-![Frame 1171274940](https://github.com/zeeshan-ad/network/assets/17006214/99e3cb92-31b5-4193-9720-6ec8f390e03a)
-![Frame 1171274953](https://github.com/zeeshan-ad/network/assets/17006214/e6fc3d79-8821-43ac-a825-87a706076184)
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/6c12a9d3-c703-4455-8e9d-6ddb43301706" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/4f071b4d-f195-42c5-9a91-fa9fe792c410" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/d3f62e14-0261-441b-8980-19519b009a5b" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/1c6cf40b-3a2a-4ae2-ad6d-5c32d5b2c7a5" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/c4dc20f5-647b-4250-9318-9418a059616d" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/b3418287-8bb4-46ab-abf1-ffeb9e73495a" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/929797a1-b223-438a-844f-811f992efff5" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/99e3cb92-31b5-4193-9720-6ec8f390e03a" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/e6fc3d79-8821-43ac-a825-87a706076184" height="500"/>
+<img src="https://github.com/zeeshan-ad/network/assets/17006214/0fd2717a-192b-4baf-8a27-9139bdaa167e" height="500"/>
+
 
